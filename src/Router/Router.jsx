@@ -3,6 +3,7 @@ import MainLayout from "../Layout/MainLayout";
 import Home from "../pages/Home/Home";
 import Loding from "../Shared/Loding";
 import MapCover from "../pages/MapCover";
+import About from "../pages/About";
 
 export const router = createBrowserRouter([
     {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
             {
                 path:"/mapcover",
                 element:<MapCover></MapCover>
+            },
+            {
+                path:"/about",
+                element:<About></About>
             }
         ]
     }

@@ -28,7 +28,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="wd" className=" ">
+              <NavLink to="about" className=" ">
              About Us
               </NavLink>
             </li>
