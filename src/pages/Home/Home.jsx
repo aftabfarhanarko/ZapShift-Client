@@ -5,6 +5,7 @@ import Company from "./HomeComponents/Company";
 import Safe from "./HomeComponents/Safe";
 import SecondBanner from "./HomeComponents/SecondBanner";
 import Work from "./HomeComponents/Work";
+import TextSections from "./HomeComponents/TextSections";
 
 const Home = () => {
   return (
@@ -28,6 +29,9 @@ const Home = () => {
       </section>
       <section className="my-20">
        <SecondBanner></SecondBanner>
+      </section>
+      <section className="my-20">
+       <TextSections></TextSections>
       </section>
     </div>
   );

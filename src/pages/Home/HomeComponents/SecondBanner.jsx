@@ -9,7 +9,7 @@ const SecondBanner = () => {
 
       <div className="border relative p-4 py-12  md:p-10  mt-10 rounded-2xl bg-[#03373d]">
         <div className="flex flex-col-reverse md:flex-row md:pt-6 items-center justify-center text-white">
-          <div className="md:mt-0 mt-6">
+          <div className="text-center md:mt-0 mt-6 md:text-left ">
             <h1 className="text-3xl font-semibold">
               Merchant and Customer Satisfaction is Our First Priority
             </h1>
