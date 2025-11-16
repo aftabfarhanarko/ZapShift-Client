@@ -7,15 +7,17 @@ import { useForm } from "react-hook-form";
 const Login = () => {
   const [show, setShow] = useState(true);
 
-  const {register, handleSubmit, formState:{errors}} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const loginHandel = (data) => {
     console.log("Login Now", data);
-    
-  }
+  };
 
-  const handleGoogleLogin = () => {}
-
+  const handleGoogleLogin = () => {};
 
   return (
     <div className="flex flex-col justify-center items-center mx-auto">
@@ -40,10 +42,15 @@ const Login = () => {
             </label>
             <input
               type="email"
-             {...register("email", {required:true})}
+              {...register("email", { required: true })}
               placeholder="Email"
               className="w-full px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
             />
+            {errors.email?.type === "required" && (
+              <p className="text-red-500 text-xs font-semibold mt-1">
+                Please Emaile Provied Now
+              </p>
+            )}
           </div>
 
           {/* Password Field */}
@@ -53,11 +60,27 @@ const Login = () => {
             </label>
             <input
               type={show ? "password" : "text"}
-              {...register("password", {required:true, minLength:6})}
+              {...register("password", { required: true, minLength: 6 ,
+                 pattern:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+              })}
               placeholder="Password"
               className="w-full px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
             />
-
+            {errors.password?.type === "required" && (
+              <p className="text-red-500 text-xs font-semibold mt-1">
+                Must be Provied Password
+              </p>
+            )}
+             {errors.password?.type === "minLength" && (
+              <p className="text-red-500 text-xs font-semibold mt-1">
+                Password must be 6 characters or longer
+              </p>
+            )}
+             {errors.password?.type === "pattern" && (
+              <p className="text-red-500 text-xs font-semibold mt-1">
+                Need uppercase, lowercase, digit & special character
+              </p>
+            )}
             <div onClick={() => setShow(!show)} className=" cursor-pointer  ">
               {show ? (
                 <FaEyeSlash className="absolute right-5 z-2 top-11 md:top-12.5" />
@@ -69,7 +92,7 @@ const Login = () => {
 
           {/* Register Button */}
           <button
-           type="submit"
+            type="submit"
             className="w-full bg-lime-400 hover:bg-lime-500 text-gray-900 font-semibold py-2.5 md:py-3 rounded-lg transition duration-200 mb-4 text-sm md:text-base"
           >
             Login
@@ -88,7 +111,10 @@ const Login = () => {
         <div className="divider">OR</div>
 
         {/* Google Register Button */}
-        <button onClick={handleGoogleLogin} className="btn w-full bg-white text-black border-[#e5e5e5]">
+        <button
+          onClick={handleGoogleLogin}
+          className="btn w-full bg-white text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"

@@ -75,7 +75,11 @@ const Register = () => {
             </label>
             <input
               type={show ? "password" : "text"}
-              {...register("password", { required: true, minLength: 6 })}
+              {...register("password", { 
+                required: true, 
+                minLength: 6 , 
+                pattern:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+            })}
               placeholder="Password"
               className="w-full px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
             />
@@ -87,6 +91,11 @@ const Register = () => {
             {errors.password?.type === "minLength" && (
               <p className="text-red-500 text-xs font-semibold mt-1">
                 Password must be 6 characters or longer
+              </p>
+            )}
+            {errors.password?.type === "pattern" && (
+              <p className="text-red-500 text-xs font-semibold mt-1">
+                Need uppercase, lowercase, digit & special character
               </p>
             )}
 
@@ -121,7 +130,10 @@ const Register = () => {
 
         {/* Google Register Button */}
         {/* Google */}
-        <button onClick={handleGoogleRegister} className="btn w-full bg-white text-black border-[#e5e5e5]">
+        <button
+          onClick={handleGoogleRegister}
+          className="btn w-full bg-white text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"
