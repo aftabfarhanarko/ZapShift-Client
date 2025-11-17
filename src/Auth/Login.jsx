@@ -23,7 +23,7 @@ const Login = () => {
       .then((result) => {
         console.log(result);
         toast.success("Login User Successfully");
-        naviget(location.state ? location.state : "/");
+        naviget(location?.state ? location?.state : "/");
       })
       .catch((err) => {
         toast.warning(err.code);
@@ -34,7 +34,7 @@ const Login = () => {
     googleLogin()
       .then(() => {
         toast.success("Login User Successfully");
-        naviget(location.state ? location.state : "/");
+        naviget(location?.state ? location?.state : "/");
       })
       .catch((err) => {
         toast.warning(err.code);
@@ -112,6 +112,9 @@ const Login = () => {
                 <FaEye className="absolute right-5 z-2  top-11 md:top-12.5" />
               )}
             </div>
+         
+            <Link state={location?.state} to="/forget" className="font-medium  underline text-secondary hover:text-red-500">Forget Password</Link>
+       
           </div>
 
           {/* Register Button */}

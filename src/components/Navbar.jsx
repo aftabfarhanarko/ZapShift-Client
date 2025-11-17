@@ -31,7 +31,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="wd" className=" ">
+              <NavLink to="/raider" className=" ">
                 Be a Rider
               </NavLink>
             </li>

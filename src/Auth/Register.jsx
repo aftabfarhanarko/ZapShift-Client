@@ -193,7 +193,7 @@ const Register = () => {
         {/* Login Link */}
         <p className=" text-secondary font-medium text-center mb-4 text-sm md:text-base">
           Already have an account?{" "}
-          <Link to="/login" className="text-lime-600 underline">
+          <Link state={location?.state} to="/login" className="text-lime-600 underline">
             Login
           </Link>
         </p>

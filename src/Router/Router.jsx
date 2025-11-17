@@ -9,6 +9,8 @@ import AuthLayout from "../Layout/AuthLayout";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import PriverRouter from "./PriverRouter";
+import ForgetPassword from "../Auth/ForgetPassword";
+import RiderBook from "../pages/Raider/RiderBook";
 
 export const router = createBrowserRouter([
   {
@@ -22,13 +24,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "/mapcover",
-        element: <PriverRouter><MapCover></MapCover></PriverRouter>,
-      },
-      {
-        path: "/about",
-        element: <PriverRouter><About></About></PriverRouter>,
+        element: <MapCover></MapCover>,
       },
 
+      {
+        path: "/about",
+        element: <About></About>,
+      },
+       {
+        path:"/raider",
+        element:<RiderBook></RiderBook>
+       },
       {
         path: "/*",
         element: <Error></Error>,
@@ -50,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "/*",
         element: <Error></Error>,
+      },
+      {
+        path: "/forget",
+        element: <ForgetPassword></ForgetPassword>,
       },
     ],
   },
