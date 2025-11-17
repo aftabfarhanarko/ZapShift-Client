@@ -13,7 +13,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { loginUser } = useAuth();
+  const { loginUser, googleLogin } = useAuth();
   const naviget = useNavigate();
 
   const location = useLocation();
@@ -30,7 +30,16 @@ const Login = () => {
       });
   };
 
-  const handleGoogleLogin = () => {};
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then(() => {
+        toast.success("Login User Successfully");
+        naviget(location.state ? location.state : "/");
+      })
+      .catch((err) => {
+        toast.warning(err.code);
+      });
+  };
 
   return (
     <div className="flex flex-col justify-center items-center mx-auto">

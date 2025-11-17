@@ -14,7 +14,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { userCreat, profilesUpdeat } = useAuth();
+  const { userCreat, profilesUpdeat,googleLogin } = useAuth();
 
   const handelData = (data) => {
     const email = data.email;
@@ -44,7 +44,13 @@ const Register = () => {
       });
   };
 
-  const handleGoogleRegister = () => {};
+  const handleGoogleRegister = () => {
+    googleLogin()
+    .then(() => {
+        toast.success("Creat User Successfully")
+        naviget("/")
+    })
+  };
 
   return (
     <div className="flex flex-col justify-center items-center mx-auto">
