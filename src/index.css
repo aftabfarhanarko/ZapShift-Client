@@ -23,7 +23,7 @@
 
 
 a.active{
-  @apply bg-primary  p-1 rounded-full px-6
+  @apply   border-b  text-lime-600
 }
 
 /* Hover effect সম্পূর্ণ বন্ধ করার জন্য */

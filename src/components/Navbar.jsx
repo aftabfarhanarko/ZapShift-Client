@@ -18,7 +18,7 @@ const Navbar = () => {
             <Logo></Logo>
           </div>
           <div className="navbar-center hidden lg:flex">
-            <ul className=" menu-horizontal px-1 font-medium text-[#1F1F1F] flex gap-8 list-none text-lg ">
+            <ul className=" menu-horizontal px-1 font-medium  text-[#1F1F1F] flex gap-8 list-none  text-[15px] ">
               <li>
                 <NavLink to="/" className=" ">
                   Services
@@ -42,6 +42,11 @@ const Navbar = () => {
               <li>
                 <NavLink to="/price" className="">
                   Pricing
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/send_parcel" className="">
+                  Send Parcel
                 </NavLink>
               </li>
               

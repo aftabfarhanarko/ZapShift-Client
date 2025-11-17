@@ -12,6 +12,7 @@ import PriverRouter from "./PriverRouter";
 import ForgetPassword from "../Auth/ForgetPassword";
 import RiderBook from "../pages/Raider/RiderBook";
 import Price from "../pages/Price";
+import SendPricel from "../pages/SendPricel/SendPricel";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
         element: <About></About>,
       },
       {
+       path:"/send_parcel",
+       element:<PriverRouter><SendPricel></SendPricel></PriverRouter>
+      },
+      {
         path: "/raider",
         element: (
           <PriverRouter>
@@ -42,7 +47,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/price",
-        element:<Price></Price>
+        element:<PriverRouter><Price></Price></PriverRouter>
       },
       {
         path: "/*",

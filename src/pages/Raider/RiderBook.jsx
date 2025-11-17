@@ -193,7 +193,9 @@ const RiderBook = () => {
             <div className=" bg-base-300 h-full rounded-xl mt-7 md:mt-0">
               <img src={rider}></img>
             </div>
-            <p className=" text-lg font-semibold mt-2.5 text-center text-secondary">Delivery Men</p>
+            <p className=" text-lg font-semibold mt-2.5 text-center text-secondary">
+              Delivery Men
+            </p>
           </div>
         </div>
       </div>
