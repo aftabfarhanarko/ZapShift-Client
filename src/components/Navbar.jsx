@@ -1,8 +1,16 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "../Shared/Logo";
+import useAuth from "../Hook/useAuth";
 
 const Navbar = () => {
+  const { user, userLogOut } = useAuth();
+  console.log(user);
+
+  const LogOutNow = () => {
+    userLogOut();
+  };
+
   return (
     <div className="bg-base-100 shadow-sm rounded-xl ">
       <div className="navbar  w-11/12 mx-auto py-5">
@@ -41,59 +49,15 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-end">
-          <div className="flex">
-            <div className="flex items-center gap-4">
-              {/* Sign In Button */}
-              <Link to="/login">
-                <button
-                  className="px-5.5 py-2 rounded-xl border border-gray-300 text-gray-700 font-semibold 
-                     bg-white hover:bg-primary hover:text-black hover:outline-none transition"
-                >
-                  Sign In
-                </button>
-              </Link>
-              {/* Sign Up Button */}
-              <Link to="/register">
-                <button
-                  className="px-5.5 py-2 rounded-xl border border-gray-300 text-gray-700 font-semibold 
-                     bg-white hover:bg-primary hover:text-black hover:outline-none transition"
-                >
-                  Sign Up
-                </button>
-              </Link>
-            </div>
-
-            {/* Black Arrow Button */}
-            <button
-              className="w-11 h-11 rounded-full bg-black flex items-center justify-center 
-             hover:bg-gray-800 transition transform hover:-translate-y-0.5"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 text-white "
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 12h12m-4-4 4 4-4 4"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* <div className=" hidden md:block  ">
+          <div className=" hidden md:block  ">
             {user ? (
               <div className=" dropdown dropdown-end">
                 <div tabIndex={0} role="button" className=" m-1">
                   <div className="hidden  md:block ">
                     <div className="">
                       <img
-                        className=" w-7 md:w-13 rounded-full"
-                        src={user.photoURL}
+                        className=" w-8 md:w-13 h-8 md:h-13 rounded-full"
+                        src={user?.photoURL}
                       ></img>
                     </div>
                   </div>
@@ -104,24 +68,28 @@ const Navbar = () => {
                 >
                   {user && (
                     <div className="flex items-center flex-col gap-3">
-                      <input
+                      <p className="text-md font-semibold">{user.displayName}</p>
+                      {/* <input
                         onChange={(e) => handleTheme(e.target.checked)}
                         type="checkbox"
                         defaultChecked={
                           localStorage.getItem("theme") === "dark"
                         }
                         className="toggle"
-                      />
+                      /> */}
 
                       <button
-                        onClick={handelLogOut}
-                        className="px-6 py-2 
-                 text-white font-medium bg-gradient-to-r from-orange-500 to-orange-600  rounded-md  shadow-lg 
-                   transform transition-all duration-300 ease-out hover:from-orange-600 hover:to-orange-700 hover:shadow-xl 
-                     hover:scale-105 active:scale-95 
-                      focus:outline-none focus:ring-4 focus:ring-orange-300"
+                        onClick={LogOutNow}
+                        className="
+                   px-6 py-2 
+   font-medium  rounded-md
+bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
+  font-semibold
+hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
+  focus:outline-none  shadow
+                  "
                       >
-                        Logout
+                        LogOut
                       </button>
                     </div>
                   )}
@@ -133,20 +101,8 @@ const Navbar = () => {
                   {" "}
                   <button
                     className="
-                 px-6 py-2 
-  text-orange-500 font-medium 
-  bg-white 
-  outline
-  rounded-md 
-  transition-all duration-300 ease-out 
-  bg-gradient-to-r  hover:from-orange-500 hover:to-orange-400 
-  hover:text-white 
-  hover:shadow-xl 
-  hover:scale-105 
-  active:scale-95 
-  focus:outline-none focus:ring-4 focus:ring-orange-300
-                  
-                  
+                 px-6 py-2  text-[#82aa09]
+  bg-white  outline  rounded-md   transition-all duration-300 ease-out   bg-gradient-to-r hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300  hover:text-black hover:shadow-xl  hover:outline-none font-semibold hover:scale-100  active:scale-95  focus:outline-none                        
                   "
                   >
                     Login
@@ -157,11 +113,12 @@ const Navbar = () => {
                   <button
                     className="
                    px-6 py-2 
-  text-white font-medium  rounded-md
-  bg-gradient-to-r from-orange-400 to-orange-500  hover:from-orange-500 hover:to-orange-400 
-  transform transition-all  duration-300 ease-out  hover:shadow-xl 
+   font-medium  rounded-md
+bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
+  font-semibold
+hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
   hover:scale-105 active:scale-95 
-  focus:outline-none focus:ring-4 focus:ring-orange-300
+  focus:outline-none 
                   "
                   >
                     Register
@@ -169,7 +126,7 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

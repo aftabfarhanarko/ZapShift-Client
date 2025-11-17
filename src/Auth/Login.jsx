@@ -135,19 +135,21 @@ const Login = () => {
         <div className="divider">OR</div>
 
         {/* Google Register Button */}
+
         <button
           onClick={handleGoogleLogin}
-          className="btn w-full bg-white text-black border-[#e5e5e5]"
+          className="btn w-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-gray-800 font-semibold py-3 border border-blue-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group"
         >
           <svg
             aria-label="Google logo"
-            width="16"
-            height="16"
+            width="22"
+            height="22"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
+            className="group-hover:scale-110 transition-transform duration-300"
           >
             <g>
-              <path d="m0 0H512V512H0" fill="#fff"></path>
+              <path d="m0 0H512V512H0" fill="none"></path>
               <path
                 fill="#34a853"
                 d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
@@ -166,7 +168,7 @@ const Login = () => {
               ></path>
             </g>
           </svg>
-          Login with Google
+          Continue with Google
         </button>
       </div>
     </div>

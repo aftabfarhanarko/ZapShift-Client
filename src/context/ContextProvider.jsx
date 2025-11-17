@@ -41,15 +41,15 @@ const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubccripet = onAuthStateChanged(auth, (currentUser) => {
-      setLogind(true);
       setUser(currentUser);
-      setLogind(false);
+      
     });
-
+    
     return () => {
-      unsubccripet();
+        unsubccripet();
     };
-  }, []);
+}, []);
+console.log(user);
 
   const userInfo = {
     userCreat,
@@ -57,6 +57,7 @@ const ContextProvider = ({ children }) => {
     userLogOut,
     profilesUpdeat,
     googleLogin,
+    user
   };
 
   return (
