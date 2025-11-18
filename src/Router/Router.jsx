@@ -35,7 +35,8 @@ export const router = createBrowserRouter([
       },
       {
        path:"/send_parcel",
-       element:<PriverRouter><SendPricel></SendPricel></PriverRouter>
+       loader:() => fetch("warehouses.json").then(res => res.json()),
+       element:<PriverRouter><SendPricel></SendPricel></PriverRouter>,
       },
       {
         path: "/raider",

@@ -56,7 +56,6 @@ const ContextProvider = ({ children }) => {
       unsubccripet();
     };
   }, []);
-  console.log(user);
 
   const userInfo = {
     userCreat,

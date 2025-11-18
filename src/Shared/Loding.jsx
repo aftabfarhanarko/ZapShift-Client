@@ -5,7 +5,7 @@ const Loding = () => {
     <div>
       Loding Loding
       <div>
-        <HashLoader color="#39e61d" />
+        {/* <HashLoader color="#39e61d" /> */}
       </div>
     </div>
   );

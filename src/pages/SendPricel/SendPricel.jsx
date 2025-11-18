@@ -1,15 +1,120 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const SendPricel = () => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const serviceCenters = useLoaderData();
+  const regionsert = serviceCenters.map((r) => r.region);
+  const regionsDuplicate = [...new Set(regionsert)];
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const reciverRegion = useWatch({ control, name: "reciverRegion" });
+
+  const districtsByRegion = (region) => {
+    const regionDistricts = serviceCenters.filter((d) => d.region === region);
+    const districts = regionDistricts.map((d) => d.district);
+
+    return districts;
+  };
+
+  // addrss: "Rowmari Kurigram";
+  // contact: "01613410880";
+  // delivery: " wer wer werr";
+  // name: "Aftab Farhan";
+  // parcelType: "document";
+  // percilname: "Book";
+  // pickup: "Test Now";
+  // reciverDistrick: "Faridpur";
+  // reciverRegion: "Dhaka";
+  // reciveraddrss: "Rowmari Kurigram";
+  // recivercontact: "01613410880";
+  // reciveremail: "korim@gmail.com";
+  // recivername: "Korim";
+  // senderRegion: "Dhaka";
+  // senderdistick: "Faridpur";
+  // "aftabfarhan324@gmail.com";
+  // weight: "2";
+
   const subMiteFrom = (data) => {
     console.log("Submite Producat", data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderdistick === data.reciverDistrick;
+    const parcilWight = parseFloat(data.weight);
+
+    console.log(parcilWight);
+
+    let cost = 0;
+    // cost conditions chack
+
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcilWight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcilWight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        cost = minCharge + extraCharge;
+      }
+    }
+
+  Swal.fire({
+  title: "Confirm Delivery Cost",
+  text: `Total delivery charge will be ${cost} taka. Do you want to continue?`,
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonText: "Yes, Confirm",
+  cancelButtonText: "No, Cancel",
+
+  customClass: {
+    popup: "rounded-2xl shadow-xl",
+    title: "text-lg font-semibold text-gray-800",
+    htmlContainer: "text-gray-600",
+    actions: "flex gap-3 justify-end",
+    confirmButton:
+      "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl",
+    cancelButton:
+      "bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl",
+  },
+
+  buttonsStyling: false,
+  backdrop: `rgba(0,0,0,0.45)`,
+}).then((result) => {
+  if (result.isConfirmed) {
+
+    
+
+
+
+    // Swal.fire({
+    //   icon: "success",
+    //   title: "Parcel Successfully Created",
+    //   text: "Your parcel has been added and is now ready for processing.",
+    //   confirmButtonText: "OK",
+    //   customClass: {
+    //     popup: "rounded-2xl shadow-lg",
+    //     title: "text-lg font-bold text-green-700",
+    //     htmlContainer: "text-gray-700",
+    //     confirmButton:
+    //       "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
+    //   },
+    //   buttonsStyling: false,
+    // });
+  }
+});
+
+
+    console.log("cost", cost);
   };
 
   return (
@@ -97,7 +202,6 @@ const SendPricel = () => {
             </h3>
             <div className=" space-y-5 mt-4 md:mt-7">
               {/* Name & Age Row */}
-
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
                   Sender Name
@@ -117,17 +221,17 @@ const SendPricel = () => {
 
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Address
+                  Sender Email
                 </label>
                 <input
-                  type="text"
-                  {...register("addrss", { required: true })}
-                  placeholder="sender addrss"
+                  type="email"
+                  {...register("senderemail", { required: true })}
+                  placeholder="sender email"
                   className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
                 />
-                {errors.addrss?.type === "required" && (
+                {errors.senderemail?.type === "required" && (
                   <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Provied Sender Addrss
+                    Fillup Your Email
                   </p>
                 )}
               </div>
@@ -150,32 +254,59 @@ const SendPricel = () => {
                 )}
               </div>
 
+              {/* Sender Region */}
+              <div>
+                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
+                  Sender Region
+                </label>
+                <select
+                  name="city"
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select"
+                  {...register("senderRegion")}
+                >
+                  <option disabled={true}>Pick a Sender region</option>
+                  {regionsDuplicate.map((one, i) => (
+                    <option value={one} key={i}>
+                      {one}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sender Distuick */}
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
                   Sender District
                 </label>
                 <select
-                  name="city"
-                  {...register("city", { required: true })}
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm text-gray-500 md:text-base "
+                  {...register("senderdistick", { required: true })}
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/90 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select focus:outline-none"
+                  defaultValue=" Select Sender District"
                 >
-                  <option value="">Select Sender District</option>
-                  <option value="dhaka">Dhaka</option>
-                  <option value="chittagong">Chittagong</option>
-                  <option value="rajshahi">Rajshahi</option>
-                  <option value="khulna">Khulna</option>
-                  <option value="sylhet">Sylhet</option>
-                  <option value="rangpur">Rangpur</option>
-                  <option value="barisal">Barisal</option>
-                  <option value="mymensingh">Mymensingh</option>
+                  {districtsByRegion(senderRegion).map((d, i) => (
+                    <option value={d} key={i}>
+                      {d}
+                    </option>
+                  ))}
                 </select>
-                {errors.city?.type === "required" && (
+              </div>
+
+              <div>
+                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
+                  Sender Address
+                </label>
+                <input
+                  type="text"
+                  {...register("addrss", { required: true })}
+                  placeholder="sender addrss"
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
+                />
+                {errors.addrss?.type === "required" && (
                   <p className="text-red-500 text-xs font-semibold mt-1">
-                    Fillup Your City
+                    Please Provied Sender Addrss
                   </p>
                 )}
               </div>
-
               {/* Pickup Instruction */}
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
@@ -226,17 +357,17 @@ const SendPricel = () => {
 
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Receiver Address
+                  Receiver Email
                 </label>
                 <input
-                  type="text"
-                  {...register("reciveraddrss", { required: true })}
-                  placeholder="Receiver Address"
+                  type="email"
+                  {...register("reciveremail", { required: true })}
+                  placeholder="sender email"
                   className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
                 />
-                {errors.reciveraddrss?.type === "required" && (
+                {errors.reciveremail?.type === "required" && (
                   <p className="text-red-500 text-xs font-semibold mt-1">
-                    Provied Reciver Addrss
+                    Reciver email Provied
                   </p>
                 )}
               </div>
@@ -258,27 +389,54 @@ const SendPricel = () => {
                 )}
               </div>
 
+              {/* Sender Region */}
               <div>
                 <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Reciver District
+                  Reciver Region
                 </label>
                 <select
-                  {...register("recivercity", { required: true })}
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base "
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select"
+                  {...register("reciverRegion")}
+                  defaultValue="Pick a region"
                 >
-                  <option value="">Select Reciver District</option>
-                  <option value="dhaka">Dhaka</option>
-                  <option value="chittagong">Chittagong</option>
-                  <option value="rajshahi">Rajshahi</option>
-                  <option value="khulna">Khulna</option>
-                  <option value="sylhet">Sylhet</option>
-                  <option value="rangpur">Rangpur</option>
-                  <option value="barisal">Barisal</option>
-                  <option value="mymensingh">Mymensingh</option>
+                  {regionsDuplicate.map((one, i) => (
+                    <option value={one} key={i}>
+                      {one}
+                    </option>
+                  ))}
                 </select>
-                {errors.recivercity?.type === "required" && (
+              </div>
+
+              <div>
+                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
+                  Sender District
+                </label>
+                <select
+                  {...register("reciverDistrick")}
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/90 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select focus:outline-none"
+                  defaultValue=" Select Reciver District"
+                >
+                  {districtsByRegion(reciverRegion).map((d, i) => (
+                    <option value={d} key={i}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
+                  Receiver Address
+                </label>
+                <input
+                  type="text"
+                  {...register("reciveraddrss", { required: true })}
+                  placeholder="Receiver Address"
+                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
+                />
+                {errors.reciveraddrss?.type === "required" && (
                   <p className="text-red-500 text-xs font-semibold mt-1">
-                    Reciver City
+                    Provied Reciver Addrss
                   </p>
                 )}
               </div>
