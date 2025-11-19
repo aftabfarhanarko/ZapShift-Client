@@ -1,20 +1,12 @@
-import React from "react";
-import { useState } from "react";
 import {
-  Menu,
-  X,
-  Bell,
-  ChevronDown,
   LayoutDashboard,
   Package,
   Store,
-  Tag,
-  Users,
   Settings,
   Lock,
   HelpCircle,
   LogOut,
-  MapPinned,
+  Bell,
 } from "lucide-react";
 import Logo from "../Shared/Logo";
 import { BsFillHouseDashFill } from "react-icons/bs";
@@ -24,40 +16,64 @@ import { GoSidebarExpand } from "react-icons/go";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { MdManageAccounts } from "react-icons/md";
 import { HiHomeModern } from "react-icons/hi2";
+import useAuth from "../Hook/useAuth";
 
 const DashbordLayout = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [color, setColor] = useState(false);
-  const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", active: true },
-    { icon: Package, label: "Parcel", active: true },
-    { icon: Store, label: "Invoices", active: true },
-    { icon: Store, label: "Stores", active: true },
-    { icon: Tag, label: "Pricing Plan", active: true },
-    { icon: Users, label: "Coverage Area", active: true },
-  ];
-  const generalItems = [
-    { icon: Settings, label: "Settings" },
-    { icon: Lock, label: "Change Password" },
-    { icon: HelpCircle, label: "Help" },
-    { icon: LogOut, label: "Logout" },
-  ];
+  const { user } = useAuth();
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
-          <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
-          >
-            {/* Sidebar toggle icon */}
-            <GoSidebarExpand className="w-4 md:w-6  h-5 md:h-6" />
-          </label>
-          <div className=" px-5">
-            <Logo></Logo>
+        <nav className="navbar w-full bg-base-300 flex justify-between md:pr-10">
+          <div className="flex items-center">
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost"
+            >
+              {/* Sidebar toggle icon */}
+              <GoSidebarExpand className="w-6 h-6" />
+            </label>
+            <div className="px-1.5 md:px-5">
+              <Logo></Logo>
+            </div>
+          </div>
+
+          <div>
+            <div className="w-full flex items-center justify-between px-4 py-4 gap-3">
+              {/* Right Side - Profile */}
+              <div className="flex items-center gap-3 cursor-pointer">
+                {/* Rounded Image (replace src later) */}
+                <div className="">
+                  {user && (
+                    <img
+                      className="w-10 h-10 rounded-full object-cover"
+                      src={user?.photoURL}
+                      alt="profile"
+                    />
+                  )}
+                </div>
+              </div>
+              {/* Left Side - Notification */}
+              <div className="flex items-center gap-4">
+                <div
+                  className="
+  w-10 h-10 
+  rounded-full 
+  bg-white 
+  border border-gray-200 
+  flex items-center justify-center
+  shadow-sm
+  hover:shadow-md 
+  hover:border-gray-300
+  transition-all duration-200
+"
+                >
+                  <Bell className="w-5 h-5 text-gray-700" />
+                </div>
+              </div>
+            </div>
           </div>
         </nav>
         {/* Page content here */}

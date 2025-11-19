@@ -24,7 +24,7 @@ const Navbar = () => {
                   Services
                 </NavLink>
               </li>
-                 <li>
+              <li>
                 <NavLink to="about" className=" ">
                   About Us
                 </NavLink>
@@ -51,12 +51,9 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink to="/dasbord" className="">
-                 My Parcel
+                  My Parcel
                 </NavLink>
               </li>
-              
-             
-              
             </ul>
           </div>
 
