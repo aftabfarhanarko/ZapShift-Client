@@ -7,12 +7,14 @@ import ParcelCard from "./Parcel";
 import { Link } from "lucide-react";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteOutline, MdOutlineRateReview } from "react-icons/md";
+import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 const MyParcel = () => {
   const { user } = useAuth();
   const axiosData = useAxiosSecoir();
 
-  const { isPending, isLoading, data } = useQuery({
+  const { isPending, isLoading, data, refetch } = useQuery({
     queryKey: ["tododat", user?.email],
     queryFn: () =>
       axiosData.get(`parcel?email=${user?.email}`).then((respons) => {
@@ -25,7 +27,57 @@ const MyParcel = () => {
   if (isLoading) return <Loding></Loding>;
 
   const handelDelet = (id) => {
-    console.log("This id Delet Now", id);
+    Swal.fire({
+      title: "Confirm Parcel Deletion",
+      text: `Are you sure you want to delete this parcel? This action cannot be undone.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Delete",
+      cancelButtonText: "No, Cancel",
+
+      customClass: {
+        popup: "rounded-2xl shadow-xl",
+        title: "text-lg font-semibold text-gray-800",
+        htmlContainer: "text-gray-600",
+        actions: "flex gap-3 justify-end",
+        confirmButton:
+          "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl",
+        cancelButton:
+          "bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl",
+      },
+
+      buttonsStyling: false,
+      backdrop: `rgba(0,0,0,0.45)`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosData
+          .delete(`parcel/${id}`)
+          .then((res) => {
+            // task query propley refetch delet data
+            refetch();
+            console.log("Propley Delet Now", res);
+            toast.success("Delet Now")
+          })
+          .catch((err) => {
+            console.log(err?.code);
+            toast.warning(err?.code);
+          });
+        Swal.fire({
+          icon: "success",
+          title: "Parcel Successfully Deleted",
+          text: "Your parcel has been Deletd Proprely .",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "rounded-2xl shadow-lg",
+            title: "text-lg font-bold text-green-700",
+            htmlContainer: "text-gray-700",
+            confirmButton:
+              "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
+          },
+          buttonsStyling: false,
+        });
+      }
+    });
   };
 
   return (
@@ -34,9 +86,6 @@ const MyParcel = () => {
         My Send Parcel : {data?.length}
       </h1>
       <div className=" ">
-        {/* {
-        data.map((p, i) => <ParcelCard p={p} key={i}></ParcelCard>)
-       } */}
         <div className="overflow-x-auto bg-white rounded-xl shadow">
           <table className="min-w-full text-sm">
             <thead className="bg-base-300 text-left">
@@ -112,7 +161,8 @@ const MyParcel = () => {
                       </button>
 
                       {/* Delete Button */}
-                      <button onClick={() => handelDelet(item._id)}
+                      <button
+                        onClick={() => handelDelet(item._id)}
                         className="px-4 py-1.5 rounded-xl bg-white text-red-600 border border-red-300 
                      flex items-center gap-2 font-semibold shadow-sm
                      hover:bg-red-50 hover:shadow transition-all"
