@@ -4,11 +4,11 @@ import useAuth from "../../Hook/useAuth";
 import Loding from "../../Shared/Loding";
 import Parcel from "./Parcel";
 import ParcelCard from "./Parcel";
-import { Link } from "lucide-react";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineDeleteOutline, MdOutlineRateReview } from "react-icons/md";
 import Swal from "sweetalert2";
 import { toast } from "sonner";
+import { Link } from "react-router";
 
 const MyParcel = () => {
   const { user } = useAuth();
@@ -56,7 +56,7 @@ const MyParcel = () => {
             // task query propley refetch delet data
             refetch();
             console.log("Propley Delet Now", res);
-            toast.success("Delet Now")
+            toast.success("Delet Now");
           })
           .catch((err) => {
             console.log(err?.code);
@@ -95,7 +95,8 @@ const MyParcel = () => {
                 <th className="p-4">Sender Info</th>
                 <th className="p-4">Reciver Info</th>
                 <th className="p-4">Tracking Number</th>
-                <th className="p-4">Total Cost</th>
+                <th className="p-4">Delivery Status</th>
+                <th className="p-4">Payment</th>
                 <th className="p-4">Action</th>
               </tr>
             </thead>
@@ -133,10 +134,20 @@ const MyParcel = () => {
                   {/* Tracking */}
                   <td className="p-4">{item.recivercontact}</td>
 
+                  <td className="p-4">Id Now</td>
+
                   {/* Payment */}
                   <td className="p-4 text-green-600 font-semibold">
-                    ৳ {item.totalCost}{" "}
-                    <span className="text-red-500">(Panding)</span>
+                    {item.paymentStutas === "paid" ? (
+                      <span className="text-green-600">Paid</span>
+                    ) : (
+                      <Link
+                        to={`/dasbord/payment/${item._id}`}
+                        className="inline-block px-6 py-1.5 bg-lime-400 text-black font-semibold rounded-lg  hover:bg-lime-500 transition duration-300"
+                      >
+                        Pay
+                      </Link>
+                    )}
                   </td>
 
                   {/* Action */}
@@ -145,7 +156,7 @@ const MyParcel = () => {
                       {/* View Button */}
                       <button
                         className="px-4 py-1.5 rounded-xl bg-[#e8f4ee] text-zinc-800 border border-zinc-200 
-                     flex items-center gap-2 font-semibold shadow-sm
+                     flex items-center gap-2 font-semibold 
                      hover:bg-[#d9edef] hover:shadow transition-all"
                       >
                         View <MdOutlineRateReview size={18} />
@@ -154,7 +165,7 @@ const MyParcel = () => {
                       {/* Edit Button */}
                       <button
                         className="px-4 py-1.5 rounded-xl bg-white text-secondary-600 border border-primary 
-                     flex items-center gap-2 font-semibold shadow-sm
+                     flex items-center gap-2 font-semibold 
                      hover:bg-blue-50 hover:shadow transition-all"
                       >
                         Edit <FiEdit size={16} />
@@ -164,7 +175,7 @@ const MyParcel = () => {
                       <button
                         onClick={() => handelDelet(item._id)}
                         className="px-4 py-1.5 rounded-xl bg-white text-red-600 border border-red-300 
-                     flex items-center gap-2 font-semibold shadow-sm
+                     flex items-center gap-2 font-semibold 
                      hover:bg-red-50 hover:shadow transition-all"
                       >
                         Delete <MdOutlineDeleteOutline size={20} />

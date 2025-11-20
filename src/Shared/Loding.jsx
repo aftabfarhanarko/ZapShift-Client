@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-
 const Loding = () => {
   const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoading(false);
-    }, 2000); // 2000ms = 2 seconds
+    }, 2000); 
 
     // Cleanup on unmount
     return () => clearTimeout(timer);

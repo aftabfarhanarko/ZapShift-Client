@@ -18,6 +18,7 @@ import DashbordLayout from "../Layout/DashbordLayout";
 import MyParcel from "../pages/Dashbord/MyParcel";
 import AllDrivers from "../pages/Dashbord/AllDrivers";
 import ParcelDetlics from "../pages/Dashbord/ParcelDetlics";
+import Payment from "../pages/Dashbord/Payment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -105,8 +106,9 @@ export const router = createBrowserRouter([
         Component:ParcelDetlics
       },
       {
-        path:"/dasbord/manageParcel",
-        Component:ParcelDetlics
+        path:"/dasbord/payment/:parcelId",
+        Component:Payment
+        
       }
     ]
   } 
