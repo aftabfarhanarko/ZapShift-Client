@@ -17,11 +17,11 @@ import Dashbord from "../pages/Dashbord/Dashbord";
 import DashbordLayout from "../Layout/DashbordLayout";
 import MyParcel from "../pages/Dashbord/MyParcel";
 import AllDrivers from "../pages/Dashbord/AllDrivers";
-import ParcelDetlics from "../pages/Dashbord/ParcelDetlics";
 import Payment from "../pages/Dashbord/Payment/Payment";
 import SuccessPage from "../pages/Dashbord/Payment/SuccessPage";
 import CancelPage from "../pages/Dashbord/Payment/CancelPage";
 import ViewDetlics from "../pages/Dashbord/ViewDetlics";
+import PaymentHiestory from "../pages/Dashbord/PaymentHiestory/PaymentHiestory";
 
 export const router = createBrowserRouter([
   {
@@ -117,8 +117,8 @@ export const router = createBrowserRouter([
         Component: AllDrivers,
       },
       {
-        path: "/dasbord/ParcelDetlics",
-        Component: ParcelDetlics,
+        path: "/dasbord/paymentHiestory",
+        Component: PaymentHiestory,
       },
       {
         path: "/dasbord/payment/:parcelId",

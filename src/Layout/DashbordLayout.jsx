@@ -17,6 +17,7 @@ import { CiDeliveryTruck } from "react-icons/ci";
 import { MdManageAccounts } from "react-icons/md";
 import { HiHomeModern } from "react-icons/hi2";
 import useAuth from "../Hook/useAuth";
+import { FaRegCreditCard } from "react-icons/fa";
 
 const DashbordLayout = () => {
   const { user,userLogOut } = useAuth();
@@ -145,12 +146,12 @@ const DashbordLayout = () => {
 
               <li>
                 <Link
-                  to="/dasbord/ParcelDetlics"
+                  to="/dasbord/paymentHiestory"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Parcel Details "
+                  data-tip="Payment Details "
                 >
-                  <Store className=" w-4 md:w-5  h-5 md:h-7" />
-                  <span className="is-drawer-close:hidden">Parcel Details</span>
+                  <FaRegCreditCard  className=" w-4 md:w-5  h-5 md:h-7" />
+                  <span className="is-drawer-close:hidden">Payment Details</span>
                 </Link>
               </li>
 

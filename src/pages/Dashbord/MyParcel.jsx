@@ -82,7 +82,6 @@ const MyParcel = () => {
 
   // payment-checkout
   const handelPayment = async (parcel) => {
-    console.log(parcel);
     try {
       const paymentInfo = {
         totalCost: parcel?.totalCost,
@@ -90,121 +89,117 @@ const MyParcel = () => {
         senderemail: parcel?.senderemail,
         percilname: parcel?.percilname,
       };
-
       const res = await axiosData.post("/payment-checkout", paymentInfo);
-      window.location.assign(res.data.url) 
+      window.location.assign(res.data.url) ;
+
     } catch (error) {
       toast.warning(error?.code);
     }
   };
   return (
-    <div>
-      <h1 className=" text-2xl font-bold mt-5  mb-10">
+    <div className=" md:p-8">
+      <h1 className=" text-2xl font-bold mt-5  mb-10 ">
         My Send Parcel : {data?.length}
       </h1>
-      <div className=" ">
-        <div className="overflow-x-auto bg-white rounded-xl shadow">
-          <table className="min-w-full text-sm">
-            <thead className="bg-base-300 text-left">
-              <tr>
-                <th className="p-4">Srl No</th>
-                <th className="p-4">Parcel Info</th>
-                <th className="p-4">Sender Info</th>
-                {/* <th className="p-4">Reciver Info</th> */}
-                <th className="p-4">Tracking Number</th>
-                <th className="p-4">Delivery Status</th>
-                <th className="p-4">Payment</th>
-                <th className="p-4">Action</th>
-              </tr>
-            </thead>
+     <div className="mt-6">
+  <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
+    <table className="min-w-full text-sm">
+      <thead className="bg-gray-100 text-left text-gray-700">
+        <tr>
+          <th className="p-4 font-semibold">Srl No</th>
+          <th className="p-4 font-semibold">Parcel Info</th>
+          <th className="p-4 font-semibold">Sender Info</th>
+          <th className="p-4 font-semibold">Tracking Number</th>
+          <th className="p-4 font-semibold">Delivery Status</th>
+          <th className="p-4 font-semibold">Payment</th>
+          <th className="p-4 font-semibold">Action</th>
+        </tr>
+      </thead>
 
-            <tbody>
-              {data.map((item, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-base-300 hover:bg-gray-100"
+      <tbody>
+        {data.map((item, i) => (
+          <tr
+            key={i}
+            className="border-b border-gray-200 hover:bg-gray-50 transition"
+          >
+            {/* Serial */}
+            <td className="p-4 font-medium text-gray-900">{i + 1}</td>
+
+            {/* Parcel Info */}
+            <td className="p-4">
+              <p className="font-semibold text-gray-900">{item.percilname}</p>
+              <p className="text-xs text-gray-500">{item.parcelType}</p>
+            </td>
+
+            {/* Sender Info */}
+            <td className="p-4">
+              <p className="font-semibold text-gray-900">
+                {item.senderRegion}
+              </p>
+              <p className="text-sm text-gray-600">{item.senderdistick}</p>
+            </td>
+
+            {/* Tracking */}
+            <td className="p-4 text-gray-800">{item.recivercontact}</td>
+
+            {/* Delivery Status */}
+            <td className="p-4 text-gray-800">Id Now</td>
+
+            {/* Payment */}
+            <td className="p-4 font-semibold">
+              {item.paymentStutas === "Paid" ? (
+                <span className="text-green-600 bg-green-100 px-3 py-1 rounded-full text-xs">
+                  Paid
+                </span>
+              ) : (
+                <button
+                  onClick={() => handelPayment(item)}
+                  className="px-5 py-1.5 bg-lime-400 text-black rounded-lg font-semibold 
+                             hover:bg-lime-500 transition shadow-sm"
                 >
-                  {/* Parcel Info */}
-                  <td className=" p-4">
-                    <p className="font-medium">{i + 1}</p>
-                  </td>
-                  <td className="p-4">
-                    <p className="font-semibold">{item.percilname}</p>
-                    <p className="font-xs">{item.parcelType}</p>
-                  </td>
+                  Pay
+                </button>
+              )}
+            </td>
 
-                  {/* Recipient Info */}
-                  <td className="p-4">
-                    <p className="font-semibold">{item.senderRegion}</p>
-                    <p className="font-medium">{item.senderdistick}</p>
-                  </td>
-                  {/* Recipient Info
-                  <td className="p-4">
-                    <p className="font-semibold">{item.percilname}</p>
+            {/* Actions */}
+            <td className="p-4">
+              <div className="flex items-center gap-3">
 
-                    <p className="text-zinc-800 font-medium">
-                      {item.reciverRegion}
-                    </p>
-                    <p className="text-zinc-800">{item.reciverDistrick}</p>
-                  </td> */}
+                {/* View */}
+                <button
+                  className="px-4 py-1.5 rounded-lg bg-[#e8f4ee] text-gray-800 border border-gray-200 
+                             flex items-center gap-2 font-medium hover:bg-[#d9edef] hover:shadow-sm transition"
+                >
+                  View <MdOutlineRateReview size={18} />
+                </button>
 
-                  {/* Tracking */}
-                  <td className="p-4">{item.recivercontact}</td>
+                {/* Edit */}
+                <button
+                  className="px-4 py-1.5 rounded-lg bg-white text-blue-600 border border-blue-300 
+                             flex items-center gap-2 font-medium hover:bg-blue-50 hover:shadow-sm transition"
+                >
+                  Edit <FiEdit size={16} />
+                </button>
 
-                  <td className="p-4">Id Now</td>
+                {/* Delete */}
+                <button
+                  onClick={() => handelDelet(item._id)}
+                  className="px-4 py-1.5 rounded-lg bg-white text-red-600 border border-red-300 
+                             flex items-center gap-2 font-medium hover:bg-red-50 hover:shadow-sm transition"
+                >
+                  Delete <MdOutlineDeleteOutline size={20} />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-                  {/* Payment */}
-                  <td className="p-4 text-green-600 font-semibold">
-                    {item.paymentStutas === 'Paid' ? (
-                      <span className="text-green-600">Paid</span>
-                    ) : (
-                      <button
-                        onClick={() => handelPayment(item)}
-                        className="inline-block px-6 py-1.5 bg-lime-400 text-black font-semibold rounded-lg  hover:bg-lime-500 transition duration-300"
-                      >
-                        Pay
-                      </button>
-                    )}
-                  </td>
-
-                  {/* Action */}
-                  <td className="p-4 flex gap-3 items-center">
-                    <div className="flex items-center gap-3">
-                      {/* View Button */}
-                      <button
-                        className="px-4 py-1.5 rounded-xl bg-[#e8f4ee] text-zinc-800 border border-zinc-200 
-                     flex items-center gap-2 font-semibold 
-                     hover:bg-[#d9edef] hover:shadow transition-all"
-                      >
-                        View <MdOutlineRateReview size={18} />
-                      </button>
-
-                      {/* Edit Button */}
-                      <button
-                        className="px-4 py-1.5 rounded-xl bg-white text-secondary-600 border border-primary 
-                     flex items-center gap-2 font-semibold 
-                     hover:bg-blue-50 hover:shadow transition-all"
-                      >
-                        Edit <FiEdit size={16} />
-                      </button>
-
-                      {/* Delete Button */}
-                      <button
-                        onClick={() => handelDelet(item._id)}
-                        className="px-4 py-1.5 rounded-xl bg-white text-red-600 border border-red-300 
-                     flex items-center gap-2 font-semibold 
-                     hover:bg-red-50 hover:shadow transition-all"
-                      >
-                        Delete <MdOutlineDeleteOutline size={20} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+       
     </div>
   );
 };
