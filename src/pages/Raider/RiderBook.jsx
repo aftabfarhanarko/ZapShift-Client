@@ -1,6 +1,10 @@
 import { useForm, useWatch } from "react-hook-form";
 import rider from "../../assets/agent-pending.png";
 import { useLoaderData } from "react-router";
+import useAxiosSecoir from "../../Hook/useAxiosSecoir";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
+import axios from "axios";
 const RiderBook = () => {
   const {
     register,
@@ -9,11 +13,11 @@ const RiderBook = () => {
     formState: { errors },
   } = useForm();
 
+  const axiosSecoir = useAxiosSecoir();
   const serviceCenters = useLoaderData();
 
   const regionsert = serviceCenters.map((r) => r.region);
   const regionsDuplicate = [...new Set(regionsert)];
-  console.log(regionsDuplicate);
 
   const reiderReguon = useWatch({ control, name: "yourRegion" });
 
@@ -25,6 +29,57 @@ const RiderBook = () => {
 
   const handelFrom = (data) => {
     console.log(data);
+    const roiderPhoto = data.photo[0];
+    const fromData = new FormData();
+    fromData.append("image", roiderPhoto);
+
+    // Img File Set Axios APis
+    const api_img_url = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_imge_hoset
+    }`;
+
+    axios.post(api_img_url, fromData).then((re) => {
+      const ridPt = re?.data?.data?.url;
+
+      const sendData = {
+        bikeBrandModelAndYear: data.bikeBrandModelAndYear,
+        bikeRegistrationNumber: data.bikeRegistrationNumber,
+        drivingLicenseNumber: data.drivingLicenseNumber,
+        nidNo: data.nidNo,
+        phoneNumber: data.phoneNumber,
+        photo: ridPt,
+        tellUsAboutYourself: data.tellUsAboutYourself,
+        yourDistrict: data.yourDistrict,
+        yourEmail: data.yourEmail,
+        yourName: data.yourName,
+        yourRegion: data.yourRegion,
+      };
+
+      axiosSecoir
+        .post("/rider", sendData)
+        .then((res) => {
+          console.log(res.data);
+          // toast.success("Rider Creat Successfully");
+          Swal.fire({
+            icon: "success",
+            title: "Rider Successfully Created",
+            text: "The rider has been added. You will receive their details via email within a few days.",
+
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "rounded-2xl shadow-lg",
+              title: "text-lg font-bold text-green-700",
+              htmlContainer: "text-gray-700",
+              confirmButton:
+                "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
+            },
+            buttonsStyling: false,
+          });
+        })
+        .catch((err) => {
+          toast.warning(err.code);
+        });
+    });
   };
 
   return (
@@ -72,24 +127,6 @@ const RiderBook = () => {
                   )}
                 </div>
 
-                {/* Driving License Number */}
-                <div>
-                  <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                    Driving License Number
-                  </label>
-                  <input
-                    type="text"
-                    {...register("drivingLicenseNumber", { required: true })}
-                    placeholder="Driving License Number"
-                    className="w-full px-4 py-2.5 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm border-black/50 placeholder:text-black/90 md:text-base"
-                  />
-                  {errors.drivingLicenseNumber?.type === "required" && (
-                    <p className="text-red-500 text-xs font-semibold mt-1">
-                      Please Fillup Driving License Number
-                    </p>
-                  )}
-                </div>
-
                 {/* Your Email */}
                 <div>
                   <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
@@ -104,6 +141,49 @@ const RiderBook = () => {
                   {errors.yourEmail?.type === "required" && (
                     <p className="text-red-500 text-xs font-semibold mt-1">
                       Please Fillup Your Email
+                    </p>
+                  )}
+                </div>
+
+                {/* photo Field */}
+                <div className="mb-4 md:mb-5">
+                  <label className="block text-gray-900 font-medium mb-2">
+                    Photo File
+                  </label>
+                  <div className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent">
+                    <input
+                      type="file"
+                      className="file-input file-input-ghost focus:outline-none "
+                      {...register("photo", { required: true })}
+                    />
+                  </div>
+                  {errors.photo?.type === "required" && (
+                    <p className="text-red-500 text-xs font-semibold mt-1">
+                      Must be Privied Image File
+                    </p>
+                  )}
+
+                  {errors.name?.type === "required" && (
+                    <p className="text-red-500 text-xs font-semibold mt-1">
+                      Must be Complete Field
+                    </p>
+                  )}
+                </div>
+
+                {/* Driving License Number */}
+                <div>
+                  <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
+                    Driving License Number
+                  </label>
+                  <input
+                    type="text"
+                    {...register("drivingLicenseNumber", { required: true })}
+                    placeholder="Driving License Number"
+                    className="w-full px-4 py-2.5 md:py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm border-black/50 placeholder:text-black/90 md:text-base"
+                  />
+                  {errors.drivingLicenseNumber?.type === "required" && (
+                    <p className="text-red-500 text-xs font-semibold mt-1">
+                      Please Fillup Driving License Number
                     </p>
                   )}
                 </div>
@@ -189,7 +269,7 @@ const RiderBook = () => {
                 {/* Bike Brand Model and Year */}
                 <div>
                   <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                    Bike Brand Model and Year
+                    Bike Brand Model Name
                   </label>
                   <input
                     type="text"
@@ -199,7 +279,7 @@ const RiderBook = () => {
                   />
                   {errors.bikeBrandModelAndYear?.type === "required" && (
                     <p className="text-red-500 text-xs font-semibold mt-1">
-                      Please Fillup Bike Brand Model and Year
+                      Please Fillup Bike Brand Model Name
                     </p>
                   )}
                 </div>
@@ -244,7 +324,7 @@ const RiderBook = () => {
                   type="submit"
                   className="w-full bg-lime-300 py-2 rounded-md mt-5 font-semibold hover:bg-lime-400 transition-colors"
                 >
-                  Submit
+                  Apply a Rider
                 </button>
               </form>
             </div>
