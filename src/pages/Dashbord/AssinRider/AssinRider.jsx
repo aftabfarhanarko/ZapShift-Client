@@ -185,7 +185,9 @@ const AssinRider = () => {
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+               <button className="px-3 py-1 rounded-md bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+                Close
+              </button>
             </form>
           </div>
         </div>

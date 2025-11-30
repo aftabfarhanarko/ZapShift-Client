@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FaUserShield, FaUserTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import Loding from "../../../Shared/Loding";
-import { MdDeleteOutline, MdOutlineDeleteOutline } from "react-icons/md";
-import { toast } from "sonner";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const UserManage = () => {
   const axiosSecoir = useAxiosSecoir();
@@ -140,7 +139,7 @@ const UserManage = () => {
         <h1 className=" text-3xl text-secondary font-semibold">
           All User : {data?.length}
         </h1>
-        <label className="md:mt-0 mt-3 flex items-center gap-3 w-full max-w-md px-4 py-2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all">
+        <label className="md:mt-0 mt-3 flex items-center gap-3 w-full max-w-md px-4 py-2 bg-white/70 backdrop-blur-md border  hover:border-lime-500 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all">
           {/* Search Icon */}
           <svg
             className="h-5 w-5 text-gray-500"
@@ -162,8 +161,9 @@ const UserManage = () => {
           {/* Input Field */}
           <input
             type="search"
+            
             onChange={(e) => setSearchText(e.target.value)}
-            className="grow outline-none bg-transparent text-gray-700 placeholder-gray-400"
+            className="grow  outline-none bg-transparent text-gray-700 placeholder-gray-400"
             placeholder="Search user..."
           />
         </label>
@@ -185,7 +185,7 @@ const UserManage = () => {
             </thead>
 
             <tbody>
-              {data?.map((item, i) => (
+              {   data?.map((item, i) => (
                 <tr
                   key={i}
                   className="border-b border-gray-200 hover:bg-gray-50 transition"

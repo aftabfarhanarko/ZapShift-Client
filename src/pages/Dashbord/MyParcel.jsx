@@ -13,10 +13,13 @@ import {
 import Swal from "sweetalert2";
 import { toast } from "sonner";
 import { Link } from "react-router";
+import { useRef, useState } from "react";
 
 const MyParcel = () => {
   const { user } = useAuth();
   const axiosData = useAxiosSecoir();
+  const [parcel, setParcel] = useState([]);
+  const refernce = useRef();
 
   const { isPending, isLoading, data, refetch } = useQuery({
     queryKey: ["tododat", user?.email],
@@ -26,6 +29,14 @@ const MyParcel = () => {
         return respons.data.result;
       }),
   });
+
+  const handelView = (item) => {
+    setParcel(item);
+    refernce.current.showModal();
+    console.log("Detlise");
+  };
+
+  console.log(parcel);
 
   if (isPending) return <Loding></Loding>;
   if (isLoading) return <Loding></Loding>;
@@ -195,12 +206,13 @@ const MyParcel = () => {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       {/* View */}
-                      {/* <button
-                        className="px-4 py-1.5 rounded-lg bg-[#e8f4ee] text-gray-800 border border-gray-200 
-                             flex items-center gap-2 font-medium hover:bg-[#d9edef] hover:shadow-sm transition"
+                      <button
+                        onClick={() => handelView(item)}
+                        className="px-4 py-1.5 rounded-lg bg-blue-50  text-blue-800 border border-blue-300 
+                             flex items-center gap-2 font-medium hover:bg-blue-100 hover:shadow-sm transition"
                       >
                         View <MdOutlineRateReview size={18} />
-                      </button> */}
+                      </button>
 
                       {/* Edit */}
                       <button
@@ -226,6 +238,143 @@ const MyParcel = () => {
           </table>
         </div>
       </div>
+
+      {/* Open the modal using document.getElementById('ID').showModal() method */}
+
+      <dialog ref={refernce} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <div className=" p-4 md:p-5 bg-white rounded-xl shadow-lg w-full max-w-5xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              Parcel Details
+            </h2>
+
+            {/* Sender & Receiver Info */}
+            <div className="grid grid-cols-1  gap-4">
+              {/* Sender Info */}
+              <div className="bg-gray-100 p-5 rounded-xl">
+                <h3 className="text-xl font-semibold mb-4">Sender Info</h3>
+
+                <div className="space-y-2 text-sm">
+                  <p>
+                    <span className="font-semibold">Name:</span> {parcel.name}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Email:</span>{" "}
+                    {parcel.senderemail}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Phone:</span>{" "}
+                    {parcel.contact}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Region:</span>{" "}
+                    {parcel.senderRegion}
+                  </p>
+                  <p>
+                    <span className="font-semibold">District:</span>{" "}
+                    {parcel.senderdistick}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Address:</span>{" "}
+                    {parcel.addrss}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Pickup Instruction:</span>{" "}
+                    {parcel.pickup}
+                  </p>
+                </div>
+              </div>
+
+              {/* Receiver Info */}
+              <div className="bg-gray-100 p-5 rounded-xl">
+                <h3 className="text-xl font-semibold mb-4">Receiver Info</h3>
+
+                <div className="space-y-2 text-sm">
+                  <p>
+                    <span className="font-semibold">Name:</span>{" "}
+                    {parcel.recivername}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Email:</span>{" "}
+                    {parcel.reciveremail}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Phone:</span>{" "}
+                    {parcel.recivercontact}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Region:</span>{" "}
+                    {parcel.reciverRegion}
+                  </p>
+                  <p>
+                    <span className="font-semibold">District:</span>{" "}
+                    {parcel.reciverDistrick}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Address:</span>{" "}
+                    {parcel.reciveraddrss}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Delivery Instruction:</span>{" "}
+                    {parcel.delivery}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Parcel Main Details */}
+            <div className="bg-gray-100 p-5 rounded-xl mt-6">
+              <h3 className="text-xl font-semibold mb-4">Parcel Details</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <p>
+                  <span className="font-semibold">Parcel Type:</span>{" "}
+                  {parcel.parcelType}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Parcel Name:</span>{" "}
+                  {parcel.percilname}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Weight:</span> {parcel.weight}{" "}
+                  KG
+                </p>
+
+                <p>
+                  <span className="font-semibold">Total Cost:</span> Tk{" "}
+                  {parcel.totalCost}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Payment Status:</span>{" "}
+                  {parcel.paymentStutas}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Tracking ID:</span>{" "}
+                  {parcel.trakingId}
+                </p>
+
+                <p>
+                  <span className="font-semibold">Created At:</span>{" "}
+                  {new Date(parcel.creatAtime).toLocaleString()}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

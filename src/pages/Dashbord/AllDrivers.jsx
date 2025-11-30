@@ -324,19 +324,9 @@ const AllDrivers = () => {
           {/* Close Button */}
           <div className="modal-action mt-6 flex">
             <form method="dialog">
-              <button
-                onClick={handelCloseModal}
-                className="
-            px-6 
-            py-2.5 
-            rounded-xl 
-            bg-gray-800 
-            text-white 
-            font-medium 
-            hover:bg-gray-900 
-            transition-all
-        "
-              >
+             
+
+                <button onClick={handelCloseModal} className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
                 Close
               </button>
             </form>
