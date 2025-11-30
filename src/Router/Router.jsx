@@ -24,6 +24,7 @@ import ViewDetlics from "../pages/Dashbord/ViewDetlics";
 import PaymentHiestory from "../pages/Dashbord/PaymentHiestory/PaymentHiestory";
 import UserManage from "../pages/Dashbord/userManage/userManage";
 import AdminRole from "./AdminRole";
+import AssinRider from "../pages/Dashbord/AssinRider/AssinRider";
 
 export const router = createBrowserRouter([
   {
@@ -118,6 +119,10 @@ export const router = createBrowserRouter([
       {
         path: "/dasbord/deliveries",
         element: <AdminRole><AllDrivers></AllDrivers></AdminRole>
+      },
+      {
+        path: "/dasbord/assinRider",
+        element: <AdminRole><AssinRider></AssinRider></AdminRole>
       },
       {
         path: "/dasbord/paymentHiestory",

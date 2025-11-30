@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useAxiosSecoir from "../../../Hook/useAxiosSecoir";
 import { useQuery } from "@tanstack/react-query";
 import { FaUserShield, FaUserTimes } from "react-icons/fa";
@@ -6,18 +6,22 @@ import Swal from "sweetalert2";
 
 const UserManage = () => {
   const axiosSecoir = useAxiosSecoir();
+  const [searchText, setSearchText] = useState("");
 
   const { refetch, data } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", searchText],
     queryFn: async () => {
-      const res = await axiosSecoir.get(`users`);
+      const res = await axiosSecoir.get(`users?searchText=${searchText}`);
       return res.data;
     },
   });
 
   const handelUpdeat = (user) => {
     const roleInfo = { role: "admin" };
-
+    axiosSecoir.patch(`users/${user._id}/role`, roleInfo).then((res) => {
+      console.log(res.data);
+      refetch();
+    });
     // if (res.data.modifiedCount) {
     Swal.fire({
       icon: "success",
@@ -35,14 +39,10 @@ const UserManage = () => {
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecoir.patch(`users/${user._id}/role`, roleInfo).then((res) => {
-          console.log(res.data);
-          refetch();
-          Swal.fire({
-            title: "Add Admin Role!",
-            text: "You are Successfully Admin",
-            icon: "success",
-          });
+        Swal.fire({
+          title: "Add Admin Role!",
+          text: "You are Successfully Admin",
+          icon: "success",
         });
       }
     });
@@ -83,9 +83,39 @@ const UserManage = () => {
 
   return (
     <div className=" py-6 md:py-10 px-2 md:px-15">
-      <h1 className=" text-3xl text-secondary font-semibold">
-        All User : {data?.length}
-      </h1>
+      <div className=" md:flex justify-between items-center">
+        <h1 className=" text-3xl text-secondary font-semibold">
+          All User : {data?.length}
+        </h1>
+        <label className="md:mt-0 mt-3 flex items-center gap-3 w-full max-w-md px-4 py-2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all">
+          {/* Search Icon */}
+          <svg
+            className="h-5 w-5 text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <g
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              strokeWidth="2.2"
+              fill="none"
+              stroke="currentColor"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </g>
+          </svg>
+
+          {/* Input Field */}
+          <input
+            type="search"
+            onChange={(e) => setSearchText(e.target.value)}
+            className="grow outline-none bg-transparent text-gray-700 placeholder-gray-400"
+            placeholder="Search user..."
+          />
+        </label>
+      </div>
+
       <div className="mt-6">
         <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
           <table className="min-w-full text-sm">

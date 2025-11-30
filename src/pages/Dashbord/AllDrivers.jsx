@@ -76,6 +76,7 @@ const AllDrivers = () => {
                     <th className="p-4 px-7 md:px-0 font-semibold">Region</th>
                     <th className="p-4 px-10 md:px-0  font-semibold">All Details</th>
                     <th className="p-4 px-10 md:px-0 font-semibold">Submit Date </th>
+                    <th className="p-4 px-5 md:px-0 font-semibold">Work Status</th>
                     <th className="p-4 px-5 md:px-0 font-semibold">Delivery Status</th>
                     <th className="p-4 font-semibold">Action</th>
                   </tr>
@@ -142,7 +143,13 @@ const AllDrivers = () => {
                         </p>
                       </td>
 
-                      {/* Payment */}
+                      <td className="py-4 px-10 md:px-0 text-gray-800">
+                        <p className="text-[17px] text-black">
+                          {item.workStatus}
+                        </p>
+                      </td>
+
+                       
                       <td className="p-4 px-5 md:px-0 font-semibold">
                         {item.status === "pending" ||
                         item.status === "rejected" ? (

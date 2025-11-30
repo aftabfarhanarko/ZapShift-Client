@@ -63,7 +63,6 @@ const MyParcel = () => {
             toast.success("Delet Now");
           })
           .catch((err) => {
-            console.log(err?.code);
             toast.warning(err?.code);
           });
         Swal.fire({
@@ -102,7 +101,7 @@ const MyParcel = () => {
   return (
     <div className=" md:p-8">
       <h1 className=" text-2xl font-bold mt-5  mb-10 ">
-        My Send Parcel : {data?.length}
+        {/* My Send Parcel : {data?.length} */}
       </h1>
       <div className="mt-6">
         <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
@@ -112,7 +111,7 @@ const MyParcel = () => {
                 <th className="p-4 font-semibold">Srl No</th>
                 <th className="p-4 font-semibold">Parcel Info</th>
                 <th className="p-4 font-semibold">Sender Info</th>
-                <th className="p-4 font-semibold">Tracking Number</th>
+                <th className="p-4 font-semibold">Tracking Id</th>
                 <th className="p-4 font-semibold">Delivery Status</th>
                 <th className="p-4 font-semibold">Payment</th>
                 <th className="p-4 font-semibold">Action</th>
@@ -131,26 +130,49 @@ const MyParcel = () => {
                   {/* Parcel Info */}
                   <td className="p-4">
                     <p className="font-semibold text-gray-900">
-                      {item.percilname}
+                      {item?.percilname}
                     </p>
-                    <p className="text-xs text-gray-500">{item.parcelType}</p>
+                    <p className="text-xs text-gray-500">{item?.parcelType}</p>
                   </td>
 
                   {/* Sender Info */}
                   <td className="p-4">
                     <p className="font-semibold text-gray-900">
-                      {item.senderRegion}
+                      {item?.senderRegion}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {item.senderdistick}
+                      {item?.senderdistick}
                     </p>
                   </td>
 
                   {/* Tracking */}
-                  <td className="p-4 text-gray-800">{item.recivercontact}</td>
+                  <td className="p-4 text-gray-800">{item?.trakingId}</td>
 
                   {/* Delivery Status */}
-                  <td className="p-4 text-gray-800">Id Now</td>
+                  <td className="p-4 text-gray-800">
+                    <span
+                      className={`px-3 py-1 rounded-xl text-xs font-medium shadow-sm
+    ${
+      item.deliveryStatus === "pending-pickup" &&
+      "bg-yellow-50 text-yellow-700 border border-yellow-200"
+    }
+    ${
+      item.deliveryStatus === "delivering" &&
+      "bg-blue-50 text-blue-600 border border-blue-200"
+    }
+    ${
+      item.deliveryStatus === "delivered" &&
+      "bg-green-50 text-green-700 border border-green-200"
+    }
+    ${
+      item.deliveryStatus === "cancelled" &&
+      "bg-red-50 text-red-600 border border-red-200"
+    }
+  `}
+                    >
+                      {item.deliveryStatus}
+                    </span>
+                  </td>
 
                   {/* Payment */}
                   <td className="p-4 font-semibold">

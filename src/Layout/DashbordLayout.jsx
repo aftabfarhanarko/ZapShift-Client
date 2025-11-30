@@ -10,17 +10,20 @@ import {
 } from "lucide-react";
 import Logo from "../Shared/Logo";
 import { Link, Outlet } from "react-router";
-import { GoSidebarExpand } from "react-icons/go";
+import { GoPlus, GoSidebarExpand } from "react-icons/go";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { HiHomeModern } from "react-icons/hi2";
 import useAuth from "../Hook/useAuth";
 import { FaRegCreditCard, FaUser, FaUsers } from "react-icons/fa";
 import useRole from "../Hook/useRole";
+import { RiMotorbikeFill } from "react-icons/ri";
+import { PiMotorcycleFill } from "react-icons/pi";
+import { MdDeliveryDining } from "react-icons/md";
 
 const DashbordLayout = () => {
   const { user, userLogOut } = useAuth();
   const role = useRole();
-  
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -145,7 +148,7 @@ const DashbordLayout = () => {
                 </Link>
               </li>
 
-              {role?.role === 'admin' ? (
+              {role?.role === "admin" ? (
                 <>
                   {" "}
                   <li>
@@ -155,8 +158,21 @@ const DashbordLayout = () => {
                       data-tip="All Rider "
                     >
                       {/* Home icon */}
-                      <CiDeliveryTruck className=" w-4 md:w-5  h-5 md:h-7" />
+                      <PiMotorcycleFill className=" w-4 md:w-5  h-5 md:h-7" />
                       <span className="is-drawer-close:hidden">All Rider</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/dasbord/assinRider"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip=" Assign Ridres "
+                    >
+                      {/* < GoPlus  className=" w-4 md:w-5  h-5 md:h-7" /> */}
+                      <MdDeliveryDining className=" w-4 md:w-5  h-5 md:h-7" />
+                      <span className="is-drawer-close:hidden">
+                        Assign Ridres
+                      </span>
                     </Link>
                   </li>
                   <li>
@@ -172,7 +188,9 @@ const DashbordLayout = () => {
                     </Link>
                   </li>
                 </>
-              ) : ""}
+              ) : (
+                ""
+              )}
               {/* List item */}
               <div className=" border-t border-gray-400 mt-5 pt-3">
                 <li>
