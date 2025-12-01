@@ -289,7 +289,7 @@ const UserManage = () => {
               ))}
             </tbody>
           </table>
-          
+
           {/* Pagination */}
           <div className="my-6 flex justify-between px-6 items-center gap-6 select-none">
             {/* Previous */}
@@ -297,7 +297,7 @@ const UserManage = () => {
               disabled={page === 1}
               onClick={() => setPage(page - 1)}
               className={`
-    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow hover:bg-primary font-medium
+    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
     transition-all duration-300
     ${
       page === 1

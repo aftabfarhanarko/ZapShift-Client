@@ -5,6 +5,7 @@ import { MdCancel, MdCheckCircle, MdOutlineRateReview } from "react-icons/md";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const AllDrivers = () => {
   const axiosSecoir = useAxiosSecoir();
@@ -13,18 +14,18 @@ const AllDrivers = () => {
   // Pagitions Add Now
   const [page, setPage] = useState(1);
   const [allRider, setAllRider] = useState(0);
-  const limit = 9;
+  const limit = 6;
   const skip = (page - 1) * limit;
-  const totalPage = Math.ceil(allRider / limit)
+  const totalPage = Math.ceil(allRider / limit);
   const { refetch, data, isLoading } = useQuery({
-    queryKey: ["test", "pending",page],
+    queryKey: ["test", "pending", page],
     queryFn: async () =>
-      await axiosSecoir.get(`/riders?limit=${limit}&skip=${skip}`)
-    .then((res) => {
-
-      setAllRider(res.data.total)
-      return res.data;
-    }),
+      await axiosSecoir
+        .get(`/riders?limit=${limit}&skip=${skip}`)
+        .then((res) => {
+          setAllRider(res.data.total);
+          return res.data;
+        }),
   });
 
   const updeatStutaseNow = (item, status) => {
@@ -224,12 +225,60 @@ const AllDrivers = () => {
                   ))}
                 </tbody>
               </table>
-               
 
-               {/* Paginations */}
-               <div>
-                
-               </div>
+              {/* Paginations */}
+              <div className=" my-6 flex justify-between px-6 items-center gap-6 select-none">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage(page - 1)}
+                  className={`
+    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
+    transition-all duration-300
+    ${
+      page === 1
+        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
+        : "text-gray-700 bg-white hover:bg-gray-100 hover:shadow-md hover:-translate-y-0.5"
+    }
+  `}
+                >
+                  <FaArrowLeftLong className="transition-transform duration-300 group-hover:-translate-x-1" />
+                  Previous
+                </button>
+                <div className=" flex items-center gap-3">
+                  {Array.from({ length: totalPage }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setPage(i + 1)}
+                      className={`
+          w-8 h-8 flex items-center justify-center text-sm transition-all duration-200
+          ${
+            page === i + 1
+              ? "bg-lime-300 text-black font-semibold rounded-full" // Active circle
+              : "text-gray-600 hover:text-black"
+          }
+        `}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  disabled={page === totalPage}
+                  onClick={() => setPage(page + 1)}
+                  className={`
+    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
+    transition-all duration-300
+    ${
+      page === totalPage
+        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
+        : "text-gray-700 bg-white hover:bg-gray-200 hover:shadow-md hover:-translate-y-0.5"
+    }
+  `}
+                >
+                  Next <FaArrowRightLong />
+                </button>
+              </div>
             </div>
           </div>
         </div>
