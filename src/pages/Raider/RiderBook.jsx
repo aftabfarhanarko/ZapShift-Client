@@ -1,6 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import rider from "../../assets/agent-pending.png";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import useAxiosSecoir from "../../Hook/useAxiosSecoir";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
@@ -18,6 +18,7 @@ const RiderBook = () => {
 
   const axiosSecoir = useAxiosSecoir();
   const serviceCenters = useLoaderData();
+  const nmaviget = useNavigate()
 
   const regionsert = serviceCenters.map((r) => r.region);
   const regionsDuplicate = [...new Set(regionsert)];
@@ -71,6 +72,7 @@ const RiderBook = () => {
         .then((res) => {
           console.log(res.data);
           // toast.success("Rider Creat Successfully");
+          nmaviget("/dasbord")
           Swal.fire({
             icon: "success",
             title: "Rider Successfully Created",

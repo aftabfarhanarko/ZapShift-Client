@@ -111,7 +111,7 @@ const MyParcel = () => {
   };
   return (
     <div className=" md:p-8">
-      <h1 className=" text-2xl font-semibold text-secondary ">
+      <h1 className=" text-3xl font-semibold text-secondary ">
         My Send Parcel : {data?.length}
       </h1>
       <div className="mt-6">

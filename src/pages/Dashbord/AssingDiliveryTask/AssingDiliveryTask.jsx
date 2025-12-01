@@ -23,7 +23,6 @@ const AssingDiliveryTask = () => {
       return res.data;
     },
   });
-  // laptop@phone.comPHone@@12 aftabfarhan24@gmail.comQQqq@@12
 
   console.log(parcel);
 
@@ -67,7 +66,7 @@ const AssingDiliveryTask = () => {
     return <Loding></Loding>;
   }
   return (
-    <div className=" p-5">
+    <div className=" p-2 md:p-5">
       <h1 className=" font-semibold text-3xl text-secondary ">
         Parcels Pending Pickup:{parcel.length}
       </h1>
@@ -158,22 +157,25 @@ const AssingDiliveryTask = () => {
                   )}
                 </td>
                 <td className=" p-4">
-                  <button
-                    onClick={() =>
-                      handelAcceptsPsrcel(item, "parcel-picked-up")
-                    }
-                    className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
-                  >
-                    Mark as Pickup
-                  </button>
-                  <button
-                    onClick={() =>
-                      handelAcceptsPsrcel(item, "parcel-delivered")
-                    }
-                    className="px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 ml-3"
-                  >
-                    Mark as Delivery
-                  </button>
+                  {item.deliveryStatus === "parcel-picked-up" ? (
+                    <button
+                      onClick={() =>
+                        handelAcceptsPsrcel(item, "parcel-delivered")
+                      }
+                      className="px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-all duration-300 ml-3"
+                    >
+                      Mark as Delivery
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        handelAcceptsPsrcel(item, "parcel-picked-up")
+                      }
+                      className="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
+                    >
+                      Mark as Pickup
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

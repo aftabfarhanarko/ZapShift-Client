@@ -2,6 +2,7 @@ import React from 'react';
 import useAuth from '../Hook/useAuth';
 import useRole from '../Hook/useRole';
 import Loding from '../Shared/Loding';
+import Forbidint from '../components/Forbidint'
 
 const RIderRoute = ({children}) => {
     const { loding } = useAuth();
