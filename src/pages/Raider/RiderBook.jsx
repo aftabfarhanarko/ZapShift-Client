@@ -8,7 +8,8 @@ import axios from "axios";
 import useAuth from "../../Hook/useAuth";
 import { ArrowUpRight } from "lucide-react";
 import newAdd from "../../assets/tiny-deliveryman.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 const RiderBook = () => {
   const {
     register,
@@ -19,10 +20,10 @@ const RiderBook = () => {
 
   const { user } = useAuth();
   const [show, setShow] = useState(false);
+  const [top, setTop] = useState([]);
   const axiosSecoir = useAxiosSecoir();
   const serviceCenters = useLoaderData();
   const nmaviget = useNavigate();
-
   const regionsert = serviceCenters.map((r) => r.region);
   const regionsDuplicate = [...new Set(regionsert)];
 
@@ -98,55 +99,105 @@ const RiderBook = () => {
     });
   };
 
+  useEffect(() => {
+    fetch("/reviews.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setTop(data);
+      });
+  }, []);
+
+  console.log(top);
   return (
     <div className=" my-10 min-h-screen">
-      {
-        show ? "" :
-      
-      <div className="bg-white rounded-3xl shadow-lg  w-full p-8 md:p-12">
-        {/* Image placeholder section */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            {/* Blue blob background */}
-            <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-20 transform scale-110"></div>
+      {show ? (
+        ""
+      ) : (
+        <>
+          <div className="bg-white rounded-3xl shadow-lg  w-full p-8 md:p-12">
+            {/* Image placeholder section */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                {/* Blue blob background */}
+                <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-20 transform scale-110"></div>
 
-            {/* Image container with border */}
-            <div>
-              <img
-                src={newAdd}
-                alt="Delivery person"
-                className="w-full h-full "
-              />
+                {/* Image container with border */}
+                <div>
+                  <img
+                    src={newAdd}
+                    alt="Delivery person"
+                    className="w-full h-full "
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Heading */}
+            <h1 className="text-3xl  text-secondary font-semibold text-center mb-4">
+              How Earning Works
+            </h1>
+
+            {/* Description */}
+            <p className="text-gray-600 text-center max-w-2xl mx-auto mb-8 leading-relaxed">
+              Enjoy fast, reliable parcel delivery with real-time tracking and
+              zero hassle. From personal packages to business shipments — we
+              deliver on time, every time.
+            </p>
+
+            {/* Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShow(!show)}
+                className="bg-primary hover:bg-lime-300 text-gray-900 font-semibold px-8  md:px-15 py-1.5 md:py-2 rounded-full flex items-center gap-3 transition-all duration-300 shadow-md hover:shadow-lg"
+              >
+                <span className="text-lg">Apply Now Rider</span>
+                <div className="bg-gray-900 rounded-full p-2">
+                  <ArrowUpRight className="w-4 h-4 text-white" />
+                </div>
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Heading */}
-        <h1 className="text-3xl  text-secondary font-semibold text-center mb-4">
-          How Earning Works
-        </h1>
+          <div className="max-w-7xl mx-auto">
+            {/* Heading */}
+            <h1 className="text-3xl font-semibold text-secondary mt-15 text-center mb-12">
+              Our Top Rider
+            </h1>
 
-        {/* Description */}
-        <p className="text-gray-600 text-center max-w-2xl mx-auto mb-8 leading-relaxed">
-          Enjoy fast, reliable parcel delivery with real-time tracking and zero
-          hassle. From personal packages to business shipments — we deliver on
-          time, every time.
-        </p>
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {top.map((agent, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+                >
+                  {/* Image Placeholder */}
+                  <div
+                    className={`${agent.bgColor} h-64 flex items-center justify-center`}
+                  >
+                    <div className="text-center text-gray-400">
+                      <p className="text-xs mt-1">{agent.name}</p>
+                    </div>
 
-        {/* Button */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => setShow(!show)}
-            className="bg-primary hover:bg-lime-300 text-gray-900 font-semibold px-8  md:px-15 py-1.5 md:py-2 rounded-full flex items-center gap-3 transition-all duration-300 shadow-md hover:shadow-lg"
-          >
-            <span className="text-lg">Apply Now Rider</span>
-            <div className="bg-gray-900 rounded-full p-2">
-              <ArrowUpRight className="w-4 h-4 text-white" />
+                    <img
+                      src={agent.user_photoURL}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Agent Info */}
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      {agent.userName}
+                    </h3>
+                    <p className="text-gray-500 text-sm">Role : Rider</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </button>
-        </div>
-      </div>
-      }
+          </div>
+        </>
+      )}
       {show && (
         <div className="bg-white min-h-[80vh] rounded-lg my-20">
           <div className=" p-5 md:p-15 py-12 md:py-15 ">

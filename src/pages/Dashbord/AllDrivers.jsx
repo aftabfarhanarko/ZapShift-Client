@@ -9,10 +9,22 @@ import { useState } from "react";
 const AllDrivers = () => {
   const axiosSecoir = useAxiosSecoir();
   const [modalData, setModalData] = useState([]);
+
+  // Pagitions Add Now
+  const [page, setPage] = useState(1);
+  const [allRider, setAllRider] = useState(0);
+  const limit = 9;
+  const skip = (page - 1) * limit;
+  const totalPage = Math.ceil(allRider / limit)
   const { refetch, data, isLoading } = useQuery({
-    queryKey: ["test", "pending"],
+    queryKey: ["test", "pending",page],
     queryFn: async () =>
-      await axiosSecoir.get("/riders").then((res) => res.data),
+      await axiosSecoir.get(`/riders?limit=${limit}&skip=${skip}`)
+    .then((res) => {
+
+      setAllRider(res.data.total)
+      return res.data;
+    }),
   });
 
   const updeatStutaseNow = (item, status) => {
@@ -63,7 +75,7 @@ const AllDrivers = () => {
     <div>
       <div className=" p-6  ">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-         All Rider : {data.length}
+          All Rider : {data.total}
         </h2>
         <div className="">
           <div className="mt-6">
@@ -74,16 +86,24 @@ const AllDrivers = () => {
                     <th className="p-4 font-semibold">Srl No</th>
                     <th className="p-4 px-10 md:px-0 font-semibold">Raider</th>
                     <th className="p-4 px-7 md:px-0 font-semibold">Region</th>
-                    <th className="p-4 px-10 md:px-0  font-semibold">All Details</th>
-                    <th className="p-4 px-10 md:px-0 font-semibold">Submit Date </th>
-                    <th className="p-4 px-5 md:px-0 font-semibold">Work Status</th>
-                    <th className="p-4 px-5 md:px-0 font-semibold">Delivery Status</th>
+                    <th className="p-4 px-10 md:px-0  font-semibold">
+                      All Details
+                    </th>
+                    <th className="p-4 px-10 md:px-0 font-semibold">
+                      Submit Date{" "}
+                    </th>
+                    <th className="p-4 px-5 md:px-0 font-semibold">
+                      Work Status
+                    </th>
+                    <th className="p-4 px-5 md:px-0 font-semibold">
+                      Delivery Status
+                    </th>
                     <th className="p-4 font-semibold">Action</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {data.map((item, i) => (
+                  {data.result.map((item, i) => (
                     <tr
                       key={i}
                       className="border-b border-gray-200 hover:bg-gray-50 transition"
@@ -149,7 +169,6 @@ const AllDrivers = () => {
                         </p>
                       </td>
 
-                       
                       <td className="p-4 px-5 md:px-0 font-semibold">
                         {item.status === "pending" ||
                         item.status === "rejected" ? (
@@ -168,8 +187,6 @@ const AllDrivers = () => {
                       {/* Actions */}
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                         
-
                           {/* Approved */}
                           <button
                             onClick={() => handelUpdet(item)}
@@ -188,7 +205,7 @@ const AllDrivers = () => {
                             Reject <MdCancel size={20} />
                           </button>
 
-                           {/* View */}
+                          {/* View */}
                           <button
                             onClick={() => handelViewAll(item)}
                             className="px-5 py-1.5 rounded-md
@@ -207,6 +224,12 @@ const AllDrivers = () => {
                   ))}
                 </tbody>
               </table>
+               
+
+               {/* Paginations */}
+               <div>
+                
+               </div>
             </div>
           </div>
         </div>
@@ -303,7 +326,14 @@ const AllDrivers = () => {
 
             <div>
               <p className="text-sm text-gray-500">Status</p>
-              <p className={`${modalData.status ===  "approved" ? 'font-semibold px-3 py-1.5 bg-green-100 text-green-700 rounded-xl inline-block': modalData.status === "rejected" &&  'font-semibold px-3 py-1.5 bg-red-100 text-red-600 rounded-xl inline-block'} `}>
+              <p
+                className={`${
+                  modalData.status === "approved"
+                    ? "font-semibold px-3 py-1.5 bg-green-100 text-green-700 rounded-xl inline-block"
+                    : modalData.status === "rejected" &&
+                      "font-semibold px-3 py-1.5 bg-red-100 text-red-600 rounded-xl inline-block"
+                } `}
+              >
                 {modalData?.status}
               </p>
             </div>
@@ -326,9 +356,10 @@ const AllDrivers = () => {
           {/* Close Button */}
           <div className="modal-action mt-6 flex">
             <form method="dialog">
-             
-
-                <button onClick={handelCloseModal} className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+              <button
+                onClick={handelCloseModal}
+                className="px-5 py-1.5 rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+              >
                 Close
               </button>
             </form>

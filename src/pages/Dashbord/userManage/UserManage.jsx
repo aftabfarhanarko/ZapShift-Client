@@ -5,18 +5,33 @@ import { FaUserShield, FaUserTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 import Loding from "../../../Shared/Loding";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { GoArrowRight } from "react-icons/go";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const UserManage = () => {
   const axiosSecoir = useAxiosSecoir();
   const [searchText, setSearchText] = useState("");
 
+  // set Paginitions
+  const [page, setPage] = useState(1);
+  const [allUser, setAllUser] = useState(0);
+  const limit = 9; // per page
+  const skip = (page - 1) * limit;
+  const totalPage = Math.ceil(allUser / limit);
+
   const { refetch, data, isLoading } = useQuery({
-    queryKey: ["users", searchText],
+    queryKey: ["users", searchText, page],
     queryFn: async () => {
-      const res = await axiosSecoir.get(`users?searchText=${searchText}`);
+      const res = await axiosSecoir.get(
+        `/users?searchText=${searchText}&limit=${limit}&skip=${skip}`
+      );
+      // total count from backend
+      setAllUser(res.data.total);
       return res.data;
     },
   });
+
+  // console.log(allUser);
 
   const handelUpdeat = (user) => {
     const roleInfo = { role: "admin" };
@@ -137,7 +152,7 @@ const UserManage = () => {
     <div className=" py-6 md:py-10 px-2 md:px-15">
       <div className=" md:flex justify-between items-center">
         <h1 className=" text-3xl text-secondary font-semibold">
-          All User : {data?.length}
+          All User : {data.total}
         </h1>
         <label className="md:mt-0 mt-3 flex items-center gap-3 w-full max-w-md px-4 py-2 bg-white/70 backdrop-blur-md border  hover:border-lime-500 border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all">
           {/* Search Icon */}
@@ -157,17 +172,15 @@ const UserManage = () => {
               <path d="m21 21-4.3-4.3"></path>
             </g>
           </svg>
-
           {/* Input Field */}
           <input
             type="search"
             onChange={(e) => setSearchText(e.target.value)}
-            className="grow  outline-none bg-transparent text-gray-700 placeholder-gray-400"
+            className="grow z-20 outline-none bg-transparent text-gray-700 placeholder-gray-400"
             placeholder="Search user..."
           />
         </label>
       </div>
-
       <div className="mt-6">
         <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
           <table className="min-w-full text-sm">
@@ -182,58 +195,52 @@ const UserManage = () => {
                 <th className="p-4 font-semibold">Action</th>
               </tr>
             </thead>
-
             <tbody>
-              {data?.map((item, i) => (
+              {data.result?.map((item, i) => (
                 <tr
                   key={i}
                   className="border-b border-gray-200 hover:bg-gray-100 transition"
                 >
                   {/* Serial */}
                   <td className="p-4 font-medium text-gray-900">{i + 1}</td>
-
                   {/* User Info */}
                   <td className="p-4 flex items-center gap-3">
                     <img
-                      src={item.photoURL}
-                      alt={item.displayName}
+                      src={item?.photoURL}
                       className="w-10 h-10 rounded-full object-cover border-2 border-base-300"
                     />
                     <p className=" font-medium md:font-semibold text-gray-900">
                       {item.displayName}
                     </p>
                   </td>
-
                   {/* Email */}
                   <td className="p-4 px-10 md:px-0 text-gray-800">
                     {item.email}
                   </td>
-
                   {/* Created At */}
                   <td className="p-4 text-gray-700">
                     {new Date(item.creatWb).toLocaleDateString()}
                   </td>
-
                   {/* Role */}
                   <td className="p-4 font-semibold">
                     <span
-                      className={`
-    px-3 py-1 rounded-full text-xs font-semibold
-    ${
-      item.role === "admin"
-        ? "bg-orange-100 text-orange-600"
-        : item.role === "rider"
-        ? "bg-red-100 text-red-600"
-        : "bg-blue-100 text-blue-600" // user
-    }
-  `}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold${
+                        item.role === "admin"
+                          ? "bg-orange-100 text-orange-600"
+                          : item.role === "rider"
+                          ? "bg-red-100 text-red-600"
+                          : "bg-blue-100 text-blue-600"
+                      }`}
                     >
                       {item.role}
                     </span>
                   </td>
-
                   <td className=" p-4">
-                    { item.role === "rider" ? <span className=" text-md font-semibold text-red-600">No Updeat</span> :item.role === "admin" ? (
+                    {item.role === "rider" ? (
+                      <span className=" text-md font-semibold text-red-600">
+                        No Updeat
+                      </span>
+                    ) : item.role === "admin" ? (
                       <button
                         onClick={() => handelremovedAdmin(item)}
                         className="
@@ -267,14 +274,9 @@ const UserManage = () => {
                       </button>
                     )}
                   </td>
-
                   {/* Actions */}
                   <td className="p-4">
                     <div className="flex items-center gap-3">
-                      {/* <button className="px-4 py-1.5 rounded-lg bg-white text-green-600 border border-green-300 flex items-center gap-2 font-medium hover:bg-green-50 hover:shadow-sm transition">
-                        Approved
-                      </button> */}
-
                       <button
                         onClick={() => handelDeletUser(item._id)}
                         className="px-4 py-1.5 rounded-lg bg-white text-red-600 border border-red-300 flex items-center gap-2 font-medium hover:bg-red-50 hover:shadow-sm transition "
@@ -287,6 +289,64 @@ const UserManage = () => {
               ))}
             </tbody>
           </table>
+          
+          {/* Pagination */}
+          <div className="my-6 flex justify-between px-6 items-center gap-6 select-none">
+            {/* Previous */}
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className={`
+    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow hover:bg-primary font-medium
+    transition-all duration-300
+    ${
+      page === 1
+        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
+        : "text-gray-700 bg-white hover:bg-gray-100 hover:shadow-md hover:-translate-y-0.5"
+    }
+  `}
+            >
+              <FaArrowLeftLong className="transition-transform duration-300 group-hover:-translate-x-1" />
+              Previous
+            </button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-3">
+              {Array.from({ length: totalPage }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setPage(i + 1)}
+                  className={`
+          w-8 h-8 flex items-center justify-center text-sm transition-all duration-200
+          ${
+            page === i + 1
+              ? "bg-lime-300 text-black font-semibold rounded-full" // Active circle
+              : "text-gray-600 hover:text-black"
+          }
+        `}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            {/* Next */}
+            <button
+              disabled={page === totalPage}
+              onClick={() => setPage(page + 1)}
+              className={`
+    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
+    transition-all duration-300
+    ${
+      page === totalPage
+        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
+        : "text-gray-700 bg-white hover:bg-gray-200 hover:shadow-md hover:-translate-y-0.5"
+    }
+  `}
+            >
+              Next <FaArrowRightLong />
+            </button>
+          </div>
         </div>
       </div>
     </div>
