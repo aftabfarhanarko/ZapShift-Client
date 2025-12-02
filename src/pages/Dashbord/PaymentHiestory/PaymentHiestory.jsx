@@ -3,15 +3,15 @@ import useAxiosSecoir from "../../../Hook/useAxiosSecoir";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../Hook/useAuth";
 import Loding from "../../../Shared/Loding";
+import { Link } from "react-router";
 
 const PaymentHiestory = () => {
   const { user } = useAuth();
   const axiosSecoir = useAxiosSecoir();
-  const { data: history , isLoading } = useQuery({
+  const { data: history, isLoading } = useQuery({
     queryKey: ["idd", user?.email],
     queryFn: () =>
-      axiosSecoir.get(`/payment?email=${user?.email}`)
-    .then((res) => res.data),
+      axiosSecoir.get(`/payment?email=${user?.email}`).then((res) => res.data),
     enabled: !!user?.email,
   });
 
@@ -22,13 +22,14 @@ const PaymentHiestory = () => {
   }
   return (
     <div className="md:p-9">
-      
-      <h2 className="text-3xl font-semibold text-secondary">Total Payment Hiestory : {history?.length}</h2>
+      <h2 className="text-3xl font-semibold text-secondary">
+        Total Payment Hiestory : {history?.length}
+      </h2>
 
-      <div className="mt-8">
-        <div className="bg-white shadow-lg rounded-xl overflow-x-auto">
+      <div className="mt-8 md:min-h-auto min-h-[90vh]">
+        <div className="overflow-x-auto mt-5  bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-100 text-gray-700 text-left">
+            <thead className="bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-200 text-left">
               <tr>
                 <th className="p-4 font-semibold">Srl</th>
                 <th className="p-4 font-semibold">Parcel Info</th>
@@ -44,24 +45,33 @@ const PaymentHiestory = () => {
               {history?.map((item, i) => (
                 <tr
                   key={i}
-                  className="border-b border-gray-200 hover:bg-gray-50 transition"
+                  className="border-b  transition dark:bg-gray-900 dark:border-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:via-purple-50 hover:to-blue-50 dark:hover:from-gray-800 dark:hover:via-gray-800 dark:hover:to-gray-900 transition"
                 >
                   {/* Serial */}
-                  <td className="p-4 font-medium text-gray-800">{i + 1}</td>
+                  <td className="p-4  font-medium text-gray-900 dark:text-gray-200">
+                    {i + 1}
+                  </td>
 
                   {/* Parcel Info */}
-                  <td className="p-4">
-                    <p className="font-semibold text-gray-900">
+                  <td className="p-4 ">
+                    <p className="font-semibold text-gray-900 dark:text-gray-200">
                       {item.parcelName}
                     </p>
-                    <p className="text-xs text-gray-500">ID: {item.parcelid}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      ID: {item.parcelid}
+                    </p>
                   </td>
 
                   {/* Customer Email */}
-                  <td className="p-4 text-gray-700">{item.customerEmail}</td>
+                  <td className="p-4">
+                    <p className="font-semibold text-gray-900 dark:text-gray-200">
+                      {item.customerEmail}
+                    </p>
+                  </td>
 
                   {/* Amount */}
-                  <td className="p-4 font-semibold text-gray-900">
+
+                  <td className="p-4 text-gray-800  dark:text-gray-200">
                     ${item.amount}
                   </td>
 
@@ -85,7 +95,7 @@ const PaymentHiestory = () => {
                   </td>
 
                   {/* Paid At */}
-                  <td className="p-4 text-gray-700">
+                  <td className="p-4 font-semibold text-gray-900 dark:text-gray-200">
                     {new Date(item.paidAt).toLocaleString()}
                   </td>
                 </tr>

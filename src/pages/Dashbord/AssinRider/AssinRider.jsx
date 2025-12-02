@@ -125,6 +125,7 @@ const AssinRider = () => {
         </table>
       </div>
 
+
       {/* Modal */}
       <dialog ref={referen} className="modal modal-bottom sm:modal-middle">
         <div className="modal-box bg-white dark:bg-gray-900">
