@@ -12,16 +12,18 @@ const Dashboard = () => {
     return <Loding></Loding>
   }
 
+  console.log(role);
+  
   if(role === "admin"){
-    return AdminDashBord
+    return <AdminDashBord></AdminDashBord>
   }
 
   if(role === "rider"){
-    return RiderDashBord
+    return <RiderDashBord></RiderDashBord>
   }
 
   if(role === "user"){
-    return UserDashBord
+    return <UserDashBord></UserDashBord>
   }
 
 };

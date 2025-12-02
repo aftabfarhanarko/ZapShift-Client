@@ -1,7 +1,7 @@
+import React from "react";
 import {
   LayoutDashboard,
   Package,
-  Store,
   Settings,
   Lock,
   HelpCircle,
@@ -9,305 +9,233 @@ import {
   Bell,
 } from "lucide-react";
 import Logo from "../Shared/Logo";
-import { Link, Outlet } from "react-router";
-import { GoPlus, GoSidebarExpand } from "react-icons/go";
-import { CiDeliveryTruck } from "react-icons/ci";
+import { Link, Outlet, useLocation } from "react-router";
+import { GoSidebarExpand } from "react-icons/go";
 import { HiHomeModern } from "react-icons/hi2";
 import useAuth from "../Hook/useAuth";
+import useRole from "../Hook/useRole";
 import {
-  FaCheckCircle,
   FaRegCreditCard,
   FaTasks,
-  FaUser,
+  FaCheckCircle,
   FaUsers,
 } from "react-icons/fa";
-import useRole from "../Hook/useRole";
 import { RiMotorbikeFill } from "react-icons/ri";
 import { PiMotorcycleFill } from "react-icons/pi";
 import { MdDeliveryDining } from "react-icons/md";
-import logoseas from '../assets/logo.png'
+import logoseas from "../assets/logo.png";
 
 const DashbordLayout = () => {
   const { user, userLogOut } = useAuth();
   const role = useRole();
-  console.log(role);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
+      <div className="drawer-content flex flex-col">
         {/* Navbar */}
-        <nav className="navbar w-full bg-base-300 flex justify-between md:pr-10">
-          <div className="flex items-center">
+        <nav className="navbar w-full bg-white dark:bg-gray-900 shadow-md px-4 md:px-10 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-4">
             <label
               htmlFor="my-drawer-4"
+              className="btn btn-square text-white btn-ghost"
               aria-label="open sidebar"
-              className="btn btn-square btn-ghost"
             >
-              {/* Sidebar toggle icon */}
               <GoSidebarExpand className="w-6 h-6" />
             </label>
-            <div className="px-1.5 md:px-5">
-              <Logo></Logo>
+            <div className="flex items-center gap-2">
+              <Logo />
             </div>
           </div>
 
-          <div>
-            <div className="w-full flex items-center justify-between px-4 py-4 gap-3">
-              {/* Right Side - Profile */}
-              <div className="flex items-center gap-3 cursor-pointer">
-                {/* Rounded Image (replace src later) */}
-                <div className="">
-                  {user && (
-                    <img
-                      className="w-10 h-10 rounded-full object-cover"
-                      src={user?.photoURL}
-                      alt="profile"
-                    />
-                  )}
-                </div>
+          <div className="flex items-center gap-4">
+            {/* Notification */}
+            <div className="relative">
+              <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition">
+                <Bell className="w-5 h-5 text-gray-700 dark:text-gray-200" />
               </div>
-              {/* Left Side - Notification */}
-              <div className="flex items-center gap-4">
-                <div
-                  className="
-  w-10 h-10 
-  rounded-full 
-  bg-white 
-  border border-gray-200 
-  flex items-center justify-center
-  shadow-sm
-  hover:shadow-md 
-  hover:border-gray-300
-  transition-all duration-200
-"
-                >
-                  <Bell className="w-5 h-5 text-gray-700" />
-                </div>
-              </div>
+              <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </div>
+
+            {/* Profile */}
+            {user && (
+              <img
+                className="w-10 h-10 rounded-full object-cover shadow-sm"
+                src={user.photoURL}
+                alt="profile"
+              />
+            )}
           </div>
         </nav>
-        {/* Page content here */}
-        <div className="p-4">
-          <Outlet></Outlet>
-        </div>
+
+        {/* Page Content */}
+        <main className="flex-1 p-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+          <Outlet />
+        </main>
       </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
-        <label
-          htmlFor="my-drawer-4"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-300 border-r border-gray-400 is-drawer-close:w-14 is-drawer-open:w-64">
-          {/* Sidebar content here */}
+      {/* Sidebar */}
+      <div className="drawer-side">
+        <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
+        <aside className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 w-64 lg:w-64">
+          <div className="flex items-center justify-center mt-4 mb-6">
+            {/* <img src={logoseas} alt="Logo" className="w-28 object-contain" /> */}
+          </div>
 
-          <ul className="menu w-full grow ">
-            <li>
-              <Link
-                to="/"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip=" Home Page "
-              >
-                <img src={logoseas}></img>
-
-                {/* <HiHomeModern className=" w-4 md:w-5  h-5 md:h-7" /> */}
-                <span className="is-drawer-close:hidden">Home Page</span>
-              </Link>
-            </li>
-
+          <ul className="menu flex-1 px-2 space-y-1">
+            {/* Dashboard Home */}
             <li>
               <Link
                 to="/dasbord"
-                className="is-drawer-close:tooltip mt-3 is-drawer-close:tooltip-right"
-                data-tip="Dashboard Home Page "
+                className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                  isActive("/dasbord")
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                }`}
               >
-                <HiHomeModern className=" w-4 md:w-5  h-5 md:h-7" />
-                <span className="is-drawer-close:hidden">Dashboard Home Page</span>
+                <HiHomeModern className="w-5 h-5" />
+                <span>Dashboard Home</span>
               </Link>
             </li>
-            <div className="mt-">
-              {/* List item */}
-              <p className="py-3 border-b  border-gray-300 text-secondary">
-                MENU
-              </p>
 
-          {/* 
-          
-          
-          */}
-
-              <li>
-                <Link
-                  to="/dasbord/myparcel"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="My Parcel "
-                >
-                  {/* Home icon */}
-                  <Package className=" w-4 md:w-5  h-5 md:h-7" />
-                  <span className="is-drawer-close:hidden">My Parcel</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/dasbord/paymentHiestory"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Payment Details "
-                >
-                  <FaRegCreditCard className=" w-4 md:w-5  h-5 md:h-7" />
-                  <span className="is-drawer-close:hidden">
-                    Payment Details
-                  </span>
-                </Link>
-              </li>
-
-              {role?.role === "rider" && (
-                <>
-                  <li>
-                    <Link
-                      to="/dasbord/assigned-deliveries"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Assigned Deliveries "
-                    >
-                      {/* Home icon */}
-                      <FaTasks className=" w-4 md:w-5  h-5 md:h-7" />
-                      <span className="is-drawer-close:hidden">
-                        {" "}
-                        Assigned Deliveries
-                      </span>
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      to="/dasbord/riderCommpletTask"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="Commplet Rider Task "
-                    >
-                      {/* Home icon */}
-                      <FaCheckCircle className=" w-4 md:w-5  h-5 md:h-7" />
-                      <span className="is-drawer-close:hidden">
-                        {" "}
-                        Commplet Rider Task
-                      </span>
-                    </Link>
-                  </li>
-                </>
-              )}
-
-              {role?.role === "admin" ? (
-                <>
-                  {" "}
-                  <li>
-                    <Link
-                      to="/dasbord/deliveries"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="All Rider "
-                    >
-                      {/* Home icon */}
-                      <PiMotorcycleFill className=" w-4 md:w-5  h-5 md:h-7" />
-                      <span className="is-drawer-close:hidden">All Rider</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dasbord/assinRider"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip=" Assign Ridres "
-                    >
-                      {/* < GoPlus  className=" w-4 md:w-5  h-5 md:h-7" /> */}
-                      <MdDeliveryDining className=" w-4 md:w-5  h-5 md:h-7" />
-                      <span className="is-drawer-close:hidden">
-                        Assign Ridres
-                      </span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dasbord/userManage"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="User Manage "
-                    >
-                      <FaUsers className=" w-4 md:w-5  h-5 md:h-7" />
-                      <span className="is-drawer-close:hidden">
-                        User Manage
-                      </span>
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                ""
-              )}
-              {/* List item */}
-              <div className=" border-t border-gray-400 mt-5 pt-3">
+            {/* Role-based Menu */}
+            {role?.role === "user" && (
+              <>
                 <li>
                   <Link
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Settings"
+                    to="/dasbord/myparcel"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/myparcel")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
                   >
-                    {/* Settings icon */}
-                    <Settings className=" w-4 md:w-5  h-5 md:h-7" />
-
-                    <span className="is-drawer-close:hidden">Settings</span>
+                    <Package className="w-5 h-5" />
+                    <span>My Parcel</span>
                   </Link>
                 </li>
 
                 <li>
                   <Link
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Change Password"
+                    to="/dasbord/paymentHiestory"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/paymentHiestory")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
                   >
-                    {/* Settings icon */}
-                    <Lock className=" w-4 md:w-5  h-5 md:h-7" />
+                    <FaRegCreditCard className="w-5 h-5" />
+                    <span>Payment Details</span>
+                  </Link>
+                </li>
+              </>
+            )}
 
-                    <span className="is-drawer-close:hidden">
-                      {" "}
-                      Change Password
-                    </span>
+            {role?.role === "rider" && (
+              <>
+                <li>
+                  <Link
+                    to="/dasbord/assigned-deliveries"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/assigned-deliveries")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
+                  >
+                    <FaTasks className="w-5 h-5" />
+                    <span>Assigned Deliveries</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Help"
+                    to="/dasbord/riderCommpletTask"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/riderCommpletTask")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
                   >
-                    {/* Settings icon */}
-                    <HelpCircle className=" w-4 md:w-5  h-5 md:h-7" />
+                    <FaCheckCircle className="w-5 h-5" />
+                    <span>Complete Rider Task</span>
+                  </Link>
+                </li>
+              </>
+            )}
 
-                    <span className="is-drawer-close:hidden">Help</span>
+            {role?.role === "admin" && (
+              <>
+                <li>
+                  <Link
+                    to="/dasbord/deliveries"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/deliveries")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
+                  >
+                    <PiMotorcycleFill className="w-5 h-5" />
+                    <span>All Riders</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    onClick={() => userLogOut()}
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Logout"
+                    to="/dasbord/assinRider"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/assinRider")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
                   >
-                    {/* Settings icon */}
-                    <LogOut className=" w-4 md:w-5  h-5 md:h-7" />
-
-                    <span className="is-drawer-close:hidden">Logout</span>
+                    <MdDeliveryDining className="w-5 h-5" />
+                    <span>Assign Riders</span>
                   </Link>
                 </li>
-              </div>
-            </div>
+                <li>
+                  <Link
+                    to="/dasbord/userManage"
+                    className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                      isActive("/dasbord/userManage")
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                    }`}
+                  >
+                    <FaUsers className="w-5 h-5" />
+                    <span>User Manage</span>
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
-        </div>
+
+          {/* Footer Actions */}
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-auto py-4 px-2 flex flex-col gap-2">
+            <Link className="flex items-center gap-3 p-2 text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <Settings className="w-5 h-5 " />
+              <span>Settings</span>
+            </Link>
+            <Link className="flex text-white items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <Lock className="w-5 h-5" />
+              <span>Change Password</span>
+            </Link>
+            <Link className="flex items-center text-white gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <HelpCircle className="w-5 h-5" />
+              <span>Help</span>
+            </Link>
+            <Link
+              onClick={() => userLogOut()}
+              className="flex items-center text-white gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <LogOut className="w-5 h-5" />
+              <span>Logout</span>
+            </Link>
+          </div>
+        </aside>
       </div>
     </div>
   );
 };
 
 export default DashbordLayout;
-    // <li>
-    //             <Link
-    //               className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-    //               data-tip="Dashboard "
-    //             >
-    //               {/* Home icon */}
-    //               <LayoutDashboard className=" w-4 md:w-5  h-5 md:h-7" />
-    //               <span className="is-drawer-close:hidden">Dashboard</span>
-    //             </Link>
-    //           </li>

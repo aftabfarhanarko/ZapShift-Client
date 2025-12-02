@@ -3,355 +3,253 @@ import useAxiosSecoir from "../../../Hook/useAxiosSecoir";
 import { useQuery } from "@tanstack/react-query";
 import { FaUserShield, FaUserTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
-import Loding from "../../../Shared/Loding";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { GoArrowRight } from "react-icons/go";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoIosSearch } from "react-icons/io";
 
+const SkeletonRow = () => (
+  <tr className="animate-pulse">
+    {Array.from({ length: 7 }).map((_, i) => (
+      <td key={i} className="p-4">
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full w-full"></div>
+      </td>
+    ))}
+  </tr>
+);
+
 const UserManage = () => {
   const axiosSecoir = useAxiosSecoir();
-  // const [searchText, setSearchText] = useState("");
-
-  // set Paginitions
   const [page, setPage] = useState(1);
   const [allUser, setAllUser] = useState(0);
-  const limit = 8; // per page
+  const limit = 8;
   const skip = (page - 1) * limit;
   const totalPage = Math.ceil(allUser / limit);
 
   const { refetch, data, isLoading } = useQuery({
-    queryKey: ["users", searchText, page],
+    queryKey: ["users", page],
     queryFn: async () => {
       const res = await axiosSecoir.get(
-        `/users?searchText=${searchText}&limit=${limit}&skip=${skip}`
+        `/users?searchText=&limit=${limit}&skip=${skip}`
       );
-      // total count from backend
       setAllUser(res.data.total);
       return res.data;
     },
   });
 
-  // console.log(allUser);
-
   const handelUpdeat = (user) => {
     const roleInfo = { role: "admin" };
-    axiosSecoir.patch(`users/${user._id}/role`, roleInfo).then((res) => {
-      console.log(res.data);
-      refetch();
-    });
-    // if (res.data.modifiedCount) {
+    axiosSecoir.patch(`users/${user._id}/role`, roleInfo).then(() => refetch());
     Swal.fire({
       icon: "success",
-      title: `Admin Added Successfully ${user.displayName}`,
-
+      title: `Admin Added: ${user.displayName}`,
       confirmButtonText: "OK",
       customClass: {
-        popup: "rounded-2xl shadow-lg",
-        title: "text-lg font-bold text-green-700",
-        htmlContainer: "text-gray-700",
+        popup: "rounded-2xl shadow-xl",
+        title: "text-lg font-bold",
         confirmButton:
-          "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
+          "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white font-semibold px-6 py-2 rounded-xl",
       },
       buttonsStyling: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Add Admin Role!",
-          text: "You are Successfully Admin",
-          icon: "success",
-        });
-      }
     });
-    //
   };
 
   const handelremovedAdmin = (user) => {
     const roleInfo = { role: "user" };
-
-    // if (res.data.modifiedCount) {
     Swal.fire({
       icon: "success",
-      title: `Admin Removed ${user.displayName} `,
+      title: `Admin Removed: ${user.displayName}`,
       confirmButtonText: "OK",
       customClass: {
-        popup: "rounded-2xl shadow-lg",
-        title: "text-lg font-bold text-green-700",
-        htmlContainer: "text-gray-700",
+        popup: "rounded-2xl shadow-xl",
+        title: "text-lg font-bold",
         confirmButton:
-          "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
+          "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white font-semibold px-6 py-2 rounded-xl",
       },
       buttonsStyling: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecoir.patch(`users/${user._id}/role`, roleInfo).then((res) => {
-          console.log(res.data);
-          refetch();
-          Swal.fire({
-            title: "Removed Admin!",
-            text: "Your Role Removed has been deleted Admin to User.",
-            icon: "success",
-          });
-        });
-      }
-    });
-    //
+    }).then(() =>
+      axiosSecoir
+        .patch(`users/${user._id}/role`, roleInfo)
+        .then(() => refetch())
+    );
   };
-  const handelDeletUser = (id) => {
-    console.log(id);
 
+  const handelDeletUser = (id) => {
     Swal.fire({
-      title: "Confirm User Deletion",
-      text: `Are you sure you want to delete this User? This action cannot be undone.`,
+      title: "Confirm Deletion",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, Delete",
-      cancelButtonText: "No, Cancel",
-
+      cancelButtonText: "Cancel",
       customClass: {
         popup: "rounded-2xl shadow-xl",
-        title: "text-lg font-semibold text-gray-800",
-        htmlContainer: "text-gray-600",
-        actions: "flex gap-3 justify-end",
         confirmButton:
-          "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl",
+          "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white font-semibold px-6 py-2 rounded-xl",
         cancelButton:
-          "bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl",
+          "bg-gray-400 hover:bg-gray-500 text-white font-semibold px-6 py-2 rounded-xl",
       },
-
       buttonsStyling: false,
-      backdrop: `rgba(0,0,0,0.45)`,
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecoir.delete(`user/${id}`).then((res) => {
-          refetch();
-          console.log(res.data);
-        });
-        Swal.fire({
-          icon: "success",
-          title: "User Deleted Successfully ",
-          text: "This User has been Deletd Proprely .",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "rounded-2xl shadow-lg",
-            title: "text-lg font-bold text-green-700",
-            htmlContainer: "text-gray-700",
-            confirmButton:
-              "bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-xl",
-          },
-          buttonsStyling: false,
-        });
+        axiosSecoir.delete(`user/${id}`).then(() => refetch());
       }
     });
   };
+
   const handelSearch = (e) => {
     e.preventDefault();
-    console.log(e.target.text.value);
-    
-  }
-
-  if (isLoading) {
-    return <Loding></Loding>;
-  }
+  };
 
   return (
-    <div className=" py-6 md:py-10 px-2 md:px-15">
-      <div className=" md:flex justify-between items-center">
-        <h1 className=" text-3xl text-secondary font-semibold">
-          All User : {data.total}
+    <div className="py-6 md:py-10 px-2 md:px-15">
+      {/* Header + Search */}
+      <div className="md:flex justify-between items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold  text-white">
+          All Users: {data?.total || 0}
         </h1>
-        <div className="relative  max-w-md mb-10">
-          <form
-            onSubmit={handelSearch}
-            className="flex items-center rounded-xl border border-gray-300 bg-white px-6 py-3 shadow-sm transition-shadow hover:shadow-md focus-within:shadow-md focus-within:ring-2 focus-within:ring-lime-400"
+        <form onSubmit={handelSearch} className="relative mt-3 md:mt-0 max-w-md w-full">
+          <input
+            type="search"
+            name="text"
+            placeholder="Search users..."
+            className="w-full px-5 py-3 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none text-gray-900 placeholder-gray-400"
+          />
+          <button
+            type="submit"
+            className="absolute right-1 top-1/2 -translate-y-1/2 px-4 py-2 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white font-semibold rounded-xl hover:opacity-90 transition"
           >
-            {/* Icon */}
-            <IoIosSearch className="h-5 w-5   font-semibold" />
-
-            {/* Input - takes all space except button */}
-            <input
-              type="search"
-              name="text"
-              placeholder="Search here"
-              className="mx-4 flex-1 bg-transparent text-base  font-semibold  outline-none"
-            />
-
-            {/* Button - ABSOLUTELY STUCK TO THE RIGHT */}
-            <button
-              type="submit"
-              className="absolute z-2 right-0 top-1/2 -translate-y-1/2 rounded-xl bg-lime-400 px-6 py-3 font-medium text-gray-900 transition-colors hover:bg-lime-500 focus:outline-none focus:ring-2 focus:ring-lime-400 text-thried font-semibold"
-            >
-              Search
-            </button>
-          </form>
-        </div>
+            <IoIosSearch />
+          </button>
+        </form>
       </div>
-      <div className="mt-6">
-        <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
-          <table className="min-w-full text-sm">
-            <thead className="bg-gray-100 text-left text-gray-700">
-              <tr>
-                <th className="p-4 font-semibold">Srl No</th>
-                <th className="p-4 font-semibold">User Info</th>
-                <th className="p-4 px-10 md:px-0 font-semibold">Email</th>
-                <th className="p-4 font-semibold">Account Created</th>
-                <th className="p-4 font-semibold">Role</th>
-                <th className="p-4 font-semibold">Admine Action</th>
-                <th className="p-4 font-semibold">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.result?.map((item, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-gray-200 hover:bg-gray-100 transition"
-                >
-                  {/* Serial */}
-                  <td className="p-4 font-medium text-gray-900">{i + 1}</td>
-                  {/* User Info */}
-                  <td className="p-4 flex items-center gap-3">
-                    <img
-                      src={item?.photoURL}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-base-300"
-                    />
-                    <p className=" font-medium md:font-semibold text-gray-900">
-                      {item.displayName}
-                    </p>
-                  </td>
-                  {/* Email */}
-                  <td className="p-4 px-10 md:px-0 text-gray-800">
-                    {item.email}
-                  </td>
-                  {/* Created At */}
-                  <td className="p-4 text-gray-700">
-                    {new Date(item.creatWb).toLocaleDateString()}
-                  </td>
-                  {/* Role */}
-                  <td className="p-4 font-semibold">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold${
-                        item.role === "admin"
-                          ? "bg-orange-100 text-orange-600"
-                          : item.role === "rider"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
-                    >
-                      {item.role}
-                    </span>
-                  </td>
-                  <td className=" p-4">
-                    {item.role === "rider" ? (
-                      <span className=" text-md font-semibold text-red-600">
-                        Not Updeat
+
+      {/* Table */}
+      <div className="overflow-x-auto  dark:bg-gray-900 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
+        <table className="min-w-full text-sm">
+          <thead className=" dark:bg-gray-800 text-left text-gray-700 dark:text-gray-200">
+            <tr>
+              <th className="p-4 font-semibold">Srl</th>
+              <th className="p-4 font-semibold">User</th>
+              <th className="p-4 font-semibold">Email</th>
+              <th className="p-4 font-semibold">Joined</th>
+              <th className="p-4 font-semibold">Role</th>
+              <th className="p-4 font-semibold">Admin Action</th>
+              <th className="p-4 font-semibold">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading
+              ? Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
+              : data.result?.map((user, i) => (
+                  <tr
+                    key={i}
+                    className="border-b border-gray-200 dark:border-gray-700 hover:to-blue-50 dark:hover:bg-gray-800 transition"
+                  >
+                    <td className="p-4 font-medium text-white">{i + 1}</td>
+                    <td className="p-4 flex items-center gap-3">
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName}
+                        className="w-13 h-13 rounded-full border-2 border-gradient-to-r from-pink-500 via-purple-500 to-blue-400"
+                      />
+                      <span className="font-semibold text-gray-900 dark:text-gray-200">
+                        {user.displayName}
                       </span>
-                    ) : item.role === "admin" ? (
-                      <button
-                        onClick={() => handelremovedAdmin(item)}
-                        className="
-    flex items-center justify-center
-    w-10 h-10
-    rounded-lg
-    bg-red-100
-    text-red-600
-    hover:bg-red-600 hover:text-white
-    transition-all duration-300
-    shadow-sm hover:shadow-md
-  "
+                    </td>
+                    <td className="p-4 px-14 md:px-4 text-gray-800 dark:text-gray-300">
+                      {user.email}
+                    </td>
+                    <td className="p-4 text-gray-700 dark:text-gray-400">
+                      {new Date(user.creatWb).toLocaleDateString()}
+                    </td>
+                    <td className="p-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          user.role === "admin"
+                            ? "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white"
+                            : user.role === "rider"
+                            ? "bg-red-100 text-red-600"
+                            : "bg-blue-100 text-blue-700"
+                        }`}
                       >
-                        <FaUserTimes className="text-lg" />
-                      </button>
-                    ) : (
+                        {user.role}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      {user.role === "rider" ? (
+                        <span className="text-red-600 font-semibold">
+                          Not Update
+                        </span>
+                      ) : user.role === "admin" ? (
+                        <button
+                          onClick={() => handelremovedAdmin(user)}
+                          className="flex items-center justify-center w-10 h-10 rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white shadow-sm transition"
+                        >
+                          <FaUserTimes />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handelUpdeat(user)}
+                          className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90 shadow-sm transition"
+                        >
+                          <FaUserShield />
+                        </button>
+                      )}
+                    </td>
+                    <td className="p-4">
                       <button
-                        onClick={() => handelUpdeat(item)}
-                        className="
-    flex items-center justify-center
-    w-10 h-10
-    rounded-lg
-    bg-green-100
-    text-green-600
-    hover:bg-green-600 hover:text-white
-    transition-all duration-300
-    shadow-sm hover:shadow-md
-  "
+                        onClick={() => handelDeletUser(user._id)}
+                        className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white border border-red-300 text-red-600 hover:bg-red-50 shadow transition"
                       >
-                        <FaUserShield className="text-lg" />
+                        Delete <MdOutlineDeleteOutline />
                       </button>
-                    )}
-                  </td>
-                  {/* Actions */}
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handelDeletUser(item._id)}
-                        className="px-4 py-1.5 rounded-lg bg-white text-red-600 border border-red-300 flex items-center gap-2 font-medium hover:bg-red-50 hover:shadow-sm transition "
-                      >
-                        Delete <MdOutlineDeleteOutline size={20} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+          </tbody>
+        </table>
 
-          {/* Pagination */}
-          <div className="my-6 flex justify-between px-6 items-center gap-6 select-none">
-            {/* Previous */}
-            <button
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-              className={`
-    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
-    transition-all duration-300
-    ${
-      page === 1
-        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
-        : "text-gray-700 bg-white hover:bg-gray-100 hover:shadow-md hover:-translate-y-0.5"
-    }
-  `}
-            >
-              <FaArrowLeftLong className="transition-transform duration-300 group-hover:-translate-x-1" />
-              Previous
-            </button>
+        {/* Pagination */}
+        <div className="flex justify-between items-center px-6 py-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className={`flex items-center gap-2 px-4 py-1 rounded-lg font-medium transition ${
+              page === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90"
+            }`}
+          >
+            <FaArrowLeftLong /> Previous
+          </button>
 
-            {/* Page Numbers */}
-            <div className="flex items-center gap-3">
-              {Array.from({ length: totalPage }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setPage(i + 1)}
-                  className={`
-          w-8 h-8 flex items-center justify-center text-sm transition-all duration-200
-          ${
-            page === i + 1
-              ? "bg-lime-300 text-black font-semibold rounded-full" // Active circle
-              : "text-gray-600 hover:text-black"
-          }
-        `}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-
-            {/* Next */}
-            <button
-              disabled={page === totalPage}
-              onClick={() => setPage(page + 1)}
-              className={`
-    group flex items-center gap-2 px-5 py-1 rounded-lg border border-base-300 shadow  font-medium
-    transition-all duration-300
-    ${
-      page === totalPage
-        ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-100"
-        : "text-gray-700 bg-white hover:bg-gray-200 hover:shadow-md hover:-translate-y-0.5"
-    }
-  `}
-            >
-              Next <FaArrowRightLong />
-            </button>
+          <div className="flex gap-2">
+            {Array.from({ length: totalPage }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i + 1)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold transition ${
+                  page === i + 1
+                    ? "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gradient-to-r hover:from-pink-50 hover:via-purple-50 hover:to-blue-50"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
           </div>
+
+          <button
+            disabled={page === totalPage}
+            onClick={() => setPage(page + 1)}
+            className={`flex items-center gap-2 px-4 py-1 rounded-lg font-medium transition ${
+              page === totalPage
+                ? "text-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90"
+            }`}
+          >
+            Next <FaArrowRightLong />
+          </button>
         </div>
       </div>
     </div>
