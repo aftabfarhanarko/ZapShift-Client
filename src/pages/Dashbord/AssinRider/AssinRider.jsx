@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
 import useAxiosSecoir from "../../../Hook/useAxiosSecoir";
 import Loding from "../../../Shared/Loding";
-import { MdCheckCircle, MdOutlineDeleteOutline } from "react-icons/md";
+import { MdCheckCircle } from "react-icons/md";
 import { toast } from "sonner";
 
 const AssinRider = () => {
   const [parcelSet, setParcelSet] = useState(null);
   const axioSecore = useAxiosSecoir();
   const referen = useRef();
+
   const { data: parcel, isLoading } = useQuery({
     queryKey: ["parcel", "pending-pickup"],
     queryFn: async () => {
@@ -17,8 +18,6 @@ const AssinRider = () => {
     },
   });
 
-  console.log("Total Pickup Parcel", parcel);
-
   const { data: rider = [], refetch } = useQuery({
     queryKey: ["riders", parcelSet?.reciverDistrick, "available"],
     enabled: !!parcelSet,
@@ -26,18 +25,14 @@ const AssinRider = () => {
       const res = await axioSecore.get(
         `ridereas?status=approved&yourDistrict=${parcelSet?.reciverDistrick}&workStatus=available`
       );
-      console.log(res.data);
-
       return res.data;
     },
   });
 
-
-
   const riderAssing = (item) => {
     setParcelSet(item);
     referen.current.showModal();
-    toast.success("Assing Rider");
+    toast.success("Assign Rider");
   };
 
   const handelAssinRider = (ride) => {
@@ -45,85 +40,79 @@ const AssinRider = () => {
       riderId: ride._id,
       riderEmail: ride.yourEmail,
       riderName: ride.yourName,
-      trakingId:parcelSet.trakingId
+      trakingId: parcelSet.trakingId,
     };
     axioSecore.patch(`parcel/${parcelSet._id}`, riderInfo).then((res) => {
       refetch();
       if (res.data.modifiedCount) {
         referen.current.close();
-        
-        toast.success("Raider Assing Successfully");
+        toast.success("Rider Assigned Successfully");
       }
-      // console.log(res.data);
     });
-    // console.log("Assing");
   };
 
   if (isLoading) {
-    return <Loding></Loding>;
+    return <Loding />;
   }
+
   return (
-    <div className=" py-10 px-3 md:px-10">
-      <h1 className=" text-secondary font-semibold text-2xl md:text-3xl"> Assin Rider:{parcel?.length}</h1>
-      <div className="overflow-x-auto mt-5 bg-white rounded-xl shadow-lg border border-gray-100">
+    <div className="py-10 px-3 md:px-10">
+      <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
+        Assign Rider: {parcel?.length}
+      </h1>
+
+      {/* Parcel Table */}
+      <div className="overflow-x-auto mt-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
         <table className="min-w-full text-sm">
-          <thead className="bg-gray-100 text-left text-gray-700">
+          <thead className="bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-200">
             <tr>
-              <th className="p-4 font-semibold">Srl No</th>
-              <th className="p-4 font-semibold">Parcel Name</th>
-              <th className="p-4 font-semibold">Reciver Info</th>
-              <th className="p-4 font-semibold">Tracking Id</th>
-              <th className="p-4 font-semibold">Creat Time</th>
-              <th className="p-4 font-semibold">Cost</th>
-              <th className="p-4 font-semibold">Action</th>
+              <th className=" font-semibold">Srl No</th>
+              <th className="py-4 font-semibold">Parcel Name</th>
+              <th className="py-4 font-semibold">Receiver Info</th>
+              <th className="py-4 font-semibold">Tracking Id</th>
+              <th className="py-4 font-semibold">Created Time</th>
+              <th className="py-4 font-semibold">Cost</th>
+              <th className="py-4 font-semibold">Action</th>
             </tr>
           </thead>
-
           <tbody>
             {parcel.map((item, i) => (
               <tr
                 key={i}
-                className="border-b border-gray-200 hover:bg-gray-100 transition"
+                className="border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:via-purple-50 hover:to-blue-50 dark:hover:from-gray-800 dark:hover:via-gray-800 dark:hover:to-gray-900 transition"
               >
-                {/* Serial */}
-                <td className="p-4 font-medium text-gray-900">{i + 1}</td>
-
-                {/* Parcel Info */}
+                <td className="p-4  font-medium text-gray-900 dark:text-gray-200">
+                  {i + 1}
+                </td>
                 <td className="p-4">
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 dark:text-gray-200">
                     {item?.percilname}
                   </p>
-                  <p className="text-xs text-gray-500">{item?.parcelType}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {item?.parcelType}
+                  </p>
                 </td>
-
-                {/* Sender Info */}
                 <td className="p-4">
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 dark:text-gray-200">
                     {item?.reciverRegion}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {item?.reciverDistrick}
                   </p>
                 </td>
-
-                {/* Tracking */}
-                <td className="p-4 text-gray-800">{item?.trakingId}</td>
-
-                <td className="p-4 text-gray-800">
+                <td className="p-4 text-gray-800 dark:text-gray-200">
+                  {item?.trakingId}
+                </td>
+                <td className="p-4 text-gray-800 dark:text-gray-200">
                   {new Date(item.creatAtime).toLocaleString()}
                 </td>
-
-                {/* Payment */}
-                <td className="p-4 font-semibold">
-                  <p className=" text-red-500">${item.totalCost}</p>
+                <td className="p-4 font-semibold text-red-500 dark:text-red-400">
+                  ${item.totalCost}
                 </td>
-
-                {/* Actions */}
                 <td className="p-4">
                   <button
                     onClick={() => riderAssing(item)}
-                    className="px-4 py-1.5 rounded-lg bg-green-50 text-green-600 border border-green-300  hover:scale-105 
-                                                            flex items-center gap-2 font-medium hover:bg-green-50 hover:shadow-sm transition "
+                    className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90 hover:scale-105 flex items-center gap-2 font-medium shadow-md hover:shadow-lg transition-all duration-200"
                   >
                     Find Rider <MdCheckCircle size={16} />
                   </button>
@@ -134,12 +123,15 @@ const AssinRider = () => {
         </table>
       </div>
 
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
+      {/* Modal */}
       <dialog ref={referen} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Total Riders : {rider.length}</h3>
+        <div className="modal-box bg-white dark:bg-gray-900">
+          <h3 className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
+            Total Riders: {rider.length}
+          </h3>
+
           <table className="min-w-full text-sm mt-4">
-            <thead className="bg-gray-100 text-left text-gray-700">
+            <thead className="bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-200">
               <tr>
                 <th className="p-4 font-semibold">Srl No</th>
                 <th className="p-4 font-semibold">Rider Name</th>
@@ -147,34 +139,29 @@ const AssinRider = () => {
                 <th className="p-4 font-semibold">Action</th>
               </tr>
             </thead>
-
             <tbody>
               {rider.map((item, i) => (
                 <tr
                   key={i}
-                  className="border-b border-gray-200 hover:bg-gray-50 transition"
+                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gradient-to-r hover:from-pink-50 hover:via-purple-50 hover:to-blue-50 dark:hover:from-gray-800 dark:hover:via-gray-800 dark:hover:to-gray-900 transition"
                 >
-                  {/* Serial */}
-                  <td className="p-4 font-medium text-gray-900">{i + 1}</td>
-
+                  <td className="p-4 font-medium text-gray-900 dark:text-gray-200">
+                    {i + 1}
+                  </td>
                   <td className="p-4">
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-gray-900 dark:text-gray-200">
                       {item?.yourName}
                     </p>
-                    <p className="text-xs text-gray-500">{item?.parcelType}</p>
                   </td>
-
                   <td className="p-4">
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-gray-900 dark:text-gray-200">
                       {item?.yourEmail}
                     </p>
                   </td>
-
                   <td className="p-4">
                     <button
                       onClick={() => handelAssinRider(item)}
-                      className="px-4 py-1.5 rounded-lg bg-green-50 text-green-600 border border-green-300  hover:scale-105 
-                                                            flex items-center gap-2 font-medium hover:bg-green-50 hover:shadow-sm transition "
+                      className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90 flex items-center gap-2 font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
                     >
                       Assign <MdCheckCircle size={16} />
                     </button>
@@ -186,8 +173,7 @@ const AssinRider = () => {
 
           <div className="modal-action">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-               <button className="px-3 py-1 rounded-md bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+              <button className="px-3 py-1 rounded-md bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400 text-white hover:opacity-90 font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
                 Close
               </button>
             </form>
