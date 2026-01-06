@@ -25,9 +25,9 @@ const Banner = () => {
 
         <div className="hidden  md:block">
           <div className=" absolute bottom-12 md:bottom-19 left-6 md:left-22 flex flex-wrap gap-2 md:gap-0">
-            <button className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
+            <a href="#track" className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
               Track Your Parcel
-            </button>
+            </a>
             <button
               className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-black flex items-center justify-center 
          hover:bg-gray-800 transition transform hover:-translate-y-0.5"
@@ -49,9 +49,9 @@ const Banner = () => {
 
         <div className="hidden  md:block">
           <div className=" absolute bottom-12 md:bottom-19 left-6 md:left-22 flex flex-wrap gap-2 md:gap-0">
-            <button className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
+            <a href="#track" className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
               Track Your Parcel
-            </button>
+            </a>
             <button
               className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-black flex items-center justify-center 
          hover:bg-gray-800 transition transform hover:-translate-y-0.5"
@@ -70,9 +70,9 @@ const Banner = () => {
 
         <div className="hidden  md:block">
           <div className=" absolute bottom-12 md:bottom-19 left-6 md:left-22 flex flex-wrap gap-2 md:gap-0">
-            <button className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
+            <a href="#track" className="bg-[#B8E55C] text-black px-3 md:px-5 py-1.5 md:py-2 text-sm md:text-base rounded-full font-semibold hover:bg-[#a5d14a] transition-all items-center">
               Track Your Parcel
-            </button>
+            </a>
             <button
               className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-black flex items-center justify-center 
          hover:bg-gray-800 transition transform hover:-translate-y-0.5"

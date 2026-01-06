@@ -12,43 +12,43 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-base-100 shadow-sm md:rounded-lg  md:rounded-xl ">
-        <div className="navbar  w-11/12 mx-auto py-5">
+      <div className="sticky top-0 z-50 bg-white/70 backdrop-blur-md shadow-sm md:rounded-xl">
+        <div className="navbar w-11/12 mx-auto py-4">
           <div className="navbar-start">
             <Logo></Logo>
           </div>
           <div className="navbar-center hidden lg:flex">
-            <ul className=" menu-horizontal px-1 font-medium  text-[#1F1F1F] flex gap-8 list-none  text-[15px] ">
+            <ul className="menu-horizontal px-1 font-medium text-[#1F1F1F] flex gap-6 list-none text-[15px]">
               <li>
-                <NavLink to="/" className=" ">
+                <NavLink to="/" className=" transition-colors hover:text-secondary">
                   Services
                 </NavLink>
               </li>
               <li>
-                <NavLink to="about" className=" ">
+                <NavLink to="about" className=" transition-colors hover:text-secondary">
                   About Us
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/mapcover" className="">
+                <NavLink to="/mapcover" className=" transition-colors hover:text-secondary">
                   Coverage
                 </NavLink>
               </li>
 
               <li>
-                <NavLink to="/raider" className=" ">
+                <NavLink to="/raider" className=" transition-colors hover:text-secondary">
                   Apply Rider
                 </NavLink>
               </li>
               {user && (
                 <>
                   <li>
-                    <NavLink to="/send_parcel" className="">
+                    <NavLink to="/send_parcel" className=" transition-colors hover:text-secondary">
                       Send Parcel
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/dasbord" className="">
+                    <NavLink to="/dasbord" className=" transition-colors hover:text-secondary">
                       Dasbord
                     </NavLink>
                   </li>
@@ -63,7 +63,7 @@ const Navbar = () => {
                 <div className="  flex gap-3 items-center">
                   <div className="">
                     <img
-                      className=" w-8 md:w-13 h-8 md:h-13 rounded-full"
+                      className=" w-8 md:w-13 h-8 md:h-13 rounded-full border border-base-300 shadow-sm"
                       src={user?.photoURL}
                     ></img>
                   </div>
@@ -72,13 +72,10 @@ const Navbar = () => {
                     <button
                       onClick={() => userLogOut()}
                       className="
-                   px-6 py-2 
-   font-medium  rounded-md
-bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
-  font-semibold
-hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
-  hover:scale-105 active:scale-95 
-  focus:outline-none 
+                   px-5 py-2 rounded-full font-semibold
+                   bg-primary text-secondary
+                   hover:brightness-105 transform transition-all duration-300 ease-out hover:shadow-xl
+                   hover:-translate-y-0.5 active:scale-95 focus:outline-none
                   "
                     >
                       Logout
@@ -97,8 +94,9 @@ hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transitio
                     {" "}
                     <button
                       className="
-                 px-6 py-2  text-[#82aa09]
-  bg-white  outline  rounded-md   transition-all duration-300 ease-out   bg-gradient-to-r hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300  hover:text-black hover:shadow-xl  hover:outline-none font-semibold hover:scale-95 active:scale-95  focus:outline-none                        
+                 px-5 py-2 rounded-full font-semibold
+                 bg-white text-secondary border border-base-300
+                 transition-all duration-300 ease-out hover:bg-base-100 hover:shadow-xl hover:-translate-y-0.5 active:scale-95
                   "
                     >
                       Login
@@ -108,13 +106,10 @@ hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transitio
                     {" "}
                     <button
                       className="
-                   px-6 py-2 
-   font-medium  rounded-md
-bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
-  font-semibold
-hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
-  hover:scale-95 active:scale-95 
-  focus:outline-none 
+                   px-5 py-2 rounded-full font-semibold
+                   bg-primary text-secondary
+                   hover:brightness-105 transform transition-all duration-300 ease-out hover:shadow-xl
+                   hover:-translate-y-0.5 active:scale-95 focus:outline-none
                   "
                     >
                       Register
@@ -144,110 +139,81 @@ hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transitio
       {hide ? (
         ""
       ) : (
-        <div className="md:hidden bg-white border-t border-base-300 rounded-b-xl shadow py-5 transition duration-500">
-          {/* Navigation */}
-          <ul className="md:hidden font-medium text-[#1F1F1F] text-[15px] flex flex-col gap-4 items-center">
-            {/* Divider spacing */}
-            <div className="gap-5 grid grid-cols-3 justify-center ">
-
-            {/* Bottom 2 items */}
-            <li>
-              <NavLink to="/" className=" ">
-                Services
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="about" className=" ">
-                About Us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/mapcover" className="">
-                Coverage
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink to="/raider" className=" ">
-                Apply Rider
-              </NavLink>
-            </li>
-            {user && (
-              <>
-                <li>
-                  <NavLink to="/send_parcel" className="">
-                    Send Parcel
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/dasbord" className="">
-                    Dasbord
-                  </NavLink>
-                </li>
-              </>
-            )}
+        <div className="md:hidden w-11/12 mx-auto mt-2 z-40">
+          <div className="rounded-xl border border-base-300 bg-white/95 backdrop-blur-md shadow p-4">
+            <div className="flex justify-end">
+              <button
+                onClick={() => setHide(true)}
+                className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center"
+              >
+                <CgClose className="w-5 h-5" />
+              </button>
             </div>
-          </ul>
-
-
-          {/* Profile */}
-          <div className="flex  mt-8 justify-center  items-center gap-4 mb-3">
-            {user && (
-              <img
-                className="w-10 h-10 rounded-full object-cover"
-                src={user?.photoURL}
-                alt="profile"
-              />
-            )}
-            {user ? (
-              <Link>
-                {" "}
-                <button
-                  onClick={() => userLogOut()}
-                  className="
-                   px-4 py-1 
-   font-medium  rounded-md
-bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
-  font-semibold
-hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
-  hover:scale-105 active:scale-95 
-  focus:outline-none 
-                  "
-                >
-                  Logout
-                </button>
-              </Link>
-            ) : (
-              <div className="flex gap-3">
-                <Link to="/login">
-                  {" "}
+            <ul className="font-medium text-[#1F1F1F] text-[16px] flex flex-col gap-3 mt-2">
+              <li>
+                <NavLink onClick={() => setHide(true)} to="/" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                  Services
+                </NavLink>
+              </li>
+              <li>
+                <NavLink onClick={() => setHide(true)} to="about" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                  About Us
+                </NavLink>
+              </li>
+              <li>
+                <NavLink onClick={() => setHide(true)} to="/mapcover" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                  Coverage
+                </NavLink>
+              </li>
+              <li>
+                <NavLink onClick={() => setHide(true)} to="/raider" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                  Apply Rider
+                </NavLink>
+              </li>
+              {user && (
+                <>
+                  <li>
+                    <NavLink onClick={() => setHide(true)} to="/send_parcel" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                      Send Parcel
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink onClick={() => setHide(true)} to="/dasbord" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
+                      Dasbord
+                    </NavLink>
+                  </li>
+                </>
+              )}
+            </ul>
+            <div className="mt-4 flex items-center gap-3">
+              {user ? (
+                <>
+                  <img className="w-10 h-10 rounded-full object-cover border border-base-300" src={user?.photoURL} alt="" />
                   <button
-                    className="
-                 px-6 py-2  text-[#82aa09]
-  bg-white  outline  rounded-md   transition-all duration-300 ease-out   bg-gradient-to-r hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300  hover:text-black hover:shadow-xl  hover:outline-none font-semibold hover:scale-100  active:scale-95  focus:outline-none                        
-                  "
+                    onClick={() => {
+                      userLogOut();
+                      setHide(true);
+                    }}
+                    className="px-5 py-2 rounded-full font-semibold bg-primary text-secondary hover:brightness-105 transition hover:shadow"
                   >
-                    Login
+                    Logout
                   </button>
-                </Link>
-                <Link to="/register">
-                  {" "}
-                  <button
-                    className="
-                   px-6 py-2 
-   font-medium  rounded-md
-bg-gradient-to-r from-[#b2e36d] via-[#b8e04e] to-[#bae240] 
-  font-semibold
-hover:from-[#bae240] hover:via-[#c5e854] hover:to-[#d0f060]  transform transition-all  duration-300 ease-out  hover:shadow-xl 
-  hover:scale-105 active:scale-95 
-  focus:outline-none 
-                  "
-                  >
-                    Register
-                  </button>
-                </Link>
-              </div>
-            )}
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setHide(true)}>
+                    <button className="px-5 py-2 rounded-full font-semibold bg-white text-secondary border border-base-300 hover:bg-base-100 transition">
+                      Login
+                    </button>
+                  </Link>
+                  <Link to="/register" onClick={() => setHide(true)}>
+                    <button className="px-5 py-2 rounded-full font-semibold bg-primary text-secondary hover:brightness-105 transition">
+                      Register
+                    </button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
