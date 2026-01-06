@@ -66,7 +66,7 @@ const PaymentHiestory = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 max-w-11/12">
         {/* Header Section */}
         <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 dark:from-pink-400 dark:via-purple-400 dark:to-blue-400">
@@ -176,7 +176,72 @@ const PaymentHiestory = () => {
             </div>
         </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+      {/* Mobile Card View - Visible on small screens */}
+      <div className="grid grid-cols-1 gap-4 md:hidden">
+        {isLoading ? (
+          <>
+             {[1, 2, 3].map((_, idx) => (
+                <div key={idx} className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 animate-pulse">
+                   <div className="flex justify-between items-center mb-4">
+                      <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                   </div>
+                   <div className="space-y-3">
+                      <div className="h-4 w-full bg-gray-100 dark:bg-gray-800 rounded"></div>
+                      <div className="h-4 w-2/3 bg-gray-100 dark:bg-gray-800 rounded"></div>
+                      <div className="h-4 w-1/2 bg-gray-100 dark:bg-gray-800 rounded"></div>
+                   </div>
+                </div>
+             ))}
+          </>
+        ) : (
+          history.map((item, i) => (
+            <div 
+              key={i} 
+              className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-4"
+            >
+              <div className="flex justify-between items-start">
+                 <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-200">{item.parcelName}</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">ID: {item.parcelid}</p>
+                 </div>
+                 <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold border
+                      ${item.paymentStatus === "paid" 
+                        ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800" 
+                        : "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800"
+                      }`}
+                  >
+                    {item.paymentStatus}
+                  </span>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                 <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Amount</p>
+                    <p className="font-semibold text-gray-900 dark:text-gray-200">${item.amount}</p>
+                 </div>
+                 <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Date</p>
+                    <p className="font-medium text-gray-900 dark:text-gray-200 truncate">{new Date(item.paidAt).toLocaleDateString()}</p>
+                 </div>
+              </div>
+
+              <div className="pt-3 border-t border-gray-100 dark:border-gray-700">
+                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Transaction ID</p>
+                 <p className="font-mono text-xs text-blue-600 dark:text-blue-400 break-all">{item.transactionId}</p>
+              </div>
+              
+              <div className="pt-2">
+                 <p className="text-xs text-gray-500 dark:text-gray-400">Customer: <span className="text-gray-700 dark:text-gray-300">{item.customerEmail}</span></p>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Table View - Hidden on small screens */}
+      <div className="hidden md:block bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">

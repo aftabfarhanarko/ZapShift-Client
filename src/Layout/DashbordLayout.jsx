@@ -10,6 +10,7 @@ import {
   Sun,
   Moon,
   Search,
+  Map as MapIcon,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router";
 import { GoSidebarExpand } from "react-icons/go";
@@ -198,6 +199,19 @@ const DashbordLayout = () => {
               >
                 <LayoutDashboard className="w-5 h-5" />
                 <span>Reports</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dasbord/map"
+                className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                  isActive("/dasbord/map")
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                }`}
+              >
+                <MapIcon className="w-5 h-5" />
+                <span>Coverage Map</span>
               </Link>
             </li>
 

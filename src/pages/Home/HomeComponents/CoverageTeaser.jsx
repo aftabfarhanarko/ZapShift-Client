@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { Map } from "lucide-react";
+import { Map as MapIcon } from "lucide-react";
 
 const CoverageTeaser = () => {
   return (
@@ -17,7 +17,7 @@ const CoverageTeaser = () => {
         </Link>
       </div>
       <div className="flex items-center justify-center w-24 h-24 rounded-2xl bg-secondary/10 border border-base-300">
-        <Map className="w-12 h-12 text-secondary" />
+        <MapIcon className="w-12 h-12 text-secondary" />
       </div>
     </div>
   );

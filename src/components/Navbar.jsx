@@ -29,11 +29,11 @@ const Navbar = () => {
                   About Us
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink to="/mapcover" className=" transition-colors hover:text-secondary">
                   Coverage
                 </NavLink>
-              </li>
+              </li> */}
 
               <li>
                 <NavLink to="/raider" className=" transition-colors hover:text-secondary">
@@ -160,11 +160,11 @@ const Navbar = () => {
                   About Us
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink onClick={() => setHide(true)} to="/mapcover" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
                   Coverage
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink onClick={() => setHide(true)} to="/raider" className="block px-4 py-3 rounded-lg bg-base-100 hover:bg-primary hover:text-secondary transition">
                   Apply Rider

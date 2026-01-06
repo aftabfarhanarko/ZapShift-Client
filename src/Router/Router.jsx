@@ -32,6 +32,7 @@ import UserRole from "./UserRole";
 import Reports from "../pages/Dashbord/Reports";
 import Settings from "../pages/Dashbord/Settings";
 import Help from "../pages/Dashbord/Help";
+import CoverageMap from "../pages/Dashbord/Map/Map";
 
 export const router = createBrowserRouter([
   {
@@ -162,6 +163,10 @@ export const router = createBrowserRouter([
       {
         path: "/dasbord/reports",
         element: <Reports></Reports>
+      },
+      {
+        path: "/dasbord/map",
+        element: <CoverageMap></CoverageMap>
       },
       {
         path: "/dasbord/settings",
