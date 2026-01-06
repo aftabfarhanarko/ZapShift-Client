@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Card, CardContent } from "../../../ui/Card";
 import {
   MapPin,
@@ -10,6 +10,11 @@ import {
   Star,
   Gift,
   Ticket,
+  TrendingUp,
+  DollarSign,
+  Calendar,
+  Activity,
+  CheckCircle,
 } from "lucide-react";
 import {
   LineChart,
@@ -37,7 +42,7 @@ const spendingData = [
 const UserDashBord = () => {
   const { user } = useAuth();
   const axiosSecoir = useAxiosSecoir();
-  const { data , isLoading:newLode} = useQuery({
+  const { data = [], isLoading: newLode } = useQuery({
     queryKey: ["usercreatParcel"],
     queryFn: async () => {
       const res = await axiosSecoir.get(
@@ -47,7 +52,7 @@ const UserDashBord = () => {
       return res.data;
     },
   });
-  const { data: delivered , isLoading} = useQuery({
+  const { data: delivered = [], isLoading } = useQuery({
     queryKey: ["deliveryStatus"],
     queryFn: async () => {
       const res = await axiosSecoir.get(
@@ -58,29 +63,77 @@ const UserDashBord = () => {
     },
   });
 
+  // Derived Data Calculations
+  const stats = useMemo(() => {
+    if (!data.length) return {
+      inProgress: 0,
+      pending: 0,
+      totalSpent: 0,
+      avgCost: 0,
+      topDistrict: "—"
+    };
 
-  if(isLoading || newLode){
-    return <Loding></Loding>
+    const inProgress = data.filter(
+      (p) => p.deliveryStatus !== "parcel-delivered" && p.deliveryStatus !== "cancelled"
+    ).length;
+
+    const pending = data.filter((p) => p.deliveryStatus === "pending-pickup").length;
+
+    const totalSpent = data.reduce((acc, curr) => acc + (parseFloat(curr.totalCost) || 0), 0);
+    
+    const avgCost = totalSpent / data.length;
+
+    // Calculate Top District
+    const districtCounts = data.reduce((acc, p) => {
+      const d = p.reciverDistrick || "Unknown";
+      acc[d] = (acc[d] || 0) + 1;
+      return acc;
+    }, {});
+    const topDistrict = Object.keys(districtCounts).reduce((a, b) => 
+      districtCounts[a] > districtCounts[b] ? a : b, "—"
+    );
+
+    return { inProgress, pending, totalSpent, avgCost, topDistrict };
+  }, [data]);
+
+
+  if (isLoading || newLode) {
+    return <Loding></Loding>;
   }
   return (
-    <div className="space-y-8 p-3 md:p-5 lg:p-7">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">
-            User Dashboard
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Parcels: <span className="font-semibold">{data?.length || 0}</span> · Delivered: <span className="font-semibold">{delivered?.length || 0}</span>
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link to="/send_parcel" className="btn btn-sm md:btn-md bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-white">Send Parcel</Link>
-          <Link to="/dasbord/myparcel" className="btn btn-sm md:btn-md bg-pink-500 text-white">My Parcels</Link>
-          <Link to="/dasbord/paymentHiestory" className="btn btn-sm md:btn-md bg-blue-600 text-white">Payments</Link>
+    <div className="space-y-8 p-3 md:p-5 lg:p-7 bg-gray-50 dark:bg-black min-h-screen">
+      {/* 1. Styled Header Section */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 p-8 text-white shadow-xl">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 h-64 w-64 rounded-full bg-pink-500/20 blur-3xl"></div>
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full bg-white/20 text-xs font-medium backdrop-blur-sm border border-white/10">
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+            </div>
+            <h1 className="text-4xl font-bold mb-2">
+              Welcome back, {user.displayName?.split(" ")[0]}! 👋
+            </h1>
+            <p className="text-purple-100 max-w-xl">
+              Here's what's happening with your shipments today. You have <span className="font-bold text-white">{stats.inProgress}</span> parcels in progress.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap gap-3">
+             <Link to="/send_parcel" className="btn bg-white text-purple-600 hover:bg-purple-50 border-none shadow-lg shadow-purple-900/20 px-6">
+              <Package size={18} className="mr-2" /> Send Parcel
+             </Link>
+             <Link to="/dasbord/myparcel" className="btn bg-purple-700/50 text-white hover:bg-purple-700/70 border-none backdrop-blur-md">
+               My Parcels
+             </Link>
+          </div>
         </div>
       </div>
 
-      <div className="rounded-2xl p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+      <div className="rounded-2xl p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -91,14 +144,14 @@ const UserDashBord = () => {
           </div>
           <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-purple-500" />
+              <Activity className="w-4 h-4 text-orange-500" />
               <span className="text-sm text-gray-700 dark:text-gray-300">In Progress</span>
             </div>
-            <span className="text-secondary dark:text-white font-semibold">—</span>
+            <span className="text-secondary dark:text-white font-semibold">{stats.inProgress}</span>
           </div>
           <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-purple-500" />
+              <MapPin className="w-4 h-4 text-blue-500" />
               <span className="text-sm text-gray-700 dark:text-gray-300">Regions</span>
             </div>
             <span className="text-secondary dark:text-white font-semibold">
@@ -107,22 +160,23 @@ const UserDashBord = () => {
           </div>
           <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Heart className="w-4 h-4 text-purple-500" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">Rewards</span>
+              <Heart className="w-4 h-4 text-pink-500" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Spent</span>
             </div>
-            <span className="text-secondary dark:text-white font-semibold">Gold</span>
+            <span className="text-secondary dark:text-white font-semibold">${stats.totalSpent.toLocaleString()}</span>
           </div>
         </div>
       </div>
 
       {/* PROFILE */}
-      <Card className="rounded-2xl shadow-lg dark:bg-gray-900">
+      <Card className="rounded-2xl shadow-lg dark:bg-gray-900 border-none">
         <CardContent className="p-6 flex items-center gap-6">
-          <div className="w-15 h-15 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg ring-4 ring-purple-50 dark:ring-gray-800">
             {user.photoURL ? (
               <img
                 src={user.photoURL}
-                className=" rounded-full w-15 h-15 "
+                className=" rounded-full w-16 h-16 object-cover"
+                alt="Profile"
               ></img>
             ) : (
               <User size={40} className="text-white" />
@@ -130,12 +184,13 @@ const UserDashBord = () => {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold dark:text-white">
+            <h2 className="text-xl font-bold dark:text-white flex items-center gap-2">
               {user.displayName}
+              <span className="px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium border border-yellow-200">Gold Member</span>
             </h2>
             <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              {new Date(user.creatWb).toLocaleDateString()}
+            <p className="text-gray-500 dark:text-gray-400 text-sm flex items-center gap-1 mt-1">
+              <Calendar size={14} /> Joined {new Date(user.creatWb).toLocaleDateString()}
             </p>
           </div>
         </CardContent>
@@ -143,32 +198,98 @@ const UserDashBord = () => {
 
       {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="shadow-md border-l-4 border-purple-500 dark:bg-gray-900">
-          <CardContent className="p-5">
-            <p className="text-gray-500 dark:text-gray-300">
-              Total Create Parcel
-            </p>
-            <h1 className="text-3xl font-bold mt-1 dark:text-white">
-              {data?.length}
-            </h1>
+        <Card className="shadow-lg border-l-4 border-purple-500 dark:bg-gray-900 hover:shadow-xl transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">Total Parcels</p>
+                <h1 className="text-4xl font-bold dark:text-white">{data?.length}</h1>
+              </div>
+              <div className="p-3 bg-purple-50 dark:bg-gray-800 rounded-xl">
+                 <Package className="text-purple-600" size={24} />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-md border-l-4 border-pink-500 dark:bg-gray-900">
-          <CardContent className="p-5">
-            <p className="text-gray-500 dark:text-gray-300">Pending</p>
-            <h1 className="text-3xl font-bold mt-1 dark:text-white">03</h1>
+        <Card className="shadow-lg border-l-4 border-pink-500 dark:bg-gray-900 hover:shadow-xl transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">Pending Pickup</p>
+                <h1 className="text-4xl font-bold dark:text-white">{stats.pending}</h1>
+              </div>
+              <div className="p-3 bg-pink-50 dark:bg-gray-800 rounded-xl">
+                 <Clock className="text-pink-600" size={24} />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-md border-l-4 border-blue-500 dark:bg-gray-900">
-          <CardContent className="p-5">
-            <p className="text-gray-500 dark:text-gray-300">Delivered</p>
-            <h1 className="text-3xl font-bold mt-1 dark:text-white">
-              {delivered?.length}
-            </h1>
+        <Card className="shadow-lg border-l-4 border-blue-500 dark:bg-gray-900 hover:shadow-xl transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-1">Delivered</p>
+                <h1 className="text-4xl font-bold dark:text-white">{delivered?.length}</h1>
+              </div>
+              <div className="p-3 bg-blue-50 dark:bg-gray-800 rounded-xl">
+                 <CheckCircle className="text-blue-600" size={24} />
+              </div>
+            </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* NEW DYNAMIC STATS ROW */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <Card className="rounded-2xl shadow-md dark:bg-gray-900 bg-white">
+            <CardContent className="p-6">
+               <div className="flex items-center gap-4">
+                  <div className="p-4 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
+                    <DollarSign size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Total Spent</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      ${stats.totalSpent.toLocaleString()}
+                    </h3>
+                  </div>
+               </div>
+            </CardContent>
+         </Card>
+
+         <Card className="rounded-2xl shadow-md dark:bg-gray-900 bg-white">
+            <CardContent className="p-6">
+               <div className="flex items-center gap-4">
+                  <div className="p-4 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600">
+                    <TrendingUp size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Avg. Cost / Parcel</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      ${stats.avgCost.toFixed(2)}
+                    </h3>
+                  </div>
+               </div>
+            </CardContent>
+         </Card>
+
+         <Card className="rounded-2xl shadow-md dark:bg-gray-900 bg-white">
+            <CardContent className="p-6">
+               <div className="flex items-center gap-4">
+                  <div className="p-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600">
+                    <MapPin size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Top Destination</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {stats.topDistrict}
+                    </h3>
+                  </div>
+               </div>
+            </CardContent>
+         </Card>
       </div>
 
       {/* USER SPENDING CHART */}

@@ -13,6 +13,7 @@ import {
   TrendingUp,
   MapPin,
   AlertCircle,
+  FileText,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -29,6 +30,8 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const CompletRiderTask = () => {
   const { user } = useAuth();
@@ -120,6 +123,42 @@ const CompletRiderTask = () => {
     document.body.removeChild(link);
   };
 
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Completed Deliveries Report", 14, 22);
+    
+    doc.setFontSize(11);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+
+    const tableColumn = ["Parcel Name", "Type", "Weight", "From", "To", "Cost", "Earnings"];
+    const tableRows = [];
+
+    filteredParcels.forEach((item) => {
+      const rowData = [
+        item.percilname,
+        item.parcelType,
+        item.weight,
+        item.senderdistick,
+        item.reciverDistrick,
+        item.totalCost,
+        handelCalculateCost(item).toFixed(2),
+      ];
+      tableRows.push(rowData);
+    });
+
+    doc.autoTable({
+      startY: 40,
+      head: [tableColumn],
+      body: tableRows,
+      theme: 'striped',
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.save("completed_deliveries.pdf");
+  };
+
   const SkeletonRow = () => (
     <tr className="animate-pulse border-b border-gray-100 dark:border-gray-800">
       <td className="p-4">
@@ -161,12 +200,20 @@ const CompletRiderTask = () => {
             Track your delivery history and earnings performance.
           </p>
         </div>
-        <button
-          onClick={handleExport}
-          className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-md transition font-medium"
-        >
-          <Download size={18} /> Export History
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-md transition font-medium"
+          >
+            <Download size={18} /> CSV
+          </button>
+          <button
+            onClick={handleDownloadPDF}
+            className="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white border border-red-500 rounded-xl shadow-md transition font-medium"
+          >
+            <FileText size={18} /> PDF
+          </button>
+        </div>
       </div>
 
       {/* 2. KPI Cards Section */}
