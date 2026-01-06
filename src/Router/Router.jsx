@@ -29,6 +29,9 @@ import TrakinkParcel from "../pages/Home/TrakinkParcel/TrakinkParcel";
 import Dashboard from "../pages/Dashbord/DashBoodrRoleShow/ShowDesh";
 import UserManage from "../pages/Dashbord/userManage/UserManage";
 import UserRole from "./UserRole";
+import Reports from "../pages/Dashbord/Reports";
+import Settings from "../pages/Dashbord/Settings";
+import Help from "../pages/Dashbord/Help";
 
 export const router = createBrowserRouter([
   {
@@ -155,6 +158,18 @@ export const router = createBrowserRouter([
       {
         path: "/dasbord/userManage",
         element: <AdminRole><UserManage></UserManage></AdminRole>
+      },
+      {
+        path: "/dasbord/reports",
+        element: <Reports></Reports>
+      },
+      {
+        path: "/dasbord/settings",
+        element: <Settings></Settings>
+      },
+      {
+        path: "/dasbord/help",
+        element: <Help></Help>
       },
       {
         path: "/dasbord/assigned-deliveries",

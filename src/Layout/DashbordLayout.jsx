@@ -36,6 +36,11 @@ const DashbordLayout = () => {
   useEffect(() => {
     const html = document.querySelector("html");
     html.setAttribute("data-theme", theme);
+    if (theme === "dark") {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
     localStorage.setItem("theme", theme);
   }, [theme]);
   const handleTheme = (checked) => {
@@ -142,6 +147,19 @@ const DashbordLayout = () => {
               >
                 <HiHomeModern className="w-5 h-5" />
                 <span>Dashboard Home</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/dasbord/reports"
+                className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                  isActive("/dasbord/reports")
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                }`}
+              >
+                <LayoutDashboard className="w-5 h-5" />
+                <span>Reports</span>
               </Link>
             </li>
 
@@ -256,7 +274,11 @@ const DashbordLayout = () => {
 
           {/* Footer Actions */}
           <div className="border-t border-gray-200 dark:border-gray-700 mt-auto py-4 px-2 flex flex-col gap-2">
-            <Link className="flex items-center gap-3 p-2 text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <Link to="/dasbord/settings" className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+              isActive("/dasbord/settings")
+                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+            }`}>
               <Settings className="w-5 h-5 " />
               <span>Settings</span>
             </Link>
@@ -264,7 +286,11 @@ const DashbordLayout = () => {
               <Lock className="w-5 h-5" />
               <span>Change Password</span>
             </Link>
-            <Link className="flex items-center text-white gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <Link to="/dasbord/help" className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+              isActive("/dasbord/help")
+                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+            }`}>
               <HelpCircle className="w-5 h-5" />
               <span>Help</span>
             </Link>
