@@ -19,6 +19,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { BarChart, Bar, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import useAuth from "../../../Hook/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecoir from "../../../Hook/useAxiosSecoir";
@@ -63,10 +64,56 @@ const UserDashBord = () => {
   }
   return (
     <div className="space-y-8 p-3 md:p-5 lg:p-7">
-      {/* TITLE */}
-      <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200 mb-6">
-        User Dashboard
-      </h1>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">
+            User Dashboard
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Parcels: <span className="font-semibold">{data?.length || 0}</span> · Delivered: <span className="font-semibold">{delivered?.length || 0}</span>
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/send_parcel" className="btn btn-sm md:btn-md bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-white">Send Parcel</Link>
+          <Link to="/dasbord/myparcel" className="btn btn-sm md:btn-md bg-pink-500 text-white">My Parcels</Link>
+          <Link to="/dasbord/paymentHiestory" className="btn btn-sm md:btn-md bg-blue-600 text-white">Payments</Link>
+        </div>
+      </div>
+
+      <div className="rounded-2xl p-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Package className="w-4 h-4 text-purple-500" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Total</span>
+            </div>
+            <span className="text-secondary dark:text-white font-semibold">{data?.length || 0}</span>
+          </div>
+          <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-purple-500" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">In Progress</span>
+            </div>
+            <span className="text-secondary dark:text-white font-semibold">—</span>
+          </div>
+          <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-purple-500" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Regions</span>
+            </div>
+            <span className="text-secondary dark:text-white font-semibold">
+              {Array.from(new Set((data || []).map((p) => p?.reciverDistrick))).length}
+            </span>
+          </div>
+          <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Heart className="w-4 h-4 text-purple-500" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">Rewards</span>
+            </div>
+            <span className="text-secondary dark:text-white font-semibold">Gold</span>
+          </div>
+        </div>
+      </div>
 
       {/* PROFILE */}
       <Card className="rounded-2xl shadow-lg dark:bg-gray-900">
@@ -146,6 +193,54 @@ const UserDashBord = () => {
         </CardContent>
       </Card>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="rounded-2xl shadow-md dark:bg-gray-900 lg:col-span-2">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-3 dark:text-white">Deliveries by District</h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart
+                data={Object.entries(
+                  (delivered || []).reduce((acc, cur) => {
+                    const d = cur?.reciverDistrick || "Unknown";
+                    acc[d] = (acc[d] || 0) + 1;
+                    return acc;
+                  }, {})
+                ).map(([name, count]) => ({ name, count }))}
+              >
+                <CartesianGrid stroke="#f5f5f5" />
+                <XAxis dataKey="name" stroke="#aaa" />
+                <YAxis stroke="#aaa" />
+                <Tooltip />
+                <Bar dataKey="count" barSize={22} fill="#8b5cf6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        <Card className="rounded-2xl shadow-md dark:bg-gray-900">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-3 dark:text-white">Payment Split</h2>
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: "COD", value: 70 },
+                    { name: "Online", value: 30 },
+                  ]}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                >
+                  <Cell fill="#8b5cf6" />
+                  <Cell fill="#ec4899" />
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* LOYALTY RANK */}
       <Card className="rounded-2xl shadow-md dark:bg-gray-900">
         <CardContent className="p-6 flex items-center gap-4">
@@ -158,6 +253,20 @@ const UserDashBord = () => {
               You earned 1200 points this year 🎉
             </p>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-2xl shadow-md dark:bg-gray-900">
+        <CardContent className="p-6">
+          <h2 className="text-xl font-semibold mb-3 dark:text-white">Recent Parcels</h2>
+          <ul className="space-y-3">
+            {(data || []).slice(0, 6).map((p, i) => (
+              <li key={i} className="flex items-center justify-between rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300">
+                <span className="text-sm text-gray-700 dark:text-gray-300">{p?.trakingId}</span>
+                <span className="text-xs rounded-full px-2 py-1 bg-gray-100 dark:bg-gray-700 text-secondary dark:text-white">{p?.reciverDistrick || "—"}</span>
+              </li>
+            ))}
+          </ul>
         </CardContent>
       </Card>
 
@@ -226,6 +335,56 @@ const UserDashBord = () => {
         >
           All Delivery Center
         </Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="rounded-2xl shadow-md dark:bg-gray-900">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-3 dark:text-white">Support Summary</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 text-center">
+                <Ticket className="w-5 h-5 mx-auto text-purple-500" />
+                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Open</p>
+                <p className="text-lg font-bold text-secondary dark:text-white">2</p>
+              </div>
+              <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 text-center">
+                <Gift className="w-5 h-5 mx-auto text-purple-500" />
+                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Rewards</p>
+                <p className="text-lg font-bold text-secondary dark:text-white">1200</p>
+              </div>
+              <div className="rounded-xl px-4 py-3 bg-base-100 dark:bg-gray-800 border border-base-300 text-center">
+                <Mail className="w-5 h-5 mx-auto text-purple-500" />
+                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">Messages</p>
+                <p className="text-lg font-bold text-secondary dark:text-white">5</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="rounded-2xl shadow-md dark:bg-gray-900">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-3 dark:text-white">Preferences</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-between">
+                <span className="text-gray-800 dark:text-gray-200">Notifications</span>
+                <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+              </div>
+              <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center justify-between">
+                <span className="text-gray-800 dark:text-gray-200">Compact Mode</span>
+                <input type="checkbox" className="toggle toggle-primary" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="rounded-2xl shadow-md dark:bg-gray-900">
+          <CardContent className="p-6">
+            <h2 className="text-xl font-semibold mb-3 dark:text-white">Export</h2>
+            <div className="grid grid-cols-3 gap-3">
+              <button className="btn btn-primary">CSV</button>
+              <button className="btn btn-primary">XLSX</button>
+              <button className="btn btn-primary">PDF</button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

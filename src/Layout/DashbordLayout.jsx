@@ -7,6 +7,9 @@ import {
   HelpCircle,
   LogOut,
   Bell,
+  Sun,
+  Moon,
+  Search,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router";
 import { GoSidebarExpand } from "react-icons/go";
@@ -46,6 +49,9 @@ const DashbordLayout = () => {
   const handleTheme = (checked) => {
     setTheme(checked ? "dark" : "light");
   };
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
 
   
@@ -54,11 +60,11 @@ const DashbordLayout = () => {
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
-        <nav className="navbar w-full bg-white dark:bg-gray-900 shadow-md px-4 md:px-10 py-5 flex justify-between items-center">
+        <nav className="navbar w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-4 md:px-10 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <label
               htmlFor="my-drawer-4"
-              className="btn btn-square text-white btn-ghost"
+              className="btn btn-square btn-ghost"
               aria-label="open sidebar"
             >
               <GoSidebarExpand className="w-6 h-6" />
@@ -66,15 +72,48 @@ const DashbordLayout = () => {
             <div className="flex items-center gap-2">
               <Link to="/" className="flex items-center">
                 <img src={logoseas}></img>
-                <p className=" text-3xl font-semibold  -ms-3.5 text-white">
+                <p className=" text-3xl font-semibold  -ms-3.5 text-secondary dark:text-white">
                   zapShift
                 </p>
               </Link>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Profile */}
+          <div className="flex items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+                className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition"
+              >
+                {theme === "dark" ? (
+                  <Sun className="w-5 h-5 text-red-400" />
+                ) : (
+                  <Moon className="w-5 h-5 text-purple-500" />
+                )}
+              </button>
+              <Link
+                to="/dasbord/reports"
+                className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
+                aria-label="Reports"
+              >
+                <Search className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+              </Link>
+              <Link
+                to="/dasbord/settings"
+                className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
+                aria-label="Settings"
+              >
+                <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+              </Link>
+              <Link
+                to="/dasbord/help"
+                className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
+                aria-label="Help"
+              >
+                <HelpCircle className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+              </Link>
+            </div>
 
             <div className="flex gap-2">
               <div className="dropdown dropdown-end">
@@ -101,7 +140,6 @@ const DashbordLayout = () => {
               </div>
             </div>
 
-            {/* Notification */}
             <div className="relative">
 
               <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition">

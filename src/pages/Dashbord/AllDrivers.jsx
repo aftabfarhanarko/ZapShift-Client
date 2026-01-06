@@ -6,10 +6,25 @@ import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { Users, BarChart3, PieChart as PieIcon, MapPin, Filter, Download, CheckCircle, Clock } from "lucide-react";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const AllDrivers = () => {
   const axiosSecoir = useAxiosSecoir();
   const [modalData, setModalData] = useState([]);
+  const [roleFilter, setRoleFilter] = useState("All Status");
+  const [workFilter, setWorkFilter] = useState("All Work");
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -27,6 +42,45 @@ const AllDrivers = () => {
       }),
   });
 
+  const riders = data?.result || [];
+  const filteredRiders = riders.filter((r) => {
+    const statusMatch = roleFilter === "All Status" ? true : r.status === roleFilter.toLowerCase();
+    const workMatch = workFilter === "All Work" ? true : r.workStatus === workFilter.toLowerCase();
+    return statusMatch && workMatch;
+  });
+  const counts = {
+    total: filteredRiders.length,
+    approved: filteredRiders.filter((r) => r.status === "approved").length,
+    pending: filteredRiders.filter((r) => r.status === "pending").length,
+    rejected: filteredRiders.filter((r) => r.status === "rejected").length,
+    available: filteredRiders.filter((r) => r.workStatus === "available").length,
+    busy: filteredRiders.filter((r) => r.workStatus === "busy").length,
+    districts: Array.from(new Set(filteredRiders.map((r) => r.yourDistrict))).length,
+  };
+  const byDistrict = Object.entries(
+    filteredRiders.reduce((acc, cur) => {
+      const d = cur?.yourDistrict || "Unknown";
+      acc[d] = (acc[d] || 0) + 1;
+      return acc;
+    }, {})
+  ).map(([name, count]) => ({ name, count }));
+  const weeklyData = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => ({
+    name: d,
+    count: filteredRiders.reduce((acc, cur) => {
+      const dt = cur?.creatAtime ? new Date(cur.creatAtime) : null;
+      if (!dt || isNaN(dt.getTime())) return acc;
+      return acc + (["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dt.getDay()] === d ? 1 : 0);
+    }, 0),
+  }));
+  const SkeletonRow = () => (
+    <tr className="animate-pulse">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <td key={i} className="p-4">
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
   const updateStatus = (item, status) => {
     const info = { status: status, email: item.email };
 
@@ -55,14 +109,150 @@ const AllDrivers = () => {
   };
   const handleCloseModal = () => setModalData([]);
 
-  if (isLoading) return <Loding />;
+  if (isLoading) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
+          All Riders: Loading...
+        </h1>
+        <div className="overflow-x-auto mt-5 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-200">
+              <tr>
+                <th className="p-4 font-semibold">Srl No</th>
+                <th className="p-4 font-semibold">Rider</th>
+                <th className="p-4 font-semibold">Region</th>
+                <th className="p-4 font-semibold">All Details</th>
+                <th className="p-4 font-semibold">Submit Date</th>
+                <th className="p-4 font-semibold">Work Status</th>
+                <th className="p-4 font-semibold">Delivery Status</th>
+                <th className="p-4 font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
-       <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
-          All Riders: {data.total}
-      </h1>
-     
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
+            All Riders
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Total: <span className="font-semibold">{counts.total}</span> · Approved: <span className="font-semibold">{counts.approved}</span> · Available: <span className="font-semibold">{counts.available}</span>
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <select className="select select-bordered" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+            <option>All Status</option>
+            <option>approved</option>
+            <option>pending</option>
+            <option>rejected</option>
+          </select>
+          <select className="select select-bordered" value={workFilter} onChange={(e) => setWorkFilter(e.target.value)}>
+            <option>All Work</option>
+            <option>available</option>
+            <option>busy</option>
+          </select>
+          <button className="btn btn-sm"><Filter className="w-4 h-4 mr-2" /> Apply</button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><Users className="w-5 h-5 text-purple-500" /><span className="text-sm">Total</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.total}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5 text-green-500" /><span className="text-sm">Approved</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.approved}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><Clock className="w-5 h-5 text-yellow-500" /><span className="text-sm">Pending</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.pending}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><MdCancel className="w-5 h-5 text-red-500" /><span className="text-sm">Rejected</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.rejected}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><PieIcon className="w-5 h-5 text-purple-500" /><span className="text-sm">Available</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.available}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2"><MapPin className="w-5 h-5 text-purple-500" /><span className="text-sm">Districts</span></div>
+          <span className="font-semibold text-secondary dark:text-white">{counts.districts}</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="rounded-3xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow lg:col-span-2">
+          <div className="flex items-center gap-2 mb-3">
+            <BarChart3 className="w-5 h-5 text-purple-500" />
+            <p className="text-lg font-semibold text-gray-800 dark:text-white">Riders by District</p>
+          </div>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={byDistrict}>
+              <CartesianGrid stroke="#f5f5f5" />
+              <XAxis dataKey="name" stroke="#aaa" />
+              <YAxis stroke="#aaa" />
+              <Tooltip />
+              <Bar dataKey="count" barSize={24} fill="#8b5cf6" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="rounded-3xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Availability Split</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie
+                data={[
+                  { name: "Available", value: counts.available },
+                  { name: "Busy", value: counts.busy },
+                ]}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={90}
+                label
+              >
+                <Cell fill="#14b8a6" />
+                <Cell fill="#ef4444" />
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="rounded-3xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow lg:col-span-2">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Weekly Signups</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={weeklyData}>
+              <CartesianGrid stroke="#f5f5f5" />
+              <XAxis dataKey="name" stroke="#aaa" />
+              <YAxis stroke="#aaa" />
+              <Tooltip />
+              <Bar dataKey="count" barSize={22} fill="#22d3ee" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="rounded-3xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Export</p>
+          <div className="grid grid-cols-3 gap-3">
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> CSV</button>
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> XLSX</button>
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> PDF</button>
+          </div>
+        </div>
+      </div>
 
       <div className="overflow-x-auto mt-5 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
         <table className="min-w-full text-sm">

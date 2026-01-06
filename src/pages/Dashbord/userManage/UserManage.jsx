@@ -6,6 +6,19 @@ import Swal from "sweetalert2";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { IoIosSearch } from "react-icons/io";
+import { Users, ShieldCheck, BarChart3, Download, Filter } from "lucide-react";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
 
 const SkeletonRow = () => (
   <tr className="animate-pulse">
@@ -20,6 +33,8 @@ const SkeletonRow = () => (
 const UserManage = () => {
   const axiosSecoir = useAxiosSecoir();
   const [searchNow, setSearchNow] = useState("");
+  const [roleFilter, setRoleFilter] = useState("All Roles");
+  const [statusFilter, setStatusFilter] = useState("All Status");
 
   // pasitions
   const [page, setPage] = useState(1);
@@ -98,6 +113,26 @@ const UserManage = () => {
       }
     });
   };
+  const users = (data?.result || []);
+  const filteredUsers = users.filter((u) => {
+    const roleMatch = roleFilter === "All Roles" ? true : u.role === roleFilter.toLowerCase();
+    const statusMatch = true;
+    return roleMatch && statusMatch;
+  });
+  const roleCounts = {
+    admin: filteredUsers.filter((u) => u.role === "admin").length,
+    rider: filteredUsers.filter((u) => u.role === "rider").length,
+    user: filteredUsers.filter((u) => u.role === "user").length,
+  };
+  const weeklyData = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((d) => ({
+    name: d,
+    count: filteredUsers.reduce((acc, cur) => {
+      const dt = cur?.creatWb ? new Date(cur.creatWb) : null;
+      if (!dt || isNaN(dt.getTime())) return acc;
+      return acc + (["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dt.getDay()] === d ? 1 : 0);
+    }, 0),
+  }));
+
   // console.log(searchNow);
 
   return (
@@ -105,7 +140,7 @@ const UserManage = () => {
       {/* Header + Search */}
       <div className="md:flex justify-between items-center mb-6 gap-4">
         <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-blue-400">
-          All Users: {data?.total || 0}
+          All Users: {filteredUsers.length || 0}
         </h1>
 
         <label className="relative mt-3 md:mt-0 max-w-md w-full">
@@ -124,6 +159,113 @@ const UserManage = () => {
             <IoIosSearch className="w-5 h-5" />
           </button>
         </label>
+      </div>
+
+      {/* Header Summary */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-purple-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">Total</span>
+          </div>
+          <span className="text-secondary dark:text-white font-semibold">{filteredUsers.length}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-purple-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-300">Admins</span>
+          </div>
+          <span className="text-secondary dark:text-white font-semibold">{roleCounts.admin}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs">R</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Riders</span>
+          </div>
+          <span className="text-secondary dark:text-white font-semibold">{roleCounts.rider}</span>
+        </div>
+        <div className="rounded-xl px-4 py-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs">U</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Users</span>
+          </div>
+          <span className="text-secondary dark:text-white font-semibold">{roleCounts.user}</span>
+        </div>
+      </div>
+
+      {/* Charts and Tools */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow lg:col-span-2">
+          <div className="flex items-center gap-2 mb-3">
+            <BarChart3 className="w-5 h-5 text-purple-500" />
+            <p className="text-lg font-semibold text-gray-800 dark:text-white">Role Distribution</p>
+          </div>
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <Pie
+                data={[
+                  { name: "Admin", value: roleCounts.admin },
+                  { name: "Rider", value: roleCounts.rider },
+                  { name: "User", value: roleCounts.user },
+                ]}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                label
+              >
+                <Cell fill="#8b5cf6" />
+                <Cell fill="#ef4444" />
+                <Cell fill="#3b82f6" />
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Quick Filters</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <select className="select select-bordered w-full" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+              <option>All Roles</option>
+              <option>Admin</option>
+              <option>Rider</option>
+              <option>User</option>
+            </select>
+            <select className="select select-bordered w-full" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option>All Status</option>
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </div>
+          <button className="btn btn-sm mt-4">
+            <Filter className="w-4 h-4 mr-2" /> Apply
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow lg:col-span-2">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Activity Trend</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart
+              data={weeklyData}
+            >
+              <CartesianGrid stroke="#f5f5f5" />
+              <XAxis dataKey="name" stroke="#aaa" />
+              <YAxis stroke="#aaa" />
+              <Tooltip />
+              <Bar dataKey="count" barSize={22} fill="#8b5cf6" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="rounded-2xl p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow">
+          <p className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Export</p>
+          <div className="grid grid-cols-3 gap-3">
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> CSV</button>
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> XLSX</button>
+            <button className="btn btn-primary"><Download className="w-4 h-4 mr-2" /> PDF</button>
+          </div>
+        </div>
       </div>
 
       {/* Table */}
