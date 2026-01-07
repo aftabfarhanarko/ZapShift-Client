@@ -119,7 +119,7 @@ const Register = () => {
           </div>
           
           <div className="relative z-10">
-            <img src="/nnewcopy.png" alt="ZapShift" className="h-12 mb-4" />
+            <img src="/nnewcopy.png" alt="ZapShift" className="h-20 w-auto object-contain mb-6" />
             <p className="text-gray-300 text-sm">Join the Logistics Revolution</p>
           </div>
 

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router";
-// import logo from "../assets/logo.png";
-import logo from "/nnewcopy.png";
+import logo from "/loogo-8.png";
 import useAuth from "../Hook/useAuth";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { CgClose } from "react-icons/cg";

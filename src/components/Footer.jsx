@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "/logo-5.png";
+import logo from "/loogo-8.png";
 import {
   Facebook,
   Linkedin,
