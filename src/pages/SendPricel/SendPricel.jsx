@@ -5,6 +5,22 @@ import Swal from "sweetalert2";
 import useAxiosSecoir from "../../Hook/useAxiosSecoir";
 import useAuth from "../../Hook/useAuth";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
+import { 
+  Package, 
+  FileText, 
+  Box, 
+  User, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Truck, 
+  Scale, 
+  Send, 
+  Info,
+  ArrowRight,
+  Map
+} from "lucide-react";
 
 const SendPricel = () => {
   const {
@@ -32,35 +48,12 @@ const SendPricel = () => {
     return districts;
   };
 
-  // addrss: "Rowmari Kurigram";
-  // contact: "01613410880";
-  // delivery: " wer wer werr";
-  // name: "Aftab Farhan";
-  // parcelType: "document";
-  // percilname: "Book";
-  // pickup: "Test Now";
-  // reciverDistrick: "Faridpur";
-  // reciverRegion: "Dhaka";
-  // reciveraddrss: "Rowmari Kurigram";
-  // recivercontact: "01613410880";
-  // reciveremail: "korim@gmail.com";
-  // recivername: "Korim";
-  // senderRegion: "Dhaka";
-  // senderdistick: "Faridpur";
-  // "aftabfarhan324@gmail.com";
-  // weight: "2";
-
   const subMiteFrom = (data) => {
     // console.log("Submite Producat", data);
     const isDocument = data.parcelType === "document";
     const isSameDistrict = data.senderdistick === data.reciverDistrick;
     const parcilWight = parseFloat(data.weight);
-
-    // console.log(parcilWight);
-
     let cost = 0;
-    // cost conditions chack
-
     if (isDocument) {
       cost = isSameDistrict ? 60 : 80;
     } else {
@@ -91,7 +84,7 @@ const SendPricel = () => {
         htmlContainer: "text-gray-600",
         actions: "flex gap-3 justify-end",
         confirmButton:
-          "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-xl",
+          "bg-[#03373D] hover:bg-[#022c30] text-white font-semibold px-6 py-2 rounded-xl",
         cancelButton:
           "bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-xl",
       },
@@ -125,366 +118,321 @@ const SendPricel = () => {
     // console.log("cost", cost);
   };
 
-  return (
-    <div>
-      <form
-        onSubmit={handleSubmit(subMiteFrom)}
-        className="w-full max-w-6xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-sm my-20"
-      >
-        {/* Title */}
-        <h1 className="text-3xl font-bold  text-secondary mb-8">Add Parcel</h1>
-
-        <div className="border-t pt-6">
-          {/* Section Title */}
-          <h2 className="text-2xl font-semibold text-secondary  mb-6">
-            Enter your parcel details
-          </h2>
-          {/* Document Type */}
-          <div>
-            <label className="label mr-4">
-              <input
-                type="radio"
-                {...register("parcelType")}
-                value="document"
-                className="radio"
-                defaultChecked
-              />
-              Document
-            </label>
-            <label className="label">
-              <input
-                type="radio"
-                {...register("parcelType")}
-                value="non-document"
-                className="radio"
-              />
-              Non-Document
-            </label>
-          </div>
-
-          {/* Parcel Inputs */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                Parcel Name
-              </label>
-              <input
-                type="text"
-                {...register("percilname", { required: true })}
-                placeholder="Select percilname"
-                className="w-full px-4 py-2 md:py-2 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-              />
-              {errors.percilname?.type === "required" && (
-                <p className="text-red-500 text-xs font-semibold mt-1">
-                  Please Fillup Producat Name
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                Parcel Weight (KG)
-              </label>
-              <input
-                type="number"
-                name="number"
-                {...register("weight", { required: true })}
-                placeholder="Parcel Weight (KG)"
-                className="w-full px-4 py-2 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-              />
-              {errors.weight?.type === "required" && (
-                <p className="text-red-500 text-xs font-semibold mt-1">
-                  Please Provied Producat Weight
-                </p>
-              )}
-            </div>
-          </div>
+  const InputField = ({ label, icon: Icon, error, ...props }) => (
+    <div className="relative">
+      <label className="block text-gray-700 font-medium mb-2 text-sm ml-1">
+        {label}
+      </label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+          {Icon && <Icon size={18} />}
         </div>
-
-        {/* Sender + Receiver */}
-        <div className="grid md:grid-cols-2 gap-10 mt-10  ">
-          {/* Sender */}
-          <div className=" border-t md:border-0 pt-4 md:pt-0 border-b pb-4  md:pb-0 border-base-300">
-            <h3 className="font-semibold text-lg text-secondary mb-3">
-              Sender Details
-            </h3>
-            <div className=" space-y-5 mt-4 md:mt-7">
-              {/* Name & Age Row */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Name
-                </label>
-                <input
-                  type="text"
-                  {...register("name", { required: true })}
-                  defaultValue={user.displayName}
-                  className="w-full px-4 py-2.5 md:py-3 border  rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  border-black/50 placeholder:text-black/90  md:text-base"
-                />
-                {errors.name?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Fillup Name
-                  </p>
-                )}
-              </div>
-              {/* email */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Email
-                </label>
-                <input
-                  type="email"
-                  {...register("senderemail", { required: true })}
-                  defaultValue={user.email}
-                  readOnly
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.senderemail?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Fillup Your Email
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Phone No
-                </label>
-                <input
-                  type="tel"
-                  name="contact"
-                  {...register("contact", { required: true })}
-                  placeholder="Sender Phone No"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.contact?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Provied Sender Phone No
-                  </p>
-                )}
-              </div>
-
-              {/* Sender Region */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Region
-                </label>
-                <select
-                  name="city"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select"
-                  {...register("senderRegion")}
-                >
-                  <option disabled={true}>Pick a Sender region</option>
-                  {regionsDuplicate.map((one, i) => (
-                    <option value={one} key={i}>
-                      {one}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Sender Distuick */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender District
-                </label>
-                <select
-                  {...register("senderdistick", { required: true })}
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/90 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select focus:outline-none"
-                  defaultValue=" Select Sender District"
-                >
-                  {districtsByRegion(senderRegion).map((d, i) => (
-                    <option value={d} key={i}>
-                      {d}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender Address
-                </label>
-                <input
-                  type="text"
-                  {...register("addrss", { required: true })}
-                  placeholder="sender addrss"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.addrss?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Provied Sender Addrss
-                  </p>
-                )}
-              </div>
-              {/* Pickup Instruction */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Pickup Instruction
-                </label>
-                <div className="w-full ">
-                  <textarea
-                    {...register("pickup", { required: true })}
-                    placeholder="Pickup Instruction"
-                    className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-lime-400 
-               focus:border-transparent text-sm md:text-base"
-                  ></textarea>
-                </div>
-                {errors.pickup?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Provied Pickup Instruction
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Receiver */}
-          <div className=" mt-10 md:mt-0 border-t md:border-0 pt-4 md:pt-0 border-b pb-4  md:pb-0 border-base-300">
-            <h3 className="font-semibold text-lg text-secondary mb-3">
-              Receiver Details
-            </h3>
-            <div className=" space-y-5 mt-4 md:mt-7">
-              {/* Name & Age Row */}
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Receiver Name
-                </label>
-                <input
-                  type="text"
-                  {...register("recivername", { required: true })}
-                  placeholder="Receiver Name"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.recivername?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Please Reciver Name Provied
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Receiver Email
-                </label>
-                <input
-                  type="email"
-                  {...register("reciveremail", { required: true })}
-                  placeholder="sender email"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.reciveremail?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Reciver email Provied
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Receiver Phone No
-                </label>
-                <input
-                  type="tel"
-                  {...register("recivercontact", { required: true })}
-                  placeholder="Receiver Phone No"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.recivercontact?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Receiver Phone No
-                  </p>
-                )}
-              </div>
-
-              {/* Sender Region */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Reciver Region
-                </label>
-                <select
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select"
-                  {...register("reciverRegion")}
-                  defaultValue="Pick a region"
-                >
-                  {regionsDuplicate.map((one, i) => (
-                    <option value={one} key={i}>
-                      {one}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Sender District
-                </label>
-                <select
-                  {...register("reciverDistrick")}
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/90 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm  md:text-base  select focus:outline-none"
-                  defaultValue=" Select Reciver District"
-                >
-                  {districtsByRegion(reciverRegion).map((d, i) => (
-                    <option value={d} key={i}>
-                      {d}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Receiver Address
-                </label>
-                <input
-                  type="text"
-                  {...register("reciveraddrss", { required: true })}
-                  placeholder="Receiver Address"
-                  className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-                />
-                {errors.reciveraddrss?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Provied Reciver Addrss
-                  </p>
-                )}
-              </div>
-
-              {/* Pickup Instruction */}
-              <div>
-                <label className="block text-gray-900 font-medium mb-2 text-sm sm:text-base">
-                  Delivery instruction
-                </label>
-                <div className="w-full ">
-                  <textarea
-                    {...register("delivery", { required: true })}
-                    placeholder="Delivery instruction"
-                    className="w-full px-4 py-2.5 md:py-3 border border-black/50 placeholder:text-black/90 rounded-lg 
-               focus:outline-none focus:ring-2 focus:ring-lime-400 
-               focus:border-transparent text-sm md:text-base"
-                  ></textarea>
-                </div>
-                {errors.delivery?.type === "required" && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">
-                    Provied Delivery instruction
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-lg font-semibold text-secondary  mt-4">
-          * Pickup Time 4pm–7pm Approx.
+        <input
+          {...props}
+          className={`w-full pl-10 pr-4 py-3 border ${
+            error ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+          } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm`}
+        />
+      </div>
+      {error && (
+        <p className="text-red-500 text-xs font-semibold mt-1 ml-1 flex items-center gap-1">
+          <Info size={12} /> {label} is required
         </p>
+      )}
+    </div>
+  );
 
-        {/* Buttons */}
-        <div className="flex gap-4 mt-8">
-          <button className="btn bg-[#B7E651] border-none px-10 shadow hover:bg-[#A3D33F]">
-            Proceed to Confirm Booking
-          </button>
+  const SelectField = ({ label, icon: Icon, options, error, ...props }) => (
+    <div className="relative">
+      <label className="block text-gray-700 font-medium mb-2 text-sm ml-1">
+        {label}
+      </label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+          {Icon && <Icon size={18} />}
         </div>
-      </form>
+        <select
+          {...props}
+          className={`w-full pl-10 pr-10 py-3 border ${
+            error ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+          } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm appearance-none`}
+        >
+          {props.children}
+        </select>
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+          <ArrowRight className="rotate-90" size={16} />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-6xl mx-auto"
+      >
+        {/* Header */}
+        <div className="text-center mb-10">
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="w-16 h-16 bg-[#B8E55C] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#B8E55C]/20"
+          >
+            <Truck className="text-[#03373D]" size={32} />
+          </motion.div>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#03373D] mb-2">Book Your Shipment</h1>
+          <p className="text-gray-500">Fast, secure, and reliable delivery services</p>
+        </div>
+
+        <form
+          onSubmit={handleSubmit(subMiteFrom)}
+          className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+        >
+          {/* Parcel Type Selection */}
+          <div className="bg-[#03373D] p-8 text-white">
+            <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+              <Package className="text-[#B8E55C]" />
+              Select Parcel Type
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <label className="flex-1 cursor-pointer group">
+                <input
+                  type="radio"
+                  {...register("parcelType")}
+                  value="document"
+                  className="peer sr-only"
+                  defaultChecked
+                />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 peer-checked:bg-[#B8E55C] peer-checked:text-[#03373D] transition-all hover:bg-white/10">
+                  <div className="p-2 rounded-lg bg-white/10 peer-checked:bg-black/10">
+                    <FileText size={24} />
+                  </div>
+                  <div>
+                    <span className="block font-semibold">Document</span>
+                    <span className="text-xs opacity-70 group-hover:opacity-100">Letters, Files, Papers</span>
+                  </div>
+                </div>
+              </label>
+
+              <label className="flex-1 cursor-pointer group">
+                <input
+                  type="radio"
+                  {...register("parcelType")}
+                  value="non-document"
+                  className="peer sr-only"
+                />
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 peer-checked:bg-[#B8E55C] peer-checked:text-[#03373D] transition-all hover:bg-white/10">
+                  <div className="p-2 rounded-lg bg-white/10 peer-checked:bg-black/10">
+                    <Box size={24} />
+                  </div>
+                  <div>
+                    <span className="block font-semibold">Non-Document</span>
+                    <span className="text-xs opacity-70 group-hover:opacity-100">Boxes, Items, Heavy Goods</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div className="p-8 md:p-12">
+            {/* Parcel Details */}
+            <div className="mb-12">
+              <h3 className="text-lg font-semibold text-[#03373D] mb-6 flex items-center gap-2 border-b border-gray-100 pb-2">
+                <Info size={20} className="text-[#B8E55C]" />
+                Parcel Details
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <InputField
+                  label="Parcel Name"
+                  icon={Package}
+                  placeholder="e.g. Electronics, Gift Box"
+                  {...register("percilname", { required: true })}
+                  error={errors.percilname}
+                />
+                <InputField
+                  label="Weight (KG)"
+                  icon={Scale}
+                  type="number"
+                  placeholder="e.g. 2.5"
+                  {...register("weight", { required: true })}
+                  error={errors.weight}
+                />
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* Sender Section */}
+              <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                <h3 className="text-lg font-semibold text-[#03373D] mb-6 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#03373D]/5 flex items-center justify-center text-[#03373D]">
+                    <User size={18} />
+                  </div>
+                  Sender Details
+                </h3>
+                <div className="space-y-4">
+                  <InputField
+                    label="Full Name"
+                    icon={User}
+                    defaultValue={user.displayName}
+                    {...register("name", { required: true })}
+                    error={errors.name}
+                  />
+                  <InputField
+                    label="Email Address"
+                    icon={Mail}
+                    defaultValue={user.email}
+                    readOnly
+                    {...register("senderemail", { required: true })}
+                    error={errors.senderemail}
+                  />
+                  <InputField
+                    label="Phone Number"
+                    icon={Phone}
+                    placeholder="e.g. +880 1XXX..."
+                    {...register("contact", { required: true })}
+                    error={errors.contact}
+                  />
+                  <SelectField
+                    label="Region"
+                    icon={Map}
+                    {...register("senderRegion")}
+                    defaultValue="Pick a Sender region"
+                  >
+                    <option disabled>Pick a Sender region</option>
+                    {regionsDuplicate.map((one, i) => (
+                      <option value={one} key={i}>{one}</option>
+                    ))}
+                  </SelectField>
+                  <SelectField
+                    label="District"
+                    icon={MapPin}
+                    {...register("senderdistick", { required: true })}
+                    defaultValue=" Select Sender District"
+                  >
+                     <option disabled> Select Sender District</option>
+                    {districtsByRegion(senderRegion).map((d, i) => (
+                      <option value={d} key={i}>{d}</option>
+                    ))}
+                  </SelectField>
+                  <InputField
+                    label="Address"
+                    icon={MapPin}
+                    placeholder="House, Road, Area"
+                    {...register("addrss", { required: true })}
+                    error={errors.addrss}
+                  />
+                  <div className="relative">
+                    <label className="block text-gray-700 font-medium mb-2 text-sm ml-1">
+                      Pickup Instructions
+                    </label>
+                    <textarea
+                      {...register("pickup", { required: true })}
+                      className={`w-full p-4 border ${
+                        errors.pickup ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+                      } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm h-32 resize-none`}
+                      placeholder="Any specific instructions for pickup..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              {/* Receiver Section */}
+              <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                <h3 className="text-lg font-semibold text-[#03373D] mb-6 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#B8E55C]/20 flex items-center justify-center text-[#03373D]">
+                    <User size={18} />
+                  </div>
+                  Receiver Details
+                </h3>
+                <div className="space-y-4">
+                  <InputField
+                    label="Receiver Name"
+                    icon={User}
+                    placeholder="Full Name"
+                    {...register("recivername", { required: true })}
+                    error={errors.recivername}
+                  />
+                  <InputField
+                    label="Receiver Email"
+                    icon={Mail}
+                    placeholder="Email Address"
+                    {...register("reciveremail", { required: true })}
+                    error={errors.reciveremail}
+                  />
+                  <InputField
+                    label="Receiver Phone"
+                    icon={Phone}
+                    placeholder="Phone Number"
+                    {...register("recivercontact", { required: true })}
+                    error={errors.recivercontact}
+                  />
+                  <SelectField
+                    label="Region"
+                    icon={Map}
+                    {...register("reciverRegion")}
+                    defaultValue="Pick a region"
+                  >
+                    <option disabled>Pick a region</option>
+                    {regionsDuplicate.map((one, i) => (
+                      <option value={one} key={i}>{one}</option>
+                    ))}
+                  </SelectField>
+                  <SelectField
+                    label="District"
+                    icon={MapPin}
+                    {...register("reciverDistrick")}
+                    defaultValue=" Select Reciver District"
+                  >
+                    <option disabled> Select Reciver District</option>
+                    {districtsByRegion(reciverRegion).map((d, i) => (
+                      <option value={d} key={i}>{d}</option>
+                    ))}
+                  </SelectField>
+                  <InputField
+                    label="Address"
+                    icon={MapPin}
+                    placeholder="House, Road, Area"
+                    {...register("reciveraddrss", { required: true })}
+                    error={errors.reciveraddrss}
+                  />
+                  <div className="relative">
+                    <label className="block text-gray-700 font-medium mb-2 text-sm ml-1">
+                      Delivery Instructions
+                    </label>
+                    <textarea
+                      {...register("delivery", { required: true })}
+                      className={`w-full p-4 border ${
+                        errors.delivery ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+                      } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm h-32 resize-none`}
+                      placeholder="Any specific instructions for delivery..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer / Submit */}
+            <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-3 text-gray-500 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
+                <Info size={18} className="text-blue-500" />
+                <span className="text-sm font-medium">Pickup Time: 4:00 PM – 7:00 PM (Approx)</span>
+              </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full md:w-auto bg-[#B8E55C] text-[#03373D] px-10 py-4 rounded-xl font-bold shadow-lg shadow-[#B8E55C]/20 hover:shadow-xl hover:bg-[#a3d33f] transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                Proceed to Confirm
+                <Send size={20} />
+              </motion.button>
+            </div>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 };

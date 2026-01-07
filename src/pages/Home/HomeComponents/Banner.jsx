@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 const Banner = () => {
   return (
-    <div className="relative min-h-[500px] lg:min-h-[600px] bg-[#f0fdf4] overflow-hidden flex items-center">
+    <div className="relative min-h-[500px] mt-18 lg:min-h-[600px] bg-[#f0fdf4] overflow-hidden flex items-center">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-[#dcfce7]/30 skew-x-12 transform origin-top-right" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#B8E55C]/10 rounded-full blur-3xl" />

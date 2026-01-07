@@ -18,10 +18,6 @@ const AuthLayout = () => {
             <div className="mb-8 mt-10 pl-3 md:pl-0  md:ml-22">
             <Link to="" className="text-lg font-semibold  text-secondary flex gap-1.5  items-center hover:underline" >
             <BsArrowLeft className=" w-4 md:w-5 h-5 md:h-6"/>  Back To Home Page</Link>
-     
-              <div className="mt-3">
-                <Logo></Logo>
-              </div>
             </div>
             <Outlet></Outlet>
           </div>

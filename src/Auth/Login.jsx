@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import registe from "../assets/image-upload-icon.png";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import useAuth from "../Hook/useAuth";
 import { toast } from "sonner";
 import useAxiosSecoir from "../Hook/useAxiosSecoir";
+import { motion } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff, LogIn, ArrowRight } from "lucide-react";
 
 const Login = () => {
   const [show, setShow] = useState(true);
@@ -59,155 +59,174 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center mx-auto mb-53 px-2 md:mb-0">
-      <div className="bg-white/70 rounded-lg p-6 md:p-8 w-full lg:w-8/12 ">
-        <h1 className="text-3xl  text-secondary font-bold mb-2">
-          Welcome Back
-        </h1>
-        <p className="text-thried font-medium mb-6 md:mb-8">
-          Register with ZapShift
-        </p>
-
-        {/* Profile Upload Icon */}
-        <div className="mb-6 md:mb-8">
-          <img src={registe}></img>
-        </div>
-
-        <p className="text-sm  border border-gray-700 px-4 py-3 rounded-lg leading-relaxed mb-4">
-          <span className="font-semibold text-pink-400">
-            Admin Login Email:
-          </span>
-          <span className="ml-2 text-black">supper@admin.com</span>
-          <br />
-          <span className="font-semibold text-pink-400">
-            Admin Login Password:
-          </span>
-          <span className="ml-2 text-black">SuPP@@12</span>
-        </p>
-
-        <form onSubmit={handleSubmit(loginHandel)}>
-          {/* Email Field */}
-          <div className="mb-4 md:mb-5">
-            <label className="block text-gray-900 font-medium mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              {...register("email", { required: true })}
-              placeholder="Email"
-              className="w-full px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-            />
-            {errors.email?.type === "required" && (
-              <p className="text-red-500 text-xs font-semibold mt-1">
-                Please Emaile Provied Now
-              </p>
-            )}
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl w-full  rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
+      >
+        {/* Left Side - Brand / Visual */}
+        <div className="md:w-5/12 bg-[#03373D] p-8 text-white flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#B8E55C] blur-3xl"></div>
+            <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-blue-400 blur-3xl"></div>
+          </div>
+          
+          <div className="relative z-10">
+            <img src="/nnewcopy.png" alt="ZapShift" className="h-12 mb-4" />
+            <p className="text-gray-300 text-sm">Smart Logistics Solution</p>
           </div>
 
-          {/* Password Field */}
-          <div className="mb-5 md:mb-6 relative">
-            <label className="block text-gray-900 font-medium mb-2">
-              Password
-            </label>
-            <input
-              type={show ? "password" : "text"}
-              {...register("password", {
-                required: true,
-                minLength: 6,
-                pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
-              })}
-              placeholder="Password"
-              className="w-full px-4 py-2.5 md:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent text-sm md:text-base"
-            />
-            {errors.password?.type === "required" && (
-              <p className="text-red-500 text-xs font-semibold mt-1">
-                Must be Provied Password
-              </p>
-            )}
-            {errors.password?.type === "minLength" && (
-              <p className="text-red-500 text-xs font-semibold mt-1">
-                Password must be 6 characters or longer
-              </p>
-            )}
-            {errors.password?.type === "pattern" && (
-              <p className="text-red-500 text-xs font-semibold mt-1">
-                Need uppercase, lowercase, digit & special character
-              </p>
-            )}
-            <div onClick={() => setShow(!show)} className=" cursor-pointer  ">
-              {show ? (
-                <FaEyeSlash className="absolute right-5 z-2 top-11 md:top-12.5" />
-              ) : (
-                <FaEye className="absolute right-5 z-2  top-11 md:top-12.5" />
+          <div className="relative z-10 my-10 md:my-0">
+            <h3 className="text-2xl font-semibold mb-4 text-[#B8E55C]">Welcome Back!</h3>
+            <p className="text-gray-300 leading-relaxed">
+              Access your dashboard, manage shipments, and track your logistics in real-time.
+            </p>
+          </div>
+
+          <div className="relative z-10 text-xs text-gray-400">
+            © 2024 ZapShift Inc.
+          </div>
+        </div>
+
+        {/* Right Side - Form */}
+        <div className="md:w-7/12 p-8 md:p-12 bg-white">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-[#03373D] mb-2">Login to Account</h1>
+            <p className="text-gray-500">Please enter your credentials to continue</p>
+          </div>
+
+          {/* Admin Credentials Hint */}
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-sm text-blue-800">
+            <p className="font-semibold mb-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+              Demo Admin Credentials:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+              <div><span className="font-medium text-gray-600">Email:</span> supper@admin.com</div>
+              <div><span className="font-medium text-gray-600">Pass:</span> SuPP@@12</div>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit(loginHandel)} className="space-y-5">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 ml-1">Email Address</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                  <Mail size={18} />
+                </div>
+                <input
+                  type="email"
+                  {...register("email", { required: true })}
+                  placeholder="name@example.com"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-sm"
+                />
+              </div>
+              {errors.email?.type === "required" && (
+                <p className="text-red-500 text-xs font-medium ml-1">Email is required</p>
               )}
             </div>
 
-            <Link
-              state={location?.state}
-              to="/forget"
-              className="font-medium  underline text-secondary hover:text-red-500"
+            {/* Password Field */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center ml-1">
+                <label className="text-sm font-medium text-gray-700">Password</label>
+                <Link
+                  state={location?.state}
+                  to="/forget"
+                  className="text-xs font-medium text-[#03373D] hover:text-[#B8E55C] transition-colors hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                  <Lock size={18} />
+                </div>
+                <input
+                  type={show ? "password" : "text"}
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+                  })}
+                  placeholder="Enter your password"
+                  className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShow(!show)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer"
+                >
+                  {show ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs font-medium ml-1">
+                  {errors.password.type === "required" && "Password is required"}
+                  {errors.password.type === "minLength" && "Must be at least 6 characters"}
+                  {errors.password.type === "pattern" && "Must include uppercase, lowercase, number & special char"}
+                </p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="w-full bg-[#B8E55C] hover:bg-[#a3d33f] text-[#03373D] font-bold py-3.5 rounded-xl shadow-lg shadow-[#B8E55C]/20 transition-all flex items-center justify-center gap-2"
             >
-              Forget Password
-            </Link>
+              <LogIn size={20} />
+              Sign In
+            </motion.button>
+          </form>
+
+          <div className="mt-8 mb-6 relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-100"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-400 font-medium">Or continue with</span>
+            </div>
           </div>
 
-          {/* Register Button */}
+          {/* Google Login */}
           <button
-            type="submit"
-            className="w-full bg-lime-400 hover:bg-lime-500 text-gray-900 font-semibold py-2.5 md:py-3 rounded-lg transition duration-200 mb-4 text-sm md:text-base"
+            onClick={handleGoogleLogin}
+            className="w-full bg-white border border-gray-200 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center gap-3 shadow-sm"
           >
-            Login
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+            Google
           </button>
-        </form>
 
-        {/* Login Link */}
-        <p className=" text-secondary font-medium text-center mb-4 text-sm md:text-base">
-          No account Please Creat Now?{" "}
-          <Link to="/register" className="text-lime-600 underline">
-            Register
-          </Link>
-        </p>
-
-        {/* Divider */}
-        <div className="divider">OR</div>
-
-        {/* Google Register Button */}
-
-        <button
-          onClick={handleGoogleLogin}
-          className="btn w-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-gray-800 font-semibold py-3 border border-blue-200 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group"
-        >
-          <svg
-            aria-label="Google logo"
-            width="22"
-            height="22"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            className="group-hover:scale-110 transition-transform duration-300"
-          >
-            <g>
-              <path d="m0 0H512V512H0" fill="none"></path>
-              <path
-                fill="#34a853"
-                d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-              ></path>
-              <path
-                fill="#4285f4"
-                d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-              ></path>
-              <path
-                fill="#fbbc02"
-                d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-              ></path>
-              <path
-                fill="#ea4335"
-                d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-              ></path>
-            </g>
-          </svg>
-          Continue with Google
-        </button>
-      </div>
+          <p className="mt-8 text-center text-sm text-gray-500">
+            Don't have an account?{" "}
+            <Link to="/register" className="font-semibold text-[#03373D] hover:text-[#B8E55C] hover:underline transition-colors">
+              Create free account
+            </Link>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };
