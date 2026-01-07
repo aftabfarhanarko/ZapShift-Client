@@ -30,10 +30,11 @@ const Home = () => {
       <section className="mb-10">
         <Banner></Banner>
       </section>
-      <section className="my-10">
+      <section className="mt-10 md:max-w-11/12 mx-auto">
         <QuickActions></QuickActions>
       </section>
-      <section className="my-10">
+
+      <section className="my-10 mt-10 md:max-w-11/12 mx-auto">
         <TrackSearch></TrackSearch>
       </section>
       <section className="my-20">
