@@ -27,7 +27,7 @@ import {
 import { RiMotorbikeFill } from "react-icons/ri";
 import { PiMotorcycleFill } from "react-icons/pi";
 import { MdDeliveryDining } from "react-icons/md";
-import logoseas from "../assets/logo.png";
+import logoseas from "/logo-11.png";
 
 const DashbordLayout = () => {
   const { user, userLogOut } = useAuth();
@@ -54,45 +54,35 @@ const DashbordLayout = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
-
-  
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
-        <nav className="navbar w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-4 md:px-10 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <label
-              htmlFor="my-drawer-4"
-              className="btn btn-square btn-ghost"
-              aria-label="open sidebar"
-            >
-              <GoSidebarExpand className="w-6 h-6" />
-            </label>
-            <div className="flex items-center gap-2">
-              <Link to="/" className="flex items-center">
-                <img src={logoseas}></img>
-                <p className=" text-3xl font-semibold  -ms-3.5 text-secondary dark:text-white">
-                  zapShift
-                </p>
+        <nav className="sticky top-0 z-50 navbar w-full bg-white/80 dark:bg-gray-900/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 md:px-10 py-4 flex justify-between items-center shadow-sm">
+          <div className="flex  items-center gap-2 ">
+            <div>
+              <label
+                htmlFor="my-drawer-4"
+                className="btn  md:hidden block btn-square btn-ghost"
+                aria-label="open sidebar"
+              >
+                <GoSidebarExpand className="w-6 h-6" />
+              </label>
+            </div>
+            <div className="flex items-center gap-1">
+              <Link
+                to="/"
+                className="flex items-center text-lg font-bold text-white"
+              >
+                🏗️ Panda Go
               </Link>
             </div>
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
-              <button
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-                className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition"
-              >
-                {theme === "dark" ? (
-                  <Sun className="w-5 h-5 text-red-400" />
-                ) : (
-                  <Moon className="w-5 h-5 text-purple-500" />
-                )}
-              </button>
+            
               <Link
                 to="/dasbord/reports"
                 className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
@@ -123,7 +113,6 @@ const DashbordLayout = () => {
                     <img
                       className="w-13 h-13 rounded-full object-cover shadow-sm"
                       src={user?.photoURL}
-                    
                     />
                   )}
                 </div>
@@ -142,7 +131,6 @@ const DashbordLayout = () => {
             </div>
 
             <div className="relative">
-
               <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-sm hover:shadow-md transition">
                 <Bell className="w-5 h-5 text-gray-700 dark:text-gray-200" />
               </div>
@@ -326,11 +314,14 @@ const DashbordLayout = () => {
 
           {/* Footer Actions */}
           <div className="border-t border-gray-200 dark:border-gray-700 mt-auto py-4 px-2 flex flex-col gap-2">
-            <Link to="/dasbord/settings" className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
-              isActive("/dasbord/settings")
-                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
-                : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-            }`}>
+            <Link
+              to="/dasbord/settings"
+              className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                isActive("/dasbord/settings")
+                  ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+              }`}
+            >
               <Settings className="w-5 h-5 " />
               <span>Settings</span>
             </Link>
@@ -338,11 +329,14 @@ const DashbordLayout = () => {
               <Lock className="w-5 h-5" />
               <span>Change Password</span>
             </Link>
-            <Link to="/dasbord/help" className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
-              isActive("/dasbord/help")
-                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
-                : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
-            }`}>
+            <Link
+              to="/dasbord/help"
+              className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                isActive("/dasbord/help")
+                  ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+              }`}
+            >
               <HelpCircle className="w-5 h-5" />
               <span>Help</span>
             </Link>

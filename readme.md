@@ -1,61 +1,61 @@
-# Zap Shift Resources
+# Pando Go - Parcel Delivery Dashboard
 
-Welcome to **Zap Shift Resources**!  
-A curated collection of tools, guides, and assets for developing robust parcel management systems.
+A modern, responsive parcel delivery management system built with React 19 and Tailwind CSS. Features role-based dashboards for **Users**, **Riders**, and **Admins**.
 
----
+Live Demo: [https://zapshift.vercel.app](https://zapshift.vercel.app) *(replace with your actual link)*
 
-## 📊 System Overview Table
+## 🚀 Features
 
-| Role            | Key Responsibilities                                                                      | Earnings/Benefits                              |
-| --------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| **User**        | - Book parcels<br>- Pay charges<br>- Track status<br>- Review service                     | - Real-time tracking<br>- Feedback opportunity |
-| **Admin**       | - Assign agents<br>- Manage routing<br>- Oversee warehouses<br>- Monitor operations       | - System control<br>- Operational oversight    |
-| **Agent/Rider** | - Collect/Deliver parcels<br>- Update status<br>- OTP confirmation<br>- Warehouse handoff | - ৳20 per delivery                             |
+- **Role-based Dashboard**
+  - User: Book parcels, track deliveries, view payment history
+  - Rider: View assigned deliveries, mark as completed
+  - Admin: Manage users, riders, assign deliveries, view reports
+- Dark/Light theme toggle with persistence
+- Fully responsive design (mobile-first with drawer sidebar)
+- Real-time notifications & coverage map
+- Secure authentication with Firebase
+- Smooth animations using Framer Motion, AOS & Lottie
+- Payment integration with Stripe
+- PDF report generation using jsPDF + AutoTable
+- Interactive charts with Recharts
+- Fast marquee, carousels, and spinners for better UX
 
----
+## 🛠️ Tech Stack
 
-## 🛒 Pricing Structure
+| Category              | Technology                                      |
+|-----------------------|-------------------------------------------------|
+| Framework             | React 19 + Vite                                 |
+| Routing               | React Router v7                                 |
+| Styling               | Tailwind CSS v4 + DaisyUI (themes)              |
+| State Management      | TanStack Query (React Query)                    |
+| Authentication        | Firebase Auth                                   |
+| UI Components         | Lucide React Icons, React Icons                 |
+| Animations            | Framer Motion, AOS, Lottie React, DotLottie     |
+| Maps                  | React Leaflet                                   |
+| Payments              | Stripe (@stripe/react-stripe-js)                 |
+| Notifications         | Sonner (toast)                                  |
+| Alerts                | SweetAlert2                                     |
+| Carousel              | React Responsive Carousel + Swiper              |
+| Charts                | Recharts                                        |
+| PDF Export            | jsPDF + jsPDF-AutoTable                         |
+| Loading Spinners      | React Spinners                                  |
+| Marquee               | React Fast Marquee                              |
 
-| Parcel Type      | Weight    | Within City | Outside City/District |
-| ---------------- | --------- | ----------- | --------------------- |
-| **Document**     | Any       | ৳60         | ৳80                   |
-| **Non-Document** | Up to 3kg | ৳110        | ৳150                  |
-| **Non-Document** | >3kg      | +৳40/kg     | +৳40/kg +৳40 extra    |
+## 📦 Installation & Setup
 
----
+### Prerequisites
+- Node.js ≥ 18
+- npm or yarn or pnpm
 
-## 🚚 Delivery Workflow
+### Steps
 
-```mermaid
-flowchart TD
-    A[User Adds Parcel to System] -->|Status: Unpaid| B[User Pays for Parcel Delivery]
-    B -->|Status: Paid| C[Admin Assigns Pickup & Delivery Riders]
-    C -->|Status: Ready-to-Pickup| D[Rider Picks Up Parcel]
-    D -->|Status: In-Transit| E{Within City?}
 
-    E -- Yes --> F1[Rider Out for Delivery]
-    F1 -->|Status: Ready-for-Delivery| G1[Rider Delivers Parcel]
-    G1 -->|Status: Delivered| H1[Parcel Delivery Completed]
 
-    E -- No --> F2[Parcel Reaches Warehouse]
-    F2 -->|Status: Reached-Warehouse| G2[Parcel Shipped to Destination]
-    G2 -->|Status: Shipped| H2[Rider Out for Delivery]
-    H2 -->|Status: Ready-for-Delivery| I2[Rider Delivers Parcel]
-    I2 -->|Status: Delivered| J2[Parcel Delivery Completed]
-
-```
-
----
-
-## 🗂️ Key Features
-
-- **Automated Pricing & Tracking**
-- **Role-based Access & Workflow**
-- **OTP-based Secure Delivery**
-- **Nationwide Coverage (64 districts)**
-- **Transparent Commission Structure**
-
----
-
----
+src/
+├── components/     # Reusable UI components
+├── pages/          # Route pages (Home, Dashboard, etc.)
+├── Hook/           # Custom hooks (useAuth, useRole, etc.)
+├── lib/            # Utilities & Firebase config
+├── assets/         # Images, Lottie files, logos
+├── routes/         # Protected & role-based routes
+└── App.jsx         # Main app with router
