@@ -27,7 +27,7 @@ const reivewPromis = fetch("/reviews.json").then(res => res.json());
 const Home = () => {
   return (
     <div className="px-0.5">
-      <section className="my-10">
+      <section className="mb-10">
         <Banner></Banner>
       </section>
       <section className="my-10">

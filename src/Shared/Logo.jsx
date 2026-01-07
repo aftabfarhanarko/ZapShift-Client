@@ -1,12 +1,15 @@
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "/nnewcopy.png";
 import { Link } from "react-router";
 
 const Logo = () => {
   return (
-    <Link to="/" className="flex items-center">
-      <img src={logo}></img>
-      <p className=" text-3xl font-semibold  -ms-3.5">zapShift</p>
+    <Link to="/">
+      <img
+        src={logo}
+        alt="Logo"
+        className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300"
+      />
     </Link>
   );
 };

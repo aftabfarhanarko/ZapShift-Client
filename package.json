@@ -19,7 +19,7 @@
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "firebase": "^12.6.0",
-    "framer-motion": "^12.23.25",
+    "framer-motion": "^12.24.10",
     "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.7",
     "lottie-react": "^2.4.1",
