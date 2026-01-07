@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-slate-100 shadow-sm transition-all duration-300">
+      <div className="fixed top-0 left-0 w-full z-50 bg-white backdrop-blur-lg border-b border-slate-100 shadow-sm transition-all duration-300">
         <div className="navbar max-w-[95%] w-11/12 mx-auto py-4">
           <div className="navbar-start">
             <Link to="/">
