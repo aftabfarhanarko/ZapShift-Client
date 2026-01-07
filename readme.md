@@ -1,61 +1,250 @@
-# Pando Go - Parcel Delivery Dashboard
+# 🐼 Panda Go
 
-A modern, responsive parcel delivery management system built with React 19 and Tailwind CSS. Features role-based dashboards for **Users**, **Riders**, and **Admins**.
+## Role Based Delivery Platform (User • Rider • Admin)
 
-Live Demo: [https://zapshift.vercel.app](https://zapshift.vercel.app) *(replace with your actual link)*
+**Panda Go** is a **full premium, role-based delivery platform** built using **React 19**, **Tailwind CSS v4**, and a modern frontend ecosystem.  
+The application is designed with **three distinct roles** — **User**, **Rider**, and **Admin** — each having separate permissions, dashboards, and workflows.
 
-## 🚀 Features
+This project focuses on **clean architecture**, **modern UI/UX**, **smooth animations**, and **scalable role-based access control (RBAC)**.
 
-- **Role-based Dashboard**
-  - User: Book parcels, track deliveries, view payment history
-  - Rider: View assigned deliveries, mark as completed
-  - Admin: Manage users, riders, assign deliveries, view reports
-- Dark/Light theme toggle with persistence
-- Fully responsive design (mobile-first with drawer sidebar)
-- Real-time notifications & coverage map
-- Secure authentication with Firebase
-- Smooth animations using Framer Motion, AOS & Lottie
-- Payment integration with Stripe
-- PDF report generation using jsPDF + AutoTable
-- Interactive charts with Recharts
-- Fast marquee, carousels, and spinners for better UX
+---
 
-## 🛠️ Tech Stack
+## 🚀 Live Demo : https://pandago.up.railway.app
 
-| Category              | Technology                                      |
-|-----------------------|-------------------------------------------------|
-| Framework             | React 19 + Vite                                 |
-| Routing               | React Router v7                                 |
-| Styling               | Tailwind CSS v4 + DaisyUI (themes)              |
-| State Management      | TanStack Query (React Query)                    |
-| Authentication        | Firebase Auth                                   |
-| UI Components         | Lucide React Icons, React Icons                 |
-| Animations            | Framer Motion, AOS, Lottie React, DotLottie     |
-| Maps                  | React Leaflet                                   |
-| Payments              | Stripe (@stripe/react-stripe-js)                 |
-| Notifications         | Sonner (toast)                                  |
-| Alerts                | SweetAlert2                                     |
-| Carousel              | React Responsive Carousel + Swiper              |
-| Charts                | Recharts                                        |
-| PDF Export            | jsPDF + jsPDF-AutoTable                         |
-| Loading Spinners      | React Spinners                                  |
-| Marquee               | React Fast Marquee                              |
+## ✨ Key Features
 
-## 📦 Installation & Setup
+### 👤 User Features
 
-### Prerequisites
-- Node.js ≥ 18
-- npm or yarn or pnpm
+- Secure authentication & authorization
+- Place delivery orders
+- Online payment using Stripe
+- Order tracking with real-time status
+- Interactive map integration
+- Download invoices as PDF
+- Modern, animated UI
 
-### Steps
+### 🚴 Rider Features
 
+- Rider authentication
+- View assigned orders
+- Update delivery status
+- Location-based delivery support
+- Lightweight & performance-optimized interface
 
+### 🛠️ Admin Features
 
-src/
-├── components/     # Reusable UI components
-├── pages/          # Route pages (Home, Dashboard, etc.)
-├── Hook/           # Custom hooks (useAuth, useRole, etc.)
-├── lib/            # Utilities & Firebase config
-├── assets/         # Images, Lottie files, logos
-├── routes/         # Protected & role-based routes
-└── App.jsx         # Main app with router
+- Admin dashboard
+- Manage users, riders, and orders
+- Role-based access control (RBAC)
+- Analytics & charts
+- Secure system management
+
+---
+
+## 🧠 Tech Stack
+
+### 🔹 Core Frontend
+
+- React 19
+- React DOM
+- React Router v7
+- Tailwind CSS v4
+
+### 🔹 State & Data Management
+
+- TanStack React Query
+- Axios
+
+### 🔹 Authentication & Services
+
+- Firebase
+- Dotenv
+
+### 🔹 UI / UX & Animation
+
+- Framer Motion
+- Motion
+- AOS (Animate on Scroll)
+- Swiper
+- React Fast Marquee
+- React Responsive Carousel
+- Lottie & DotLottie
+
+### 🔹 Forms & Notifications
+
+- React Hook Form
+- SweetAlert2
+- Sonner (Toast Notifications)
+
+### 🔹 Maps & Analytics
+
+- React Leaflet
+- Recharts
+
+---
+
+## 💳 Stripe Payment System
+
+Panda Go integrates a **secure and production-ready Stripe payment system** to handle online transactions smoothly and safely.
+
+### 🔐 Payment Features
+
+- Secure card payment using **Stripe**
+- Stripe Elements for modern UI
+- Real-time payment confirmation
+- Payment intent based flow
+- Error handling & payment status feedback
+- Seamless user experience
+
+### 💰 Payment Flow
+
+1. User places a delivery order
+2. Redirected to Stripe payment gateway
+3. Secure card payment processing
+4. Payment success confirmation
+5. Order status automatically updated
+
+### 🛡️ Security
+
+- PCI-DSS compliant payment processing
+- No card data stored on the client
+- Stripe handles all sensitive information
+
+---
+
+## 📍 Live Track Parcel (Real-Time Tracking)
+
+Panda Go provides a **Live Parcel Tracking System** that allows users to track their delivery in real time.
+
+### 🚚 Tracking Features
+
+- Real-time parcel location tracking
+- Rider location updates
+- Interactive map using **React Leaflet**
+- Live status updates  
+  _(Pending → Picked → On the Way → Delivered)_
+- Smooth map animations
+
+### 🗺️ Tracking Flow
+
+1. Order is assigned to a rider
+2. Rider location updates continuously
+3. User views parcel location on the map
+4. Delivery status updates in real time
+
+### 📡 Technology Used
+
+- React Leaflet
+- Real-time data updates
+- Optimized performance for mobile devices
+
+---
+
+## 🔄 Order Status Lifecycle
+
+| Status     | Description                   |
+| ---------- | ----------------------------- |
+| Pending    | Order placed successfully     |
+| Accepted   | Rider accepted the order      |
+| Picked Up  | Parcel picked from source     |
+| On the Way | Parcel in transit             |
+| Delivered  | Parcel delivered successfully |
+
+---
+
+## 🌟 User Experience Highlights
+
+- Smooth real-time animations
+- Instant feedback on payment & tracking
+- Mobile-first responsive design
+- Premium UI consistency
+
+---
+
+## 🎨 Icons & Loaders
+
+- Lucide React
+- React Icons
+- React Spinners
+
+---
+
+## 🧾 PDF & Reports
+
+- jsPDF
+- jsPDF AutoTable
+
+---
+
+## 📦 Dependencies
+
+```json
+{
+  "@lottiefiles/dotlottie-react": "^0.17.8",
+  "@stripe/react-stripe-js": "^5.4.0",
+  "@stripe/stripe-js": "^8.5.2",
+  "@tailwindcss/vite": "^4.1.17",
+  "@tanstack/react-query": "^5.90.10",
+  "aos": "^2.3.4",
+  "axios": "^1.13.2",
+  "dotenv": "^17.2.3",
+  "firebase": "^12.6.0",
+  "framer-motion": "^12.24.10",
+  "jspdf": "^4.0.0",
+  "jspdf-autotable": "^5.0.7",
+  "lottie-react": "^2.4.1",
+  "lucide-react": "^0.554.0",
+  "motion": "^12.23.24",
+  "react": "^19.2.0",
+  "react-countup": "^6.5.3",
+  "react-dom": "^19.2.0",
+  "react-fast-marquee": "^1.6.5",
+  "react-hook-form": "^7.66.0",
+  "react-icons": "^5.5.0",
+  "react-leaflet": "^5.0.0-rc.2",
+  "react-responsive-carousel": "^3.2.23",
+  "react-router": "^7.9.6",
+  "react-spinners": "^0.17.0",
+  "recharts": "^3.5.1",
+  "sonner": "^2.0.7",
+  "sweetalert2": "^11.26.3",
+  "swiper": "^12.0.3",
+  "tailwindcss": "^4.1.17"
+}
+📱 Responsive Design
+
+Fully responsive (Mobile / Tablet / Desktop)
+
+Optimized animations for mobile devices
+
+Premium UI consistency across all screen sizes
+
+⚡ Performance Optimization
+
+React Query caching
+
+Lazy loading components
+
+Optimized animations
+
+Clean folder structure
+
+📂 Project Type
+
+Role-Based Delivery Application
+
+Full Stack Ready Frontend
+
+Portfolio / Production Level Project
+
+🧑‍💻 Developer
+
+Project Name: Panda Go
+Built With: Modern React Ecosystem
+Level: Full Premium
+
+📜 License
+
+This project is open for learning, portfolio, and demonstration purposes.
+You may customize and extend it freely.
+```

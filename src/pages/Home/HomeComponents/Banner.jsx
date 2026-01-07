@@ -104,7 +104,7 @@ const Banner = () => {
             className="w-48 h-48 lg:w-64 lg:h-64 bg-white rounded-full shadow-2xl flex flex-col items-center justify-center relative z-20"
           >
             <div className="w-16 h-16 lg:w-20 lg:h-20 bg-[#B8E55C]/20 rounded-full flex items-center justify-center mb-2 lg:mb-4">
-              <Truck className="w-8 h-8 lg:w-10 lg:h-10 text-[#03373D]" />
+              <Truck className="w-8 h-8 lg:w-10 lg:h-10 animate-bounce  text-[#03373D]" />
             </div>
             <h3 className="text-lg lg:text-xl font-bold text-[#03373D]">
               Fast Delivery
