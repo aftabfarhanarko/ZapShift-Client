@@ -15,6 +15,7 @@ import {
   TrendingUp, 
   CheckCircle2 
 } from "lucide-react";
+import SetPlaces from "./SetPlaces";
 
 const tabs = [
   { id: "story", label: "Our Story" },
@@ -322,33 +323,11 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-[#1F1F1F] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80')] bg-cover bg-center opacity-10 fixed-bg"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#03373D]/90 to-[#1F1F1F]/90"></div>
-        
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Transform Your Logistics?</h2>
-            <p className="text-xl text-gray-300 mb-10">
-              Join thousands of businesses who trust ZapShift for their delivery needs. 
-              Experience speed, security, and reliability.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-[#B8E55C] text-[#03373D] font-bold rounded-full hover:bg-white hover:scale-105 transition-all shadow-[0_0_20px_rgba(184,229,92,0.4)]">
-                Get Started Now
-              </button>
-              <button className="px-8 py-4 bg-transparent border-2 border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all backdrop-blur-sm">
-                Contact Sales
-              </button>
-            </div>
-          </motion.div>
-        </div>
+      
+
+      <section className=" py-20 bg-white relative overflow-hidden">
+        <SetPlaces />
+
       </section>
     </div>
   );

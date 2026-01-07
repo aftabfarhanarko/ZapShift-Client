@@ -110,12 +110,12 @@ const RiderBook = () => {
 
   // console.log(top);
   return (
-    <div className=" my-10 min-h-screen">
+    <div className=" my-18 max-w-11/12 mx-auto  min-h-screen">
       {show ? (
         ""
       ) : (
         <>
-          <div className="bg-white rounded-3xl shadow-lg  w-full p-8 md:p-12">
+          <div className="bg-white rounded-md shadow-sm  w-full p-8 md:p-12">
             {/* Image placeholder section */}
             <div className="flex justify-center mb-8">
               <div className="relative">

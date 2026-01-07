@@ -6,20 +6,20 @@ import useAxiosSecoir from "../../Hook/useAxiosSecoir";
 import useAuth from "../../Hook/useAuth";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { 
-  Package, 
-  FileText, 
-  Box, 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Truck, 
-  Scale, 
-  Send, 
+import {
+  Package,
+  FileText,
+  Box,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Truck,
+  Scale,
+  Send,
   Info,
   ArrowRight,
-  Map
+  Map,
 } from "lucide-react";
 
 const SendPricel = () => {
@@ -37,9 +37,8 @@ const SendPricel = () => {
   const regionsert = serviceCenters.map((r) => r.region);
   const regionsDuplicate = [...new Set(regionsert)];
   const senderRegion = useWatch({ control, name: "senderRegion" });
-  
-  const reciverRegion = useWatch({ control, name: "reciverRegion" });
 
+  const reciverRegion = useWatch({ control, name: "reciverRegion" });
 
   const districtsByRegion = (region) => {
     const regionDistricts = serviceCenters.filter((d) => d.region === region);
@@ -167,8 +166,8 @@ const SendPricel = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div 
+    <div className="min-h-screen mt-16 bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -176,15 +175,19 @@ const SendPricel = () => {
       >
         {/* Header */}
         <div className="text-center mb-10">
-          <motion.div 
+          <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             className="w-16 h-16 bg-[#B8E55C] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#B8E55C]/20"
           >
             <Truck className="text-[#03373D]" size={32} />
           </motion.div>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#03373D] mb-2">Book Your Shipment</h1>
-          <p className="text-gray-500">Fast, secure, and reliable delivery services</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#03373D] mb-2">
+            Book Your Shipment
+          </h1>
+          <p className="text-gray-500">
+            Fast, secure, and reliable delivery services
+          </p>
         </div>
 
         <form
@@ -212,7 +215,9 @@ const SendPricel = () => {
                   </div>
                   <div>
                     <span className="block font-semibold">Document</span>
-                    <span className="text-xs opacity-70 group-hover:opacity-100">Letters, Files, Papers</span>
+                    <span className="text-xs opacity-70 group-hover:opacity-100">
+                      Letters, Files, Papers
+                    </span>
                   </div>
                 </div>
               </label>
@@ -230,7 +235,9 @@ const SendPricel = () => {
                   </div>
                   <div>
                     <span className="block font-semibold">Non-Document</span>
-                    <span className="text-xs opacity-70 group-hover:opacity-100">Boxes, Items, Heavy Goods</span>
+                    <span className="text-xs opacity-70 group-hover:opacity-100">
+                      Boxes, Items, Heavy Goods
+                    </span>
                   </div>
                 </div>
               </label>
@@ -303,7 +310,9 @@ const SendPricel = () => {
                   >
                     <option disabled>Pick a Sender region</option>
                     {regionsDuplicate.map((one, i) => (
-                      <option value={one} key={i}>{one}</option>
+                      <option value={one} key={i}>
+                        {one}
+                      </option>
                     ))}
                   </SelectField>
                   <SelectField
@@ -312,9 +321,11 @@ const SendPricel = () => {
                     {...register("senderdistick", { required: true })}
                     defaultValue=" Select Sender District"
                   >
-                     <option disabled> Select Sender District</option>
+                    <option disabled> Select Sender District</option>
                     {districtsByRegion(senderRegion).map((d, i) => (
-                      <option value={d} key={i}>{d}</option>
+                      <option value={d} key={i}>
+                        {d}
+                      </option>
                     ))}
                   </SelectField>
                   <InputField
@@ -331,7 +342,9 @@ const SendPricel = () => {
                     <textarea
                       {...register("pickup", { required: true })}
                       className={`w-full p-4 border ${
-                        errors.pickup ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+                        errors.pickup
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-200 bg-gray-50"
                       } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm h-32 resize-none`}
                       placeholder="Any specific instructions for pickup..."
                     ></textarea>
@@ -377,7 +390,9 @@ const SendPricel = () => {
                   >
                     <option disabled>Pick a region</option>
                     {regionsDuplicate.map((one, i) => (
-                      <option value={one} key={i}>{one}</option>
+                      <option value={one} key={i}>
+                        {one}
+                      </option>
                     ))}
                   </SelectField>
                   <SelectField
@@ -388,7 +403,9 @@ const SendPricel = () => {
                   >
                     <option disabled> Select Reciver District</option>
                     {districtsByRegion(reciverRegion).map((d, i) => (
-                      <option value={d} key={i}>{d}</option>
+                      <option value={d} key={i}>
+                        {d}
+                      </option>
                     ))}
                   </SelectField>
                   <InputField
@@ -405,7 +422,9 @@ const SendPricel = () => {
                     <textarea
                       {...register("delivery", { required: true })}
                       className={`w-full p-4 border ${
-                        errors.delivery ? "border-red-500 bg-red-50" : "border-gray-200 bg-gray-50"
+                        errors.delivery
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-200 bg-gray-50"
                       } rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all duration-200 text-sm h-32 resize-none`}
                       placeholder="Any specific instructions for delivery..."
                     ></textarea>
@@ -418,9 +437,11 @@ const SendPricel = () => {
             <div className="mt-12 pt-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-3 text-gray-500 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
                 <Info size={18} className="text-blue-500" />
-                <span className="text-sm font-medium">Pickup Time: 4:00 PM – 7:00 PM (Approx)</span>
+                <span className="text-sm font-medium">
+                  Pickup Time: 4:00 PM – 7:00 PM (Approx)
+                </span>
               </div>
-              
+
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
