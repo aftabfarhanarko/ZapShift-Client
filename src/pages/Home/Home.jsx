@@ -34,12 +34,13 @@ const Home = () => {
         <QuickActions></QuickActions>
       </section>
 
-      <section className="my-10 mt-10 md:max-w-11/12 mx-auto">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <TrackSearch></TrackSearch>
       </section>
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <Work></Work>
       </section>
+
 
       <section className="my-20">
         <OurServices></OurServices>
@@ -60,36 +61,47 @@ const Home = () => {
       <section className="my-20">
         <Safe></Safe>
       </section>
+
       <section className="my-20">
         <Benefits></Benefits>
       </section>
+
       <section className="my-20">
        <SecondBanner></SecondBanner>
       </section>
+
       <section className="my-20">
         <PricingPreview></PricingPreview>
       </section>
+
       <section className="my-20">
         <ParcelTypes></ParcelTypes>
       </section>
+
       <section className="my-20">
        <MenuCard reivewPromis={reivewPromis}></MenuCard>
       </section>
+
       <section className="my-20">
         <CoverageTeaser></CoverageTeaser>
       </section>
+
       <section className="my-20">
         <ServiceGuarantees></ServiceGuarantees>
       </section>
+
       <section className="my-20">
        <TextSections></TextSections>
       </section>
+
       <section className="my-20">
         <SupportChannels></SupportChannels>
       </section>
+
       <section className="my-20">
         <BigCTA></BigCTA>
       </section>
+
       <section className="my-20">
         <AppDownload></AppDownload>
       </section>
