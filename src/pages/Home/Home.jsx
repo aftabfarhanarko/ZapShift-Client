@@ -43,12 +43,13 @@ const Home = () => {
       <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <OurServices></OurServices>
       </section>
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
+         <Features></Features>
+      </section>
 
 
    
-      <section className="my-20">
-        <Features></Features>
-      </section>
+      
       <section className="my-20">
         <MerchantFlow></MerchantFlow>
       </section>
