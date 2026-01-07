@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "/loogo-8.png";
 import {
   Facebook,
   Linkedin,
@@ -23,13 +22,9 @@ const Footer = () => {
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           {/* Column 1: Brand & About */}
-          <div className="space-y-6">
+          <div className="space-y-3">
             <Link to="/" className="inline-block">
-              <img
-                src={logo}
-                alt="Parcel Logo"
-                className="h-24 w-auto object-contain"
-              />
+            <h1 className="text-white font-semibold">Panda Go</h1>
             </Link>
             <p className="text-gray-400 leading-relaxed text-sm">
               Experience the future of logistics with Parcel. We provide secure,

@@ -74,7 +74,7 @@ const Login = () => {
           </div>
           
           <div className="relative z-10">
-            <img src="/nnewcopy.png" alt="ZapShift" className="h-20 w-auto object-contain mb-6" />
+            <img src="/logo-11.png" alt="Panda Go" className="h-20 w-auto object-contain mb-6" />
             <p className="text-gray-300 text-sm">Smart Logistics Solution</p>
           </div>
 

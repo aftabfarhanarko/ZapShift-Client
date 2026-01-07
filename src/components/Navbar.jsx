@@ -180,19 +180,13 @@ const Navbar = () => {
       {hide ? (
         ""
       ) : (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black/20 backdrop-blur-sm" onClick={() => setHide(true)}>
+        <div className="lg:hidden  fixed inset-0 z-40 bg-black/20 backdrop-blur-sm" onClick={() => setHide(true)}>
           <div 
-            className="absolute top-0 left-0 right-0 bg-white shadow-xl rounded-b-2xl p-4 transform transition-all duration-300 ease-out"
+            className="absolute pt-25  top-0 left-0 right-0 bg-white shadow-xl rounded-b-2xl p-4 transform transition-all duration-300 ease-out"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6 px-2">
-              <span className="text-lg font-bold text-secondary">Menu</span>
-              <button
-                onClick={() => setHide(true)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"
-              >
-                <CgClose className="w-5 h-5 text-secondary" />
-              </button>
+             
             </div>
             <ul className="flex flex-col gap-2">
               <li>
