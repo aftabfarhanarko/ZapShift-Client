@@ -2,7 +2,6 @@ import React from "react";
 import Banner from "./HomeComponents/Banner";
 import OurServices from "./HomeComponents/OurServices";
 import Company from "./HomeComponents/Company";
-import Safe from "./HomeComponents/Safe";
 import SecondBanner from "./HomeComponents/SecondBanner";
 import Work from "./HomeComponents/Work";
 import TextSections from "./HomeComponents/TextSections";
@@ -14,8 +13,6 @@ import CoverageTeaser from "./HomeComponents/CoverageTeaser";
 import BigCTA from "./HomeComponents/BigCTA";
 import Features from "./HomeComponents/Features";
 import AppDownload from "./HomeComponents/AppDownload";
-import MerchantFlow from "./HomeComponents/MerchantFlow";
-import RiderBenefits from "./HomeComponents/RiderBenefits";
 import ParcelTypes from "./HomeComponents/ParcelTypes";
 import ServiceGuarantees from "./HomeComponents/ServiceGuarantees";
 import SupportChannels from "./HomeComponents/SupportChannels";
@@ -46,23 +43,14 @@ const Home = () => {
       <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
          <Features></Features>
       </section>
-
-
-   
-      
-      <section className="my-20">
-        <MerchantFlow></MerchantFlow>
-      </section>
-      <section className="my-20">
-        <Company></Company>
-      </section>
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <Stats></Stats>
       </section>
 
-      <section className="my-20">
-        <Safe></Safe>
-      </section>
+
+
+
+
 
       <section className="my-20">
         <Benefits></Benefits>
@@ -106,6 +94,10 @@ const Home = () => {
 
       <section className="my-20">
         <AppDownload></AppDownload>
+      </section>
+
+      <section className="my-20">
+        <Company></Company>
       </section>
     </div>
   );
