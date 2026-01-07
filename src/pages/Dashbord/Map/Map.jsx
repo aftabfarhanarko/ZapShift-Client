@@ -1,157 +1,11 @@
-import React, { useRef, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, Circle, Polyline } from "react-leaflet";
+import React, { useRef, useState, useEffect } from "react";
+import { MapContainer, Marker, Popup, TileLayer, Circle, Polyline, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import {
-  IoIosSearch,
-  IoMdPin,
-  IoMdStats,
-  IoMdCheckmarkCircle,
-  IoMdClose,
-  IoMdLocate,
-  IoMdLayers,
-  IoMdNavigate,
-} from "react-icons/io";
-import { FaTruck, FaWarehouse, FaMapMarkedAlt, FaRoute, FaBox } from "react-icons/fa";
+import { Search, MapPin, Activity, CheckCircle, X, Navigation, Layers, Truck, Package, TrendingUp, Filter, RefreshCw, Download, Bell, Settings, ChevronLeft, ChevronRight, Clock, BarChart3, Star } from "lucide-react";
 
-// Mock warehouse data for Bangladesh
-const warehousesData = [
-  {
-    district: "Dhaka",
-    latitude: 23.8103,
-    longitude: 90.4125,
-    status: true,
-    covered_area: ["Gulshan", "Banani", "Dhanmondi", "Mirpur", "Uttara"],
-    total_deliveries: 15420,
-    active_vehicles: 45
-  },
-  {
-    district: "Chittagong",
-    latitude: 22.3569,
-    longitude: 91.7832,
-    status: true,
-    covered_area: ["Agrabad", "Khulshi", "Panchlaish", "Halishahar"],
-    total_deliveries: 8920,
-    active_vehicles: 28
-  },
-  {
-    district: "Sylhet",
-    latitude: 24.8949,
-    longitude: 91.8687,
-    status: true,
-    covered_area: ["Zindabazar", "Amberkhana", "Upashahar", "South Surma"],
-    total_deliveries: 4560,
-    active_vehicles: 18
-  },
-  {
-    district: "Rajshahi",
-    latitude: 24.3745,
-    longitude: 88.6042,
-    status: true,
-    covered_area: ["Boalia", "Matihar", "Shah Makhdum", "Rajpara"],
-    total_deliveries: 3780,
-    active_vehicles: 15
-  },
-  {
-    district: "Khulna",
-    latitude: 22.8456,
-    longitude: 89.5403,
-    status: true,
-    covered_area: ["Khulna Sadar", "Sonadanga", "Daulatpur", "Khalishpur"],
-    total_deliveries: 5240,
-    active_vehicles: 22
-  },
-  {
-    district: "Rangpur",
-    latitude: 25.7439,
-    longitude: 89.2752,
-    status: true,
-    covered_area: ["Rangpur Sadar", "Mithapukur", "Pirganj", "Badarganj"],
-    total_deliveries: 2890,
-    active_vehicles: 12
-  },
-  {
-    district: "Mymensingh",
-    latitude: 24.7471,
-    longitude: 90.4203,
-    status: true,
-    covered_area: ["Mymensingh Sadar", "Muktagacha", "Bhaluka", "Trishal"],
-    total_deliveries: 3420,
-    active_vehicles: 14
-  },
-  {
-    district: "Barisal",
-    latitude: 22.7010,
-    longitude: 90.3535,
-    status: false,
-    covered_area: ["Barisal Sadar", "Bakerganj", "Mehendiganj", "Wazirpur"],
-    total_deliveries: 1950,
-    active_vehicles: 0
-  },
-  {
-    district: "Comilla",
-    latitude: 23.4607,
-    longitude: 91.1809,
-    status: true,
-    covered_area: ["Comilla Sadar", "Daudkandi", "Burichang", "Chandina"],
-    total_deliveries: 4120,
-    active_vehicles: 16
-  },
-  {
-    district: "Narayanganj",
-    latitude: 23.6238,
-    longitude: 90.5000,
-    status: true,
-    covered_area: ["Narayanganj Sadar", "Rupganj", "Sonargaon", "Bandar"],
-    total_deliveries: 6780,
-    active_vehicles: 25
-  },
-  {
-    district: "Gazipur",
-    latitude: 24.0022,
-    longitude: 90.4264,
-    status: true,
-    covered_area: ["Gazipur Sadar", "Kaliakair", "Kapasia", "Sreepur"],
-    total_deliveries: 5890,
-    active_vehicles: 21
-  },
-  {
-    district: "Jessore",
-    latitude: 23.1667,
-    longitude: 89.2167,
-    status: true,
-    covered_area: ["Jessore Sadar", "Jhikargachha", "Sharsha", "Manirampur"],
-    total_deliveries: 3340,
-    active_vehicles: 13
-  },
-  {
-    district: "Bogra",
-    latitude: 24.8465,
-    longitude: 89.3770,
-    status: false,
-    covered_area: ["Bogra Sadar", "Sherpur", "Sonatola", "Shibganj"],
-    total_deliveries: 2780,
-    active_vehicles: 0
-  },
-  {
-    district: "Dinajpur",
-    latitude: 25.6217,
-    longitude: 88.6354,
-    status: true,
-    covered_area: ["Dinajpur Sadar", "Birampur", "Parbatipur", "Chirirbandar"],
-    total_deliveries: 2560,
-    active_vehicles: 10
-  },
-  {
-    district: "Cox's Bazar",
-    latitude: 21.4272,
-    longitude: 92.0058,
-    status: true,
-    covered_area: ["Cox's Bazar Sadar", "Ramu", "Teknaf", "Ukhia"],
-    total_deliveries: 3920,
-    active_vehicles: 15
-  }
-];
+// Enhanced warehouse data for Bangladesh
+// Data is now fetched from warehouses.json
 
 // Custom marker icons
 const createCustomIcon = (color, isActive) => {
@@ -160,39 +14,39 @@ const createCustomIcon = (color, isActive) => {
     html: `
       <div style="position: relative;">
         <div style="
-          background: ${color};
-          width: 32px;
-          height: 32px;
+          background: ${isActive ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'};
+          width: 40px;
+          height: 40px;
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           border: 3px solid white;
-          box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        "></div>
-        <div style="
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) rotate(45deg);
-          color: white;
-          font-size: 16px;
-          font-weight: bold;
-        ">📦</div>
-        ${isActive ? `<div style="
-          position: absolute;
-          top: -5px;
-          right: -5px;
-          width: 12px;
-          height: 12px;
-          background: #10b981;
-          border: 2px solid white;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        "></div>` : ''}
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <div style="transform: rotate(45deg); font-size: 18px;">
+            ${isActive ? '📦' : '⚠️'}
+          </div>
+        </div>
+        ${isActive ? `
+          <div style="
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 16px;
+            height: 16px;
+            background: #10b981;
+            border-radius: 50%;
+            border: 2px solid white;
+            animation: pulse 2s infinite;
+          "></div>
+        ` : ''}
       </div>
     `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32]
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
   });
 };
 
@@ -205,21 +59,66 @@ const CoverageMap = () => {
   const [showRoutes, setShowRoutes] = useState(false);
   const [mapStyle, setMapStyle] = useState("default");
   const [showSidebar, setShowSidebar] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [notifications, setNotifications] = useState(3);
+  const [animateStats, setAnimateStats] = useState(false);
+  const [liveUpdate, setLiveUpdate] = useState(true);
+  const [warehouses, setWarehouses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const warehouses = warehousesData;
+  useEffect(() => {
+    fetch("/warehouses.json")
+      .then((res) => res.json())
+      .then((data) => {
+        const enhancedData = data.map((item, index) => ({
+          ...item,
+          id: index + 1,
+          status: item.status === "active",
+          total_deliveries: Math.floor(Math.random() * 5000) + 1000,
+          active_vehicles: Math.floor(Math.random() * 30) + 5,
+          pending_orders: Math.floor(Math.random() * 100) + 10,
+          completed_today: Math.floor(Math.random() * 50) + 20,
+          average_delivery_time: `${Math.floor(Math.random() * 30) + 30} min`,
+          rating: (Math.random() * (5 - 4) + 4).toFixed(1),
+          manager: `Manager ${index + 1}`
+        }));
+        setWarehouses(enhancedData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching warehouse data:", err);
+        setLoading(false);
+      });
+  }, []);
 
   const filteredWarehouses = warehouses?.filter((w) => {
-    if (viewMode === "active") return w.status;
-    if (viewMode === "inactive") return !w.status;
-    return true;
+    const matchesSearch = w.district.toLowerCase().includes(searchTerm.toLowerCase());
+    if (viewMode === "active") return w.status && matchesSearch;
+    if (viewMode === "inactive") return !w.status && matchesSearch;
+    return matchesSearch;
   });
 
   const activeCount = warehouses?.filter((w) => w.status).length || 0;
-  const totalAreas = warehouses?.reduce((acc, w) => acc + (w.covered_area?.length || 0), 0) || 0;
   const totalDeliveries = warehouses?.reduce((acc, w) => acc + w.total_deliveries, 0) || 0;
   const totalVehicles = warehouses?.reduce((acc, w) => acc + w.active_vehicles, 0) || 0;
+  const pendingOrders = warehouses?.reduce((acc, w) => acc + w.pending_orders, 0) || 0;
+  const completedToday = warehouses?.reduce((acc, w) => acc + w.completed_today, 0) || 0;
 
-  // Generate random routes between warehouses
+  useEffect(() => {
+    setAnimateStats(true);
+    const timer = setTimeout(() => setAnimateStats(false), 1000);
+    return () => clearTimeout(timer);
+  }, [viewMode]);
+
+  useEffect(() => {
+    if (liveUpdate) {
+      const interval = setInterval(() => {
+        setNotifications(prev => (prev + 1) % 10);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [liveUpdate]);
+
   const generateRoutes = () => {
     const routes = [];
     for (let i = 0; i < filteredWarehouses.length - 1; i++) {
@@ -236,6 +135,7 @@ const CoverageMap = () => {
   const handleLocateMe = () => {
     if (mapRef.current) {
       mapRef.current.flyTo(position, 7, { duration: 1.5 });
+      setSelectedDistrict(null);
     }
   };
 
@@ -252,333 +152,421 @@ const CoverageMap = () => {
     }
   };
 
+  const exportData = () => {
+    const data = JSON.stringify(filteredWarehouses, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'warehouse-data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col overflow-hidden relative">
+      {loading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-lg font-semibold text-purple-600 animate-pulse">Loading Warehouse Data...</p>
+          </div>
+        </div>
+      )}
       <style>{`
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        @keyframes slideIn {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.5s ease-out;
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f5f9;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+        .glass-effect {
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .leaflet-container {
+          font-family: inherit;
         }
       `}</style>
 
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <FaMapMarkedAlt className="text-5xl" />
-              <div>
-                <h1 className="text-5xl font-bold">Coverage Map</h1>
-                <p className="text-blue-100 mt-2">Live Delivery Network Tracking</p>
-              </div>
+      <div className="glass-effect shadow-lg p-4 z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-4">
+            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-3 rounded-xl shadow-lg">
+              <Package className="w-6 h-6 text-white" />
             </div>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                Smart Delivery Hub
+              </h1>
+              <p className="text-sm text-slate-600 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                Real-time Network Monitoring
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setLiveUpdate(!liveUpdate)}
+              className={`p-2 rounded-lg transition-all ${liveUpdate ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}
+              title="Toggle Live Updates"
+            >
+              <Activity className="w-5 h-5" />
+            </button>
+            <button
+              onClick={exportData}
+              className="p-2 bg-purple-100 text-purple-600 rounded-lg hover:bg-purple-200 transition-colors"
+              title="Export Data"
+            >
+              <Download className="w-5 h-5" />
+            </button>
+            <button className="relative p-2 bg-orange-100 text-orange-600 rounded-lg hover:bg-orange-200 transition-colors">
+              <Bell className="w-5 h-5" />
+              {notifications > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                  {notifications}
+                </span>
+              )}
+            </button>
             <button
               onClick={() => setShowSidebar(!showSidebar)}
-              className="lg:hidden bg-white/20 p-3 rounded-lg hover:bg-white/30 transition-colors"
+              className="p-2 bg-slate-200 rounded-lg hover:bg-slate-300 transition-colors"
             >
-              {showSidebar ? <IoMdClose className="text-2xl" /> : <IoMdLayers className="text-2xl" />}
+              {showSidebar ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
             </button>
           </div>
+        </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-3">
-                <FaWarehouse className="text-3xl" />
-                <div>
-                  <p className="text-blue-100 text-xs">Total Hubs</p>
-                  <p className="text-2xl font-bold">{warehouses?.length}</p>
-                </div>
+        {/* Enhanced Stats Cards */}
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
+          {[
+            { icon: Package, label: "Total Hubs", value: warehouses?.length, color: "from-blue-500 to-cyan-500" },
+            { icon: CheckCircle, label: "Active", value: activeCount, color: "from-green-500 to-emerald-500" },
+            { icon: Truck, label: "Vehicles", value: totalVehicles, color: "from-purple-500 to-pink-500" },
+            { icon: TrendingUp, label: "Deliveries", value: totalDeliveries.toLocaleString(), color: "from-orange-500 to-red-500" },
+            { icon: Clock, label: "Pending", value: pendingOrders, color: "from-yellow-500 to-amber-500" },
+            { icon: CheckCircle, label: "Today", value: completedToday, color: "from-teal-500 to-cyan-500" },
+          ].map((stat, idx) => (
+            <div
+              key={idx}
+              className={`glass-effect p-4 rounded-xl shadow-md hover:shadow-xl transition-all transform hover:scale-105 ${animateStats ? 'animate-slide-in' : ''}`}
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${stat.color} flex items-center justify-center mb-2`}>
+                <stat.icon className="w-5 h-5 text-white" />
               </div>
+              <div className="text-xs text-slate-600 mb-1">{stat.label}</div>
+              <div className="text-xl font-bold text-slate-800">{stat.value}</div>
             </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-3">
-                <IoMdCheckmarkCircle className="text-3xl text-green-300" />
-                <div>
-                  <p className="text-blue-100 text-xs">Active Hubs</p>
-                  <p className="text-2xl font-bold">{activeCount}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-3">
-                <FaBox className="text-3xl text-yellow-300" />
-                <div>
-                  <p className="text-blue-100 text-xs">Deliveries</p>
-                  <p className="text-2xl font-bold">{totalDeliveries.toLocaleString()}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-              <div className="flex items-center gap-3">
-                <FaTruck className="text-3xl text-orange-300" />
-                <div>
-                  <p className="text-blue-100 text-xs">Active Vehicles</p>
-                  <p className="text-2xl font-bold">{totalVehicles}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-4">
-          {/* Sidebar Controls */}
-          <div className={`${showSidebar ? 'block' : 'hidden'} lg:block w-full lg:w-80 space-y-4`}>
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar */}
+        <div
+          className={`${
+            showSidebar ? "w-80" : "w-0"
+          } glass-effect transition-all duration-300 overflow-hidden flex flex-col border-r border-slate-200`}
+        >
+          <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1">
             {/* Search Box */}
-            <div className="bg-white rounded-2xl shadow-lg p-4">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <IoIosSearch className="text-xl" />
-                Search District
-              </h3>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <Search className="w-4 h-4" />
+                Search Districts
+              </label>
               <div className="relative">
                 <input
                   type="text"
-                  id="searchInput"
-                  placeholder="Enter district name..."
-                  className="w-full px-4 py-2 pl-10 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      const location = e.target.value;
-                      const district = warehouses?.find((d) =>
-                        d.district.toLowerCase().includes(location.toLowerCase())
-                      );
-                      if (district) {
-                        setSelectedDistrict(district);
-                        if (mapRef.current) {
-                          mapRef.current.flyTo([district.latitude, district.longitude], 12, { duration: 1.5 });
-                        }
-                      }
-                    }
-                  }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Type to search..."
+                  className="w-full px-4 py-3 pl-10 rounded-xl border-2 border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
                 />
-                <IoIosSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search className="w-5 h-5 text-slate-400 absolute left-3 top-3.5" />
               </div>
             </div>
 
             {/* Filter Controls */}
-            <div className="bg-white rounded-2xl shadow-lg p-4">
-              <h3 className="font-bold text-gray-800 mb-3">Filter Hubs</h3>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <Filter className="w-4 h-4" />
+                Filter Hubs
+              </label>
               <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => setViewMode("all")}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                    viewMode === "all" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setViewMode("active")}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                    viewMode === "active" ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Active
-                </button>
-                <button
-                  onClick={() => setViewMode("inactive")}
-                  className={`px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                    viewMode === "inactive" ? "bg-red-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Inactive
-                </button>
+                {[
+                  { value: "all", label: "All", color: "blue" },
+                  { value: "active", label: "Active", color: "green" },
+                  { value: "inactive", label: "Inactive", color: "red" },
+                ].map((filter) => (
+                  <button
+                    key={filter.value}
+                    onClick={() => setViewMode(filter.value)}
+                    className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all transform hover:scale-105 ${
+                      viewMode === filter.value
+                        ? filter.value === 'all' ? 'bg-blue-600 text-white shadow-lg' :
+                          filter.value === 'active' ? 'bg-green-600 text-white shadow-lg' :
+                          'bg-red-600 text-white shadow-lg'
+                        : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
               </div>
             </div>
 
             {/* Map Style */}
-            <div className="bg-white rounded-2xl shadow-lg p-4">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <IoMdLayers />
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <Layers className="w-4 h-4" />
                 Map Style
-              </h3>
+              </label>
               <div className="grid grid-cols-2 gap-2">
-                {["default", "satellite", "terrain", "dark"].map((style) => (
+                {[
+                  { value: "default", label: "Default" },
+                  { value: "satellite", label: "Satellite" },
+                  { value: "terrain", label: "Terrain" },
+                  { value: "dark", label: "Dark" },
+                ].map((style) => (
                   <button
-                    key={style}
-                    onClick={() => setMapStyle(style)}
-                    className={`px-3 py-2 rounded-lg text-sm font-semibold capitalize transition-colors ${
-                      mapStyle === style ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    key={style.value}
+                    onClick={() => setMapStyle(style.value)}
+                    className={`px-3 py-2 rounded-lg text-sm font-semibold capitalize transition-all ${
+                      mapStyle === style.value
+                        ? "bg-indigo-600 text-white shadow-lg"
+                        : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
                     }`}
                   >
-                    {style}
+                    {style.label}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* View Options */}
-            <div className="bg-white rounded-2xl shadow-lg p-4 space-y-3">
-              <h3 className="font-bold text-gray-800 mb-3">View Options</h3>
-              
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showCoverage}
-                  onChange={(e) => setShowCoverage(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700">Coverage Radius</span>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Display Options
               </label>
+              <div className="space-y-2 bg-white p-3 rounded-xl border border-slate-200">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={showCoverage}
+                    onChange={(e) => setShowCoverage(e.target.checked)}
+                    className="w-5 h-5 text-purple-600 rounded border-slate-300 focus:ring-purple-500 cursor-pointer"
+                  />
+                  <span className="text-sm text-slate-700 group-hover:text-purple-600 transition-colors">
+                    Coverage Radius
+                  </span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={showRoutes}
+                    onChange={(e) => setShowRoutes(e.target.checked)}
+                    className="w-5 h-5 text-purple-600 rounded border-slate-300 focus:ring-purple-500 cursor-pointer"
+                  />
+                  <span className="text-sm text-slate-700 group-hover:text-purple-600 transition-colors">
+                    Delivery Routes
+                  </span>
+                </label>
+              </div>
+            </div>
 
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={showRoutes}
-                  onChange={(e) => setShowRoutes(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700">Delivery Routes</span>
-              </label>
-
-              <button
-                onClick={handleLocateMe}
-                className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
-              >
-                <IoMdLocate className="text-lg" />
-                Reset View
-              </button>
+            {/* Quick Actions */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Quick Actions</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={handleLocateMe}
+                  className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all transform hover:scale-105"
+                >
+                  <Navigation className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Reset</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setViewMode("all");
+                    setSelectedDistrict(null);
+                  }}
+                  className="flex items-center justify-center gap-2 px-3 py-2 bg-white text-slate-700 rounded-lg hover:bg-slate-100 border border-slate-200 transition-all"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Clear</span>
+                </button>
+              </div>
             </div>
 
             {/* Hub Details */}
             {selectedDistrict && (
-              <div className="bg-white rounded-2xl shadow-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                    <IoMdStats className="text-blue-600" />
+              <div className="space-y-2 animate-slide-in">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
                     Hub Details
-                  </h3>
+                  </label>
                   <button
                     onClick={() => setSelectedDistrict(null)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="p-1 hover:bg-slate-200 rounded-lg transition-colors"
                   >
-                    <IoMdClose className="text-xl" />
+                    <X className="w-4 h-4 text-slate-600" />
                   </button>
                 </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-xs text-gray-500">District</p>
-                    <p className="text-lg font-bold text-gray-800">{selectedDistrict.district}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-gray-500">Status</p>
-                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
-                      selectedDistrict.status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}>
+                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-4 rounded-xl border-2 border-purple-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-800">{selectedDistrict.district}</h3>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        selectedDistrict.status
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
                       {selectedDistrict.status ? "● Active" : "● Inactive"}
                     </span>
                   </div>
 
-                  <div>
-                    <p className="text-xs text-gray-500">Total Deliveries</p>
-                    <p className="text-lg font-bold text-gray-800">{selectedDistrict.total_deliveries.toLocaleString()}</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="text-xs text-slate-600 mb-1">Manager</div>
+                      <div className="text-sm font-semibold text-slate-800">{selectedDistrict.manager}</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="text-xs text-slate-600 mb-1">Rating</div>
+                      <div className="text-sm font-semibold text-slate-800 flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        {selectedDistrict.rating || 'N/A'}
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <p className="text-xs text-gray-500">Active Vehicles</p>
-                    <p className="text-lg font-bold text-gray-800">{selectedDistrict.active_vehicles}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-gray-500 mb-2">Coverage Areas</p>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedDistrict.covered_area?.map((area, i) => (
-                        <span key={i} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
-                          {area}
-                        </span>
-                      ))}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="text-xs text-slate-600 mb-1">Active Vehicles</div>
+                      <div className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                        <Truck className="w-4 h-4 text-purple-600" />
+                        {selectedDistrict.active_vehicles || 0}
+                      </div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg">
+                      <div className="text-xs text-slate-600 mb-1">Avg Time</div>
+                      <div className="text-sm font-semibold text-slate-800 flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-purple-600" />
+                        {selectedDistrict.average_delivery_time || 'N/A'}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Map Container */}
-          <div className="flex-1">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden" style={{ height: "700px" }}>
-              <MapContainer
-                center={position}
-                zoom={7}
-                ref={mapRef}
-                style={{ height: "100%", width: "100%" }}
+        {/* Map Area */}
+        <div className="flex-1 relative z-0">
+          <MapContainer
+            center={position}
+            zoom={7}
+            style={{ height: "100%", width: "100%" }}
+            zoomControl={false}
+            ref={mapRef}
+            className="z-0"
+          >
+            <TileLayer url={getTileLayer()} />
+
+            {/* Coverage Areas */}
+            {showCoverage && filteredWarehouses.map((w) => (
+              w.status && (
+                <Circle
+                  key={`circle-${w.id}`}
+                  center={[w.latitude, w.longitude]}
+                  radius={25000}
+                  pathOptions={{
+                    color: '#8b5cf6',
+                    fillColor: '#8b5cf6',
+                    fillOpacity: 0.1,
+                    weight: 1
+                  }}
+                />
+              )
+            ))}
+
+            {/* Delivery Routes */}
+            {showRoutes && (
+              <Polyline 
+                positions={generateRoutes()} 
+                pathOptions={{ 
+                  color: '#8b5cf6', 
+                  weight: 3, 
+                  dashArray: '10, 10', 
+                  opacity: 0.6 
+                }} 
+              />
+            )}
+
+            {/* Warehouse Markers */}
+            {filteredWarehouses.map((warehouse) => (
+              <Marker
+                key={warehouse.id}
+                position={[warehouse.latitude, warehouse.longitude]}
+                icon={createCustomIcon(null, warehouse.status)}
+                eventHandlers={{
+                  click: () => {
+                    setSelectedDistrict(warehouse);
+                    if (!showSidebar) setShowSidebar(true);
+                    mapRef.current?.flyTo([warehouse.latitude, warehouse.longitude], 10, { duration: 1.5 });
+                  },
+                }}
               >
-                <TileLayer url={getTileLayer()} />
-                
-                {/* Delivery Routes */}
-                {showRoutes && generateRoutes().map((route, idx) => (
-                  <Polyline
-                    key={idx}
-                    positions={route}
-                    color="#3b82f6"
-                    weight={2}
-                    opacity={0.6}
-                    dashArray="10, 10"
-                  />
-                ))}
+                <Tooltip direction="top" offset={[0, -20]} opacity={1}>
+                  <div className="px-3 py-2 bg-white text-slate-800 text-xs font-semibold rounded-lg shadow-xl border border-purple-100">
+                    {warehouse.district}
+                    <div className="text-[10px] text-slate-500 font-normal">
+                      {warehouse.status ? 'Active Hub' : 'Inactive'}
+                    </div>
+                  </div>
+                </Tooltip>
+              </Marker>
+            ))}
+          </MapContainer>
 
-                {/* Warehouse Markers */}
-                {filteredWarehouses?.map((center, index) => (
-                  <React.Fragment key={index}>
-                    <Marker
-                      position={[center.latitude, center.longitude]}
-                      icon={createCustomIcon(center.status ? "#3b82f6" : "#ef4444", center.status)}
-                      eventHandlers={{
-                        click: () => setSelectedDistrict(center),
-                      }}
-                    >
-                      <Popup>
-                        <div className="p-2 min-w-[220px]">
-                          <h3 className="text-base font-bold text-gray-800 mb-2 flex items-center gap-2">
-                            <IoMdPin className="text-blue-600" />
-                            {center.district}
-                          </h3>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Deliveries:</span>
-                              <span className="font-semibold">{center.total_deliveries.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Vehicles:</span>
-                              <span className="font-semibold">{center.active_vehicles}</span>
-                            </div>
-                            <div className={`flex items-center gap-2 font-semibold ${
-                              center.status ? "text-green-600" : "text-red-600"
-                            }`}>
-                              {center.status ? "● Active Hub" : "● Inactive"}
-                            </div>
-                          </div>
-                        </div>
-                      </Popup>
-                    </Marker>
-                    
-                    {/* Coverage Circle */}
-                    {showCoverage && (
-                      <Circle
-                        center={[center.latitude, center.longitude]}
-                        radius={20000}
-                        pathOptions={{
-                          color: center.status ? "#22c55e" : "#ef4444",
-                          fillColor: center.status ? "#22c55e" : "#ef4444",
-                          fillOpacity: 0.08,
-                          weight: 2,
-                          opacity: 0.5
-                        }}
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-              </MapContainer>
-            </div>
-          </div>
+          {/* Map Overlay Gradient */}
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-slate-900/5 to-transparent z-[400] h-20" />
         </div>
       </div>
     </div>
