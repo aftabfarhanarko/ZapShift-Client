@@ -64,24 +64,18 @@ const OurServices = () => {
   ];
 
   return (
-    <section className="py-14 relative overflow-hidden rounded-xl bg-gray-900">
-      {/* Abstract Background Shapes */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#B8E55C]/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#03373D]/40 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="py-20 relative  overflow-hidden">
+      <div className=" px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B8E55C]/10 border border-[#B8E55C]/20 mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6"
           >
-            <ShieldCheck className="w-4 h-4 text-[#B8E55C]" />
-            <span className="text-[#B8E55C] font-bold tracking-wide uppercase text-xs">
+            <ShieldCheck className="w-4 h-4 text-[#0EA5E9]" />
+            <span className="text-[#0EA5E9] font-bold tracking-wide uppercase text-xs">
               World-Class Services
             </span>
           </motion.div>
@@ -91,10 +85,10 @@ const OurServices = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"
           >
             Logistics Solutions <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E55C] to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0EA5E9] to-blue-600">
               Tailored for You
             </span>
           </motion.h2>
@@ -104,7 +98,7 @@ const OurServices = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-400 max-w-2xl mx-auto text-lg"
+            className="text-gray-600 max-w-2xl mx-auto text-lg"
           >
             Experience the next generation of parcel delivery with our premium,
             secure, and lightning-fast services.
@@ -123,36 +117,34 @@ const OurServices = () => {
               whileHover={{ y: -8 }}
               className="group relative"
             >
-              {/* Card Container (Glassmorphism) */}
-              <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-[#B8E55C]/30 transition-all duration-500 overflow-hidden">
+              {/* Card Container */}
+              <div className="relative h-full bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 overflow-hidden">
                 {/* Hover Glow Effect */}
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#B8E55C]/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Icon & Price Row */}
                 <div className="flex justify-between items-start mb-8 relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#03373D] to-[#044e54] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 border border-white/5">
-                    <service.icon className="w-8 h-8 text-[#B8E55C]" />
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-[#0EA5E9] transition-colors duration-500">
+                    <service.icon className="w-8 h-8 text-[#0EA5E9] group-hover:text-white transition-colors duration-500" />
                   </div>
-                  <span className="px-4 py-1.5 bg-[#B8E55C] text-[#03373D] text-xs font-bold rounded-full shadow-lg shadow-[#B8E55C]/20">
+                  <span className="px-4 py-1.5 bg-gray-900 text-white text-xs font-bold rounded-full">
                     {service.price}
                   </span>
                 </div>
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#B8E55C] transition-colors duration-300">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#0EA5E9] transition-colors duration-300">
                     {service.title}
                   </h3>
-                  <p className="text-gray-400 mb-8 leading-relaxed h-16">
+                  <p className="text-gray-500 mb-8 leading-relaxed min-h-[48px]">
                     {service.desc}
                   </p>
 
                   {/* Action Button */}
-                  <button className="w-full py-3 rounded-xl bg-white/5 hover:bg-[#B8E55C] border border-white/10 hover:border-[#B8E55C] flex items-center justify-center gap-2 group/btn transition-all duration-300">
-                    <span className="text-sm font-bold text-white group-hover/btn:text-[#03373D]">
-                      Learn More
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-white group-hover/btn:text-[#03373D] transform group-hover/btn:translate-x-1 transition-transform duration-300" />
+                  <button className="w-full py-3 rounded-xl bg-gray-50 hover:bg-[#0EA5E9] text-gray-900 hover:text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300">
+                    <span>Learn More</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>

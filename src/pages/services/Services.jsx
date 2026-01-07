@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Services = () => {
+const ServicesPage = () => {
     return (
         <div>
-            services
+            services wef wef 2<h4>ieuhf uihf 79y r</h4>
         </div>
     );
 };
 
-export default Services;
+export default ServicesPage;

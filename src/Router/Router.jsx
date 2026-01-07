@@ -33,6 +33,7 @@ import Reports from "../pages/Dashbord/Reports";
 import Settings from "../pages/Dashbord/Settings";
 import Help from "../pages/Dashbord/Help";
 import CoverageMap from "../pages/Dashbord/Map/Map";
+import ServicesPage from "../pages/services/Services";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "/mapcover",
         element: <MapCover></MapCover>,
+      },
+      {
+        path: "/services",
+        element:<ServicesPage />
       },
 
       {

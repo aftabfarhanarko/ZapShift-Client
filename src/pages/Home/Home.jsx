@@ -4,30 +4,21 @@ import OurServices from "./HomeComponents/OurServices";
 import Company from "./HomeComponents/Company";
 import SecondBanner from "./HomeComponents/SecondBanner";
 import Work from "./HomeComponents/Work";
-import TextSections from "./HomeComponents/TextSections";
-import MenuCard from "./HomeComponents/MenuCard";
 import Stats from "./HomeComponents/Stats";
 import Benefits from "./HomeComponents/Benefits";
-import PricingPreview from "./HomeComponents/PricingPreview";
-import CoverageTeaser from "./HomeComponents/CoverageTeaser";
-import BigCTA from "./HomeComponents/BigCTA";
 import Features from "./HomeComponents/Features";
 import AppDownload from "./HomeComponents/AppDownload";
 import ParcelTypes from "./HomeComponents/ParcelTypes";
-import ServiceGuarantees from "./HomeComponents/ServiceGuarantees";
-import SupportChannels from "./HomeComponents/SupportChannels";
 import QuickActions from "./HomeComponents/QuickActions";
 import TrackSearch from "./HomeComponents/TrackSearch";
 
-
-const reivewPromis = fetch("/reviews.json").then(res => res.json());
 const Home = () => {
   return (
     <div className="px-0.5">
       <section className="mb-10">
         <Banner></Banner>
       </section>
-      <section className="mt-10 md:max-w-11/12 mx-auto">
+      <section className="mt-20 md:max-w-11/12 mx-auto">
         <QuickActions></QuickActions>
       </section>
 
@@ -41,62 +32,24 @@ const Home = () => {
         <OurServices></OurServices>
       </section>
       <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
-         <Features></Features>
+        <Features></Features>
       </section>
       <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <Stats></Stats>
       </section>
-
-
-
-
-
-
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <Benefits></Benefits>
       </section>
-
-      <section className="my-20">
-       <SecondBanner></SecondBanner>
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
+        <SecondBanner></SecondBanner>
       </section>
-
-      <section className="my-20">
-        <PricingPreview></PricingPreview>
-      </section>
-
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <ParcelTypes></ParcelTypes>
       </section>
-
-      <section className="my-20">
-       <MenuCard reivewPromis={reivewPromis}></MenuCard>
-      </section>
-
-      <section className="my-20">
-        <CoverageTeaser></CoverageTeaser>
-      </section>
-
-      <section className="my-20">
-        <ServiceGuarantees></ServiceGuarantees>
-      </section>
-
-      <section className="my-20">
-       <TextSections></TextSections>
-      </section>
-
-      <section className="my-20">
-        <SupportChannels></SupportChannels>
-      </section>
-
-      <section className="my-20">
-        <BigCTA></BigCTA>
-      </section>
-
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <AppDownload></AppDownload>
       </section>
-
-      <section className="my-20">
+      <section className="my-10 mt-15 md:max-w-11/12 mx-auto">
         <Company></Company>
       </section>
     </div>

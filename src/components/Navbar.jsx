@@ -34,6 +34,17 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink 
+                  to="/services" 
+                  className={({ isActive }) => 
+                    `px-4 py-2 rounded-full transition-all duration-300 hover:bg-primary hover:text-secondary ${isActive ? 'bg-primary text-secondary font-bold shadow-md' : ''}`
+                  }
+                >
+                  Services
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink 
                   to="about" 
                   className={({ isActive }) => 
                     `px-4 py-2 rounded-full transition-all duration-300 hover:bg-primary hover:text-secondary ${isActive ? 'bg-primary text-secondary font-bold shadow-md' : ''}`
