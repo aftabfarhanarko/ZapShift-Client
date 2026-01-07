@@ -11,6 +11,7 @@ import {
   Moon,
   Search,
   Map as MapIcon,
+  Home,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router";
 import { GoSidebarExpand } from "react-icons/go";
@@ -60,14 +61,14 @@ const DashbordLayout = () => {
       <div className="drawer-content flex flex-col">
         {/* Navbar */}
         <nav className="sticky top-0 z-50 navbar w-full bg-white/80 dark:bg-gray-900/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 md:px-10 py-4 flex justify-between items-center shadow-sm">
-          <div className="flex  items-center gap-2 ">
+          <div className="flex  items-center -gap-3 ">
             <div>
               <label
                 htmlFor="my-drawer-4"
-                className="btn  md:hidden block btn-square btn-ghost"
+                className="btn  text-white md:hidden block btn-square btn-ghost"
                 aria-label="open sidebar"
               >
-                <GoSidebarExpand className="w-6 h-6" />
+                <Home className="w-6 mt-2 h-6" />
               </label>
             </div>
             <div className="flex items-center gap-1">
@@ -83,13 +84,7 @@ const DashbordLayout = () => {
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex items-center gap-2">
             
-              <Link
-                to="/dasbord/reports"
-                className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
-                aria-label="Reports"
-              >
-                <Search className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-              </Link>
+            
               <Link
                 to="/dasbord/settings"
                 className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
@@ -97,13 +92,7 @@ const DashbordLayout = () => {
               >
                 <Settings className="w-5 h-5 text-gray-700 dark:text-gray-200" />
               </Link>
-              <Link
-                to="/dasbord/help"
-                className="hidden sm:flex w-10 h-10 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 items-center justify-center shadow-sm hover:shadow-md transition"
-                aria-label="Help"
-              >
-                <HelpCircle className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-              </Link>
+             
             </div>
 
             <div className="flex gap-2">
