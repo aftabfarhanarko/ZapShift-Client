@@ -12,6 +12,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const { loginUser, googleLogin } = useAuth();
@@ -50,7 +51,7 @@ const Login = () => {
           })
           .catch((err) => {
             // console.log(err);
-            toast.warning(err.code)
+            toast.warning(err.code);
           });
       })
       .catch((err) => {
@@ -60,7 +61,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -72,16 +73,23 @@ const Login = () => {
             <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#B8E55C] blur-3xl"></div>
             <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-blue-400 blur-3xl"></div>
           </div>
-          
+
           <div className="relative z-10">
-            <img src="/logo-11.png" alt="Panda Go" className="h-20 w-auto object-contain mb-6" />
+            <img
+              src="/logo-11.png"
+              alt="Panda Go"
+              className="h-20 w-auto object-contain mb-6"
+            />
             <p className="text-gray-300 text-sm">Smart Logistics Solution</p>
           </div>
 
           <div className="relative z-10 my-10 md:my-0">
-            <h3 className="text-2xl font-semibold mb-4 text-[#B8E55C]">Welcome Back!</h3>
+            <h3 className="text-2xl font-semibold mb-4 text-[#B8E55C]">
+              Welcome Back!
+            </h3>
             <p className="text-gray-300 leading-relaxed">
-              Access your dashboard, manage shipments, and track your logistics in real-time.
+              Access your dashboard, manage shipments, and track your logistics
+              in real-time.
             </p>
           </div>
 
@@ -93,26 +101,68 @@ const Login = () => {
         {/* Right Side - Form */}
         <div className="md:w-7/12 p-8 md:p-12 bg-white">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-[#03373D] mb-2">Login to Account</h1>
-            <p className="text-gray-500">Please enter your credentials to continue</p>
+            <h1 className="text-3xl font-bold text-[#03373D] mb-2">
+              Login to Account
+            </h1>
+            <p className="text-gray-500">
+              Please enter your credentials to continue
+            </p>
           </div>
 
-          {/* Admin Credentials Hint */}
+          {/* Demo Credentials Buttons */}
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-sm text-blue-800">
-            <p className="font-semibold mb-1 flex items-center gap-2">
+            <p className="font-semibold mb-3 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-              Demo Admin Credentials:
+              Demo Credentials (Click to Auto-fill):
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
-              <div><span className="font-medium text-gray-600">Email:</span> supper@admin.com</div>
-              <div><span className="font-medium text-gray-600">Pass:</span> SuPP@@12</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("email", "supper@admin.com");
+                  setValue("password", "SuPP@@12");
+                }}
+                className="flex flex-col items-start p-2 bg-white/60 hover:bg-white rounded-lg border border-blue-200 transition-all text-left text-xs cursor-pointer hover:shadow-sm"
+              >
+                <span className="font-bold text-blue-700 mb-1">Admin</span>
+                <span className="text-gray-600">supper@admin.com</span>
+                <span className="text-gray-500 font-mono mt-0.5">SuPP@@12</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("email", "rider@example.com");
+                  setValue("password", "Rider@@123");
+                }}
+                className="flex flex-col items-start p-2 bg-white/60 hover:bg-white rounded-lg border border-blue-200 transition-all text-left text-xs cursor-pointer hover:shadow-sm"
+              >
+                <span className="font-bold text-blue-700 mb-1">Rider</span>
+                <span className="text-gray-600">rider@example.com</span>
+                <span className="text-gray-500 font-mono mt-0.5">Rider@@123</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("email", "sender@example.com");
+                  setValue("password", "Pa$$w0rd!");
+                }}
+                className="flex flex-col items-start p-2 bg-white/60 hover:bg-white rounded-lg border border-blue-200 transition-all text-left text-xs cursor-pointer hover:shadow-sm"
+              >
+                <span className="font-bold text-blue-700 mb-1">Parcel Sender</span>
+                <span className="text-gray-600">sender@example.com</span>
+                <span className="text-gray-500 font-mono mt-0.5">Pa$$w0rd!</span>
+              </button>
             </div>
           </div>
 
           <form onSubmit={handleSubmit(loginHandel)} className="space-y-5">
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 ml-1">Email Address</label>
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Email Address
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                   <Mail size={18} />
@@ -125,14 +175,18 @@ const Login = () => {
                 />
               </div>
               {errors.email?.type === "required" && (
-                <p className="text-red-500 text-xs font-medium ml-1">Email is required</p>
+                <p className="text-red-500 text-xs font-medium ml-1">
+                  Email is required
+                </p>
               )}
             </div>
 
             {/* Password Field */}
             <div className="space-y-2">
               <div className="flex justify-between items-center ml-1">
-                <label className="text-sm font-medium text-gray-700">Password</label>
+                <label className="text-sm font-medium text-gray-700">
+                  Password
+                </label>
                 <Link
                   state={location?.state}
                   to="/forget"
@@ -150,7 +204,8 @@ const Login = () => {
                   {...register("password", {
                     required: true,
                     minLength: 6,
-                    pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+                    pattern:
+                      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
                   })}
                   placeholder="Enter your password"
                   className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B8E55C] focus:border-transparent transition-all bg-gray-50 focus:bg-white text-sm"
@@ -165,9 +220,12 @@ const Login = () => {
               </div>
               {errors.password && (
                 <p className="text-red-500 text-xs font-medium ml-1">
-                  {errors.password.type === "required" && "Password is required"}
-                  {errors.password.type === "minLength" && "Must be at least 6 characters"}
-                  {errors.password.type === "pattern" && "Must include uppercase, lowercase, number & special char"}
+                  {errors.password.type === "required" &&
+                    "Password is required"}
+                  {errors.password.type === "minLength" &&
+                    "Must be at least 6 characters"}
+                  {errors.password.type === "pattern" &&
+                    "Must include uppercase, lowercase, number & special char"}
                 </p>
               )}
             </div>
@@ -189,7 +247,9 @@ const Login = () => {
               <div className="w-full border-t border-gray-100"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-400 font-medium">Or continue with</span>
+              <span className="px-4 bg-white text-gray-400 font-medium">
+                Or continue with
+              </span>
             </div>
           </div>
 
@@ -221,7 +281,10 @@ const Login = () => {
 
           <p className="mt-8 text-center text-sm text-gray-500">
             Don't have an account?{" "}
-            <Link to="/register" className="font-semibold text-[#03373D] hover:text-[#B8E55C] hover:underline transition-colors">
+            <Link
+              to="/register"
+              className="font-semibold text-[#03373D] hover:text-[#B8E55C] hover:underline transition-colors"
+            >
               Create free account
             </Link>
           </p>
